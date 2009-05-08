@@ -1,0 +1,2 @@
+<!-- fixme (MF) final wait here to avoid stacktrace resulting from alarm requeing post shutdown -->
+<abu:waitUntil delay="2000" timeout="125" xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"/>

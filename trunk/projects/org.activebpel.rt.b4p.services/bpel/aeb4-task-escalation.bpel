@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpel:process xmlns:abx="http://www.activebpel.org/bpel/extension" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:cpn="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-custom-notification.xsd" xmlns:htapi="http://www.example.org/WS-HT/api/wsdl" xmlns:htd="http://www.example.org/WS-HT" xmlns:tet="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd" xmlns:tew="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-escalations.wsdl" xmlns:tlt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd" xmlns:tnt="http://www.activebpel.org/b4p/2007/12/wshumantask/aeb4p-task-notification.wsdl" xmlns:tnw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-notifications-wsdl.xsd" xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:tst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:tsw="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl" xmlns:xsd="http://www.w3.org/2001/XMLSchema" expressionLanguage="urn:active-endpoints:expression-language:xquery1.0" name="aeb4-task-escalation" suppressJoinFailure="yes" targetNamespace="http://www.activebpel.org/b4p/2007/10/wshumantask">
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-escalations.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-escalations.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-state.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-notifications.wsdl" namespace="http://www.activebpel.org/b4p/2007/12/wshumantask/aeb4p-task-notification.wsdl"/>
+   <bpel:import importType="http://www.w3.org/2001/XMLSchema" location="../schema/aeb4p-task-custom-notifications.xsd" namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-custom-notification.xsd"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../../org.activebpel.rt.ht/support/wsdl/ws-humantask-api.wsdl" namespace="http://www.example.org/WS-HT/api/wsdl"/>
+   <bpel:partnerLinks>
+      <bpel:partnerLink myRole="process" name="taskEscalationServicePLT" partnerLinkType="tew:taskEscalationServicePLT"/>
+      <bpel:partnerLink name="taskCustomNotificationServicePLT" partnerLinkType="tnt:taskCustomNotificationServicePLT" partnerRole="notify"/>
+      <bpel:partnerLink name="taskNotificationServicePLT" partnerLinkType="tnt:taskNotificationServicePLT" partnerRole="notify"/>
+   </bpel:partnerLinks>
+   <bpel:variables>
+      <bpel:variable messageType="tew:StartDeadlinesRequest" name="gStartDeadlinesRequest"/>
+      <bpel:variable element="tet:deadlineList" name="gDeadlineList"/>
+      <bpel:variable name="gNextDeadlineDateTime" type="xsd:dateTime">
+         <bpel:from>current-dateTime()</bpel:from>
+      </bpel:variable>
+      <bpel:variable name="gCancelled" type="xsd:boolean">
+         <bpel:from>false()</bpel:from>
+      </bpel:variable>
+      <bpel:variable name="gDeadlineIndex" type="xsd:int">
+         <bpel:from>
+            <bpel:literal>1</bpel:literal>
+         </bpel:from>
+      </bpel:variable>
+      <bpel:variable messageType="tew:DeadlineOpRequest" name="gDeadlinesOpRequest"/>
+      <bpel:variable name="gNextDeadlineInstance" type="tet:tDeadlineInstance"/>
+      <bpel:variable messageType="tew:StartDeadlinesResponse" name="gStartDeadlinesResponse"/>
+      <bpel:variable name="gEscalationNotified" type="xsd:boolean">
+         <bpel:from>false()</bpel:from>
+      </bpel:variable>
+      <bpel:variable name="gTaskCreationDateTime" type="xsd:dateTime"/>
+   </bpel:variables>
+   <bpel:correlationSets>
+      <bpel:correlationSet name="CS1" properties="tew:deadlineType tew:identifier"/>
+   </bpel:correlationSets>
+   <bpel:sequence>
+      <bpel:receive createInstance="yes" operation="start" partnerLink="taskEscalationServicePLT" variable="gStartDeadlinesRequest">
+         <bpel:correlations>
+            <bpel:correlation initiate="yes" set="CS1"/>
+         </bpel:correlations>
+      </bpel:receive>
+      <bpel:assign name="GetPid">
+         <bpel:copy>
+            <bpel:from>&lt;ns:createDeadlinesResponse xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"&gt;&#13;
+   &lt;ns:pid&gt;{ abx:getProcessId() }&lt;/ns:pid&gt;&#13;
+&lt;/ns:createDeadlinesResponse&gt;</bpel:from>
+            <bpel:to part="createDeadlinesReponse" variable="gStartDeadlinesResponse"/>
+         </bpel:copy>
+      </bpel:assign>
+      <bpel:if name="IfNoDeadlines">
+         <bpel:condition>count($gStartDeadlinesRequest.createDeadlinesData/tet:deadlineList/tet:deadlineInstance) = 0</bpel:condition>
+         <bpel:exit/>
+      </bpel:if>
+      <bpel:if name="IfCreationDate">
+         <bpel:condition>exists( $gStartDeadlinesRequest.createDeadlinesData/tet:taskCreatedDate )</bpel:condition>
+         <bpel:assign name="AssignTaskTime">
+            <bpel:copy>
+               <bpel:from part="createDeadlinesData" variable="gStartDeadlinesRequest">
+                  <bpel:query>tet:taskCreatedDate</bpel:query>
+               </bpel:from>
+               <bpel:to variable="gTaskCreationDateTime"/>
+            </bpel:copy>
+         </bpel:assign>
+         <bpel:else>
+            <bpel:assign name="AssignCurrentTime">
+               <bpel:copy>
+                  <bpel:from>current-dateTime()</bpel:from>
+                  <bpel:to variable="gTaskCreationDateTime"/>
+               </bpel:copy>
+            </bpel:assign>
+         </bpel:else>
+      </bpel:if>
+      <bpel:assign name="CalcDeadlines">
+         <bpel:copy>
+            <bpel:from>&lt;tet:deadlineList xmlns:aeesct="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"&gt;&#13;
+{&#13;
+    for $deadlineInstance in $gStartDeadlinesRequest.createDeadlinesData/tet:deadlineList/tet:deadlineInstance&#13;
+    let $isFor := exists($deadlineInstance/tet:deadlineDef/htd:for)&#13;
+    let $isUntil := exists($deadlineInstance/tet:deadlineDef/htd:until)&#13;
+    let $forDuration := if ($isFor) then&#13;
+       (xs:duration(trt:eval(&#13;
+          $deadlineInstance/tet:deadlineDef/htd:for,&#13;
+          $gStartDeadlinesRequest.createDeadlinesData/trt:initialState/trt:processVariables,&#13;
+          $gStartDeadlinesRequest.createDeadlinesData/trt:taskInstance&#13;
+       ))) else ()&#13;
+    let $untilDateTime := if ($isUntil) then&#13;
+       (xsd:dateTime(trt:eval(&#13;
+          $deadlineInstance/tet:deadlineDef/htd:until,&#13;
+          $gStartDeadlinesRequest.createDeadlinesData/trt:initialState/trt:processVariables,&#13;
+          $gStartDeadlinesRequest.createDeadlinesData/trt:taskInstance&#13;
+       ))) else ()&#13;
+    return&#13;
+     &lt;tet:deadlineInstance xmlns:htd="http://www.example.org/WS-HT"&gt;&#13;
+       { $deadlineInstance/tet:deadlineDef }   &#13;
+       &lt;tet:deadlineDateTime&gt;&#13;
+       {&#13;
+	  if ( $isFor )&#13;
+	  then ( ($gTaskCreationDateTime + xs:yearMonthDuration($forDuration)) + xs:dayTimeDuration($forDuration))&#13;
+          else ( $untilDateTime )&#13;
+       }&#13;
+       &lt;/tet:deadlineDateTime&gt;      &#13;
+     &lt;/tet:deadlineInstance&gt;&#13;
+}&#13;
+&lt;/tet:deadlineList&gt;</bpel:from>
+            <bpel:to variable="gDeadlineList"/>
+         </bpel:copy>
+      </bpel:assign>
+      <bpel:assign name="SortDeadlines">
+         <bpel:copy>
+            <bpel:from>&lt;tet:deadlineList xmlns:aeesct="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"&gt;&#13;
+{&#13;
+    for $deadlineInstance in $gDeadlineList/tet:deadlineInstance&#13;
+      stable order by $deadlineInstance/tet:deadlineDateTime&#13;
+    return $deadlineInstance&#13;
+}&#13;
+&lt;/tet:deadlineList&gt;</bpel:from>
+            <bpel:to variable="gDeadlineList"/>
+         </bpel:copy>
+      </bpel:assign>
+      <bpel:reply name="ReplyPidToLifecyle" operation="start" partnerLink="taskEscalationServicePLT" variable="gStartDeadlinesResponse"/>
+      <bpel:repeatUntil name="RepeatUntilCancelledOrAllDone">
+         <bpel:condition>$gCancelled</bpel:condition>
+         <bpel:sequence>
+            <bpel:if>
+               <bpel:condition>$gDeadlineIndex &lt;= count($gDeadlineList/tet:deadlineInstance)</bpel:condition>
+               <bpel:assign name="AssignNextDeadline">
+                  <bpel:copy>
+                     <bpel:from>$gDeadlineList/tet:deadlineInstance[ $gDeadlineIndex ]</bpel:from>
+                     <bpel:to variable="gNextDeadlineInstance"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>$gNextDeadlineInstance/tet:deadlineDateTime</bpel:from>
+                     <bpel:to variable="gNextDeadlineDateTime"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:else>
+                  <bpel:assign name="AssignInfinity">
+                     <bpel:copy>
+                        <bpel:from>$gTaskCreationDateTime + xs:yearMonthDuration('P500Y')</bpel:from>
+                        <bpel:to variable="gNextDeadlineDateTime"/>
+                     </bpel:copy>
+                  </bpel:assign>
+               </bpel:else>
+            </bpel:if>
+            <bpel:pick name="ScheduleDeadline">
+               <bpel:onMessage operation="cancel" partnerLink="taskEscalationServicePLT" variable="gDeadlinesOpRequest">
+                  <bpel:correlations>
+                     <bpel:correlation initiate="no" set="CS1"/>
+                  </bpel:correlations>
+                  <bpel:assign name="OnCancelBreak">
+                     <bpel:copy>
+                        <bpel:from>true()</bpel:from>
+                        <bpel:to variable="gCancelled"/>
+                     </bpel:copy>
+                  </bpel:assign>
+               </bpel:onMessage>
+               <bpel:onAlarm>
+                  <bpel:until>$gNextDeadlineDateTime</bpel:until>
+                  <bpel:scope name="HandleEscalations">
+                     <bpel:partnerLinks>
+                        <bpel:partnerLink name="internalTaskServicePLT" partnerLinkType="tsw:aeInternalTaskOperationsPLT" partnerRole="process"/>
+                     </bpel:partnerLinks>
+                     <bpel:variables>
+                        <bpel:variable name="escalationIndex" type="xsd:int">
+                           <bpel:from>
+                              <bpel:literal>1</bpel:literal>
+                           </bpel:from>
+                        </bpel:variable>
+                        <bpel:variable element="cpn:genericEscalation" name="escalation"/>
+                        <bpel:variable name="escalated" type="xsd:boolean"/>
+                        <bpel:variable messageType="tsw:EscalateTaskRequest" name="escalateTaskRequest"/>
+                        <bpel:variable messageType="tsw:ReassignTaskRequest" name="reassignTaskRequest"/>
+                        <bpel:variable messageType="tnt:processCustomNotificationRequest" name="customNotificationRequest"/>
+                        <bpel:variable messageType="tnt:processNotificationRequest" name="notificationRequest"/>
+                        <bpel:variable element="cpn:genericEscalationList" name="escalationList"/>
+                        <bpel:variable name="reassigned" type="xsd:boolean">
+                           <bpel:from>
+                              <bpel:literal>false</bpel:literal>
+                           </bpel:from>
+                        </bpel:variable>
+                        <bpel:variable element="trt:taskInstance" name="taskInstance"/>
+                        <bpel:variable element="tst:getTaskInstance" name="getTaskInstance">
+                           <bpel:from>&lt;getTaskInstance&gt;{$gStartDeadlinesRequest.createDeadlinesData/trt:identifier}&lt;/getTaskInstance&gt;</bpel:from>
+                        </bpel:variable>
+                     </bpel:variables>
+                     <bpel:sequence>
+                        <bpel:assign name="CreateEscalationList">
+                           <bpel:copy>
+                              <bpel:from>&lt;cpn:genericEscalationList xmlns:aeb4pcnt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-custom-notification.xsd"&gt;&#13;
+{&#13;
+    for $escalation in $gNextDeadlineInstance/tet:deadlineDef/(htd:escalation | cpn:escalationProcess)&#13;
+    return&#13;
+     &lt;cpn:genericEscalation&gt;&#13;
+	{$escalation}&#13;
+     &lt;/cpn:genericEscalation&gt;&#13;
+}&#13;
+&lt;/cpn:genericEscalationList&gt;</bpel:from>
+                              <bpel:to variable="escalationList"/>
+                           </bpel:copy>
+                        </bpel:assign>
+                        <bpel:invoke inputVariable="getTaskInstance" name="GetTaskInstance" operation="getInstance" outputVariable="taskInstance" partnerLink="internalTaskServicePLT"/>
+                        <bpel:while name="WhileHasEscalations">
+                           <bpel:condition>$escalationIndex &lt;=  count($escalationList/cpn:genericEscalation )</bpel:condition>
+                           <bpel:sequence>
+                              <bpel:assign name="AssignNextEscalation">
+                                 <bpel:copy>
+                                    <bpel:from>$escalationList/cpn:genericEscalation [ $escalationIndex ]</bpel:from>
+                                    <bpel:to variable="escalation"/>
+                                 </bpel:copy>
+                              </bpel:assign>
+                              <bpel:scope>
+                                 <bpel:variables>
+                                    <bpel:variable element="tnw:processNotificationResponse" name="processNotificationResponse"/>
+                                 </bpel:variables>
+                                 <bpel:faultHandlers>
+                                    <bpel:catchAll>
+                                       <bpel:empty name="DoNothing"/>
+                                    </bpel:catchAll>
+                                 </bpel:faultHandlers>
+                                 <bpel:sequence>
+                                    <bpel:if name="IfHasCondition">
+                                       <bpel:condition>exists($escalation/htd:escalation/htd:condition)</bpel:condition>
+                                       <bpel:assign name="EvalHtEscCondition">
+                                          <bpel:copy>
+                                             <bpel:from>trt:eval( $escalation/htd:escalation/htd:condition, $gStartDeadlinesRequest.createDeadlinesData/trt:initialState/trt:processVariables, $taskInstance )</bpel:from>
+                                             <bpel:to variable="escalated"/>
+                                          </bpel:copy>
+                                       </bpel:assign>
+                                       <bpel:elseif>
+                                          <bpel:condition>exists( $escalation/cpn:escalationProcess/cpn:condition )</bpel:condition>
+                                          <bpel:assign name="EvalCustomEscCondition">
+                                             <bpel:copy>
+                                                <bpel:from>trt:eval($escalation/cpn:escalationProcess/cpn:condition, $gStartDeadlinesRequest.createDeadlinesData/trt:initialState/trt:processVariables, $taskInstance )</bpel:from>
+                                                <bpel:to variable="escalated"/>
+                                             </bpel:copy>
+                                          </bpel:assign>
+                                       </bpel:elseif>
+                                       <bpel:else>
+                                          <bpel:assign name="SetEscalatedTrue">
+                                             <bpel:copy>
+                                                <bpel:from>
+                                                   <bpel:literal>true</bpel:literal>
+                                                </bpel:from>
+                                                <bpel:to variable="escalated"/>
+                                             </bpel:copy>
+                                          </bpel:assign>
+                                       </bpel:else>
+                                    </bpel:if>
+                                    <bpel:if name="IfFirstTimeEscalation">
+                                       <bpel:condition>$escalated = true() and $gEscalationNotified != true()</bpel:condition>
+                                       <bpel:sequence>
+                                          <bpel:assign name="AssginIdToEscRequest">
+                                             <bpel:copy>
+                                                <bpel:from part="createDeadlinesData" variable="gStartDeadlinesRequest">
+                                                   <bpel:query>trt:identifier</bpel:query>
+                                                </bpel:from>
+                                                <bpel:to part="escalate" variable="escalateTaskRequest"/>
+                                             </bpel:copy>
+                                          </bpel:assign>
+                                          <bpel:assign name="MarkAsEscalated">
+                                             <bpel:copy>
+                                                <bpel:from>true()</bpel:from>
+                                                <bpel:to variable="gEscalationNotified"/>
+                                             </bpel:copy>
+                                          </bpel:assign>
+                                          <bpel:invoke inputVariable="escalateTaskRequest" name="notifyTaskAsEscalated" operation="escalate" partnerLink="internalTaskServicePLT"/>
+                                       </bpel:sequence>
+                                    </bpel:if>
+                                    <bpel:if name="IfNotifyOrReAsssign">
+                                       <bpel:condition>$escalated = true() and  not($reassigned) and  exists( $escalation/htd:escalation/htd:reassignment/htd:potentialOwners/htd:from/htd:literal/htd:organizationalEntity)</bpel:condition>
+                                       <bpel:sequence>
+                                          <bpel:assign name="Assign_OrgEntity">
+                                             <bpel:copy>
+                                                <bpel:from>&lt;tst:reassign xmlns:aeb4tst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:b4ptrt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"&gt;&#13;
+   &lt;trt:identifier&gt;{ data($gStartDeadlinesRequest.createDeadlinesData/trt:identifier) }&lt;/trt:identifier&gt;&#13;
+{$escalation/htd:escalation/htd:reassignment/htd:potentialOwners/htd:from/htd:literal/htd:organizationalEntity}&#13;
+&lt;/tst:reassign&gt;</bpel:from>
+                                                <bpel:to part="reassign" variable="reassignTaskRequest"/>
+                                             </bpel:copy>
+                                             <bpel:copy>
+                                                <bpel:from>
+                                                   <bpel:literal>true</bpel:literal>
+                                                </bpel:from>
+                                                <bpel:to variable="reassigned"/>
+                                             </bpel:copy>
+                                          </bpel:assign>
+                                          <bpel:invoke inputVariable="reassignTaskRequest" name="Reassign" operation="reassign" partnerLink="internalTaskServicePLT"/>
+                                       </bpel:sequence>
+                                       <bpel:elseif>
+                                          <bpel:condition>$escalated = true() and exists($escalation/cpn:escalationProcess)</bpel:condition>
+                                          <bpel:sequence>
+                                             <bpel:assign name="Assign_CustomNotification">
+                                                <bpel:copy>
+                                                   <bpel:from>&lt;wsa:EndpointReference xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"&gt;&#13;
+   &lt;wsa:Address&gt;{string($escalation/cpn:escalationProcess/@service)}&lt;/wsa:Address&gt;&#13;
+&lt;/wsa:EndpointReference&gt;</bpel:from>
+                                                   <bpel:to partnerLink="taskCustomNotificationServicePLT"/>
+                                                </bpel:copy>
+                                                <bpel:copy>
+                                                   <bpel:from>&lt;tnw:processCustomNotificationRequest xmlns:aeb4pnt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-notifications-wsdl.xsd" &#13;
+      xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"&gt;&#13;
+  &lt;trt:identifier&gt;{ &#13;
+     $gStartDeadlinesRequest.createDeadlinesData/trt:identifier/text() &#13;
+  }&lt;/trt:identifier&gt;&#13;
+  { $gStartDeadlinesRequest.createDeadlinesData/tlt:peopleActivityPid }&#13;
+  { $gStartDeadlinesRequest.createDeadlinesData/tlt:peopleActivityId }&#13;
+  &lt;tnw:data&gt;{&#13;
+     trt:eval(&#13;
+        $escalation/cpn:escalationProcess/cpn:processData,&#13;
+        $gStartDeadlinesRequest.createDeadlinesData/trt:initialState/trt:processVariables,&#13;
+        $taskInstance )&#13;
+  }&lt;/tnw:data&gt;&#13;
+&lt;/tnw:processCustomNotificationRequest&gt;</bpel:from>
+                                                   <bpel:to part="processCustomNotificationRequest" variable="customNotificationRequest"/>
+                                                </bpel:copy>
+                                             </bpel:assign>
+                                             <bpel:invoke inputVariable="customNotificationRequest" name="CustomProcessNotification" operation="processCustomNotification" partnerLink="taskCustomNotificationServicePLT"/>
+                                          </bpel:sequence>
+                                       </bpel:elseif>
+                                       <bpel:elseif>
+                                          <bpel:condition>$escalated = true() and exists($escalation/htd:escalation/htd:notification)</bpel:condition>
+                                          <bpel:sequence>
+                                             <bpel:assign name="Assign_HtNotification">
+                                                <bpel:copy>
+                                                   <bpel:from>&lt;tnw:processNotificationRequest xmlns:aeb4pnt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-notifications-wsdl.xsd"&gt;&#13;
+ { $escalation/htd:escalation/htd:notification }&#13;
+ &lt;trt:initialState&gt;&#13;
+ { $gStartDeadlinesRequest.createDeadlinesData/trt:initialState/*[local-name() != 'humanTaskContext'] }&#13;
+ &lt;/trt:initialState&gt;&#13;
+ &lt;trt:interfaceMetadata&gt;&#13;
+   &lt;trt:input/&gt;&#13;
+ &lt;/trt:interfaceMetadata&gt;&#13;
+ { $taskInstance }&#13;
+ { $gStartDeadlinesRequest.createDeadlinesData/tlt:peopleActivityPid }&#13;
+ { $gStartDeadlinesRequest.createDeadlinesData/tlt:peopleActivityId }&#13;
+&lt;/tnw:processNotificationRequest&gt;</bpel:from>
+                                                   <bpel:to part="processNotificationRequest" variable="notificationRequest"/>
+                                                </bpel:copy>
+                                             </bpel:assign>
+                                             <bpel:if name="IfHasToParts">
+                                                <bpel:condition>exists($escalation/htd:escalation/htd:toParts)</bpel:condition>
+                                                <bpel:assign name="Assign_EvalToParts">
+                                                   <bpel:copy>
+                                                      <bpel:from>&lt;trt:input xmlns:b4ptrt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"&gt;&#13;
+   { for $toPart in $escalation/htd:escalation/htd:toParts/htd:toPart&#13;
+     return&#13;
+       &lt;trt:part name="{ $toPart/@name }"&gt;{&#13;
+          trt:eval(&#13;
+             $toPart,&#13;
+             $gStartDeadlinesRequest.createDeadlinesData/trt:initialState/trt:processVariables,&#13;
+             $taskInstance )&#13;
+       }&lt;/trt:part&gt;&#13;
+   }&#13;
+&lt;/trt:input&gt;&#13;
+</bpel:from>
+                                                      <bpel:to part="processNotificationRequest" variable="notificationRequest">
+                                                         <bpel:query>trt:initialState/trt:input</bpel:query>
+                                                      </bpel:to>
+                                                   </bpel:copy>
+                                                </bpel:assign>
+                                             </bpel:if>
+                                             <bpel:assign name="Assign_InterfaceMetadata">
+                                                <bpel:copy>
+                                                   <bpel:from>&lt;trt:interfaceMetadata xmlns:b4ptrt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"&gt;&#13;
+   &lt;trt:input&gt;&#13;
+   {&#13;
+      for $part in $notificationRequest.processNotificationRequest/trt:initialState/trt:input/trt:part&#13;
+      return &#13;
+      &lt;trt:part name="{$part/@name}" typeHint="{if (exists($part/*)) then 'complex' else 'string'}"/&gt;&#13;
+   }&#13;
+   &lt;/trt:input&gt;&#13;
+&lt;/trt:interfaceMetadata&gt;</bpel:from>
+                                                   <bpel:to part="processNotificationRequest" variable="notificationRequest">
+                                                      <bpel:query>trt:interfaceMetadata</bpel:query>
+                                                   </bpel:to>
+                                                </bpel:copy>
+                                             </bpel:assign>
+                                             <bpel:invoke inputVariable="notificationRequest" name="InvokeHtNotification" operation="processNotification" outputVariable="processNotificationResponse" partnerLink="taskNotificationServicePLT"/>
+                                          </bpel:sequence>
+                                       </bpel:elseif>
+                                    </bpel:if>
+                                 </bpel:sequence>
+                              </bpel:scope>
+                              <bpel:assign name="IncreaseEscIndex">
+                                 <bpel:copy>
+                                    <bpel:from>$escalationIndex + 1</bpel:from>
+                                    <bpel:to variable="escalationIndex"/>
+                                 </bpel:copy>
+                              </bpel:assign>
+                           </bpel:sequence>
+                        </bpel:while>
+                        <bpel:assign name="IncreaseDeadlineIndex">
+                           <bpel:copy>
+                              <bpel:from>$gDeadlineIndex + 1</bpel:from>
+                              <bpel:to variable="gDeadlineIndex"/>
+                           </bpel:copy>
+                        </bpel:assign>
+                     </bpel:sequence>
+                  </bpel:scope>
+               </bpel:onAlarm>
+            </bpel:pick>
+         </bpel:sequence>
+      </bpel:repeatUntil>
+   </bpel:sequence>
+</bpel:process>

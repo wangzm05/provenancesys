@@ -1,0 +1,12 @@
+<abu:asserts 
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+	xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd">
+	<abu:assertEquals part="getTaskInstance">
+		<ns:getTaskInstance>
+			<trt:identifier>1</trt:identifier>
+			<ns:includeAttachments>true</ns:includeAttachments>
+		</ns:getTaskInstance>
+	</abu:assertEquals>
+</abu:asserts>
+

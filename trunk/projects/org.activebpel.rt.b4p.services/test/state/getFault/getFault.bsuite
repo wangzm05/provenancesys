@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="getFault">
+   <abs:bUnitRef location="getFault.bunit"/>
+   <abs:bUnitRef location="getFault-admin.bunit"/>
+   <abs:bUnitRef location="getFault-illegalAccess.bunit"/>
+   <abs:bUnitRef location="getFault-illegalState.bunit"/>
+   <abs:bUnitRef location="getFault-illegalOperation.bunit"/>
+   <abs:bUnitRef location="getFault-stakeholder.bunit"/>
+</abs:bSuite>

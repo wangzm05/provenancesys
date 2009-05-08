@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="skip">
+   <abs:bUnitRef location="skip.bunit"/>
+   <abs:bUnitRef location="skip-admin.bunit"/>
+   <abs:bUnitRef location="skip-stakeholder.bunit"/>
+   <abs:bUnitRef location="skip-illegalOperation.bunit"/>
+   <abs:bUnitRef location="skip-illegalState.bunit"/>
+   <abs:bUnitRef location="skip-illegalAccess.bunit"/>
+   <abs:bUnitRef location="skip-initiator.bunit"/>
+</abs:bSuite>

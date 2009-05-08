@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="getOutput">
+   <abs:bUnitRef location="getOutput-complex-onePart-noArg.bunit"/>
+   <abs:bUnitRef location="getOutput-simple-onePart-noArg.bunit"/>
+   <abs:bUnitRef location="getOutput-noArg-multiPart-illegalArgument.bunit"/>
+   <abs:bUnitRef location="getOutput-passArg-illegalArgument.bunit"/>
+   <abs:bUnitRef location="getOutput-simple-onePart-passArg.bunit"/>
+   <abs:bUnitRef location="getOutput-illegalAccess.bunit"/>
+   <abs:bUnitRef location="getOutput-admin.bunit"/>
+   <abs:bUnitRef location="getOutput-illegalState.bunit"/>
+   <abs:bUnitRef location="getOutput-stakeholder.bunit"/>
+</abs:bSuite>

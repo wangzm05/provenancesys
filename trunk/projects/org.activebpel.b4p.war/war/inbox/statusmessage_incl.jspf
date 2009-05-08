@@ -1,0 +1,8 @@
+<!--  display confirmation and error messages  -->
+ <div id="aestatusmessagecontainer">
+ 	<p id="aestatusmessage"></p>
+ 	<div id="aestatusmessagedetailcontainer" >
+ 		<a id="aeshowstatusmessagedetail"><ae:GetResource name="status_message_click_for_details" /></a>
+ 		<textarea id="aestatusmessagedetail" rows="4" wrap="off" readonly="readonly" ></textarea>
+ 	</div>
+ </div>

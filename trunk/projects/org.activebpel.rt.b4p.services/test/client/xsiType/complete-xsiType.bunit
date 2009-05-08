@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abu:bpelUnit
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:htapis="http://www.example.org/WS-HT/api/xsd"
+	xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy"
+    xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl"
+	xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xi="http://www.w3.org/2001/XInclude">
+	<abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml"/>
+	<xi:include href="../includes/bpels.xml"/>
+	<xi:include href="../includes/wsdls.xml"/>
+	<xi:include href="../includes/schemas.xml"/>
+	<xi:include href="../includes/resources.xml"/>
+	<xi:include href="../includes/partnerLinks-noValidation.xml"/>
+	<abu:invokes>
+		<abu:invoke name="complete">
+			<abu:defaultInvoke>
+				<abu:asserts>
+					<abu:assertEquals part="complete" query="count(//@xsi:type) = 0">true</abu:assertEquals>
+				</abu:asserts>
+				<abu:simulatedResponse>
+					<abu:message type="htapiw:completeResponse">
+						<abu:parts>
+							<abu:part name="completeResponse">
+								<htapis:completeResponse/>
+							</abu:part>
+						</abu:parts>
+					</abu:message>
+				</abu:simulatedResponse>
+			</abu:defaultInvoke>
+		</abu:invoke>
+	</abu:invokes>
+	<abu:commands>
+		<abu:sendMessage operation="complete" partnerLink="taskClientPL">
+			<abu:message type="htapiw:complete">
+				<abu:parts>
+					<abu:part name="complete">
+						<htdt:complete>
+							<htdt:identifier>urn:b4p:1</htdt:identifier>
+							<htdt:taskData>
+								<someData xmlns:ns="urn:foo" xsi:type="ns:unknownType">
+									<hello>hello</hello>
+								</someData>
+							</htdt:taskData>
+						</htdt:complete>
+					</abu:part>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+	</abu:commands>
+</abu:bpelUnit>

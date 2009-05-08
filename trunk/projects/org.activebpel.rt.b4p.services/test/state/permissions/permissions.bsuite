@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="permissions">
+   <abs:bUnitRef location="permissions-claim.bunit"/>
+   <abs:bUnitRef location="permissions-claim-notSkippable.bunit"/>
+   <abs:bUnitRef location="permissions-completed.bunit"/>
+   <abs:bUnitRef location="permissions-start.bunit"/>
+   <abs:bUnitRef location="permissions-start-admin.bunit"/>
+   <abs:bUnitRef location="permissions-suspend.bunit"/>
+   <abs:bUnitRef location="permissions-claim-initiator.bunit"/>
+   <abs:bUnitRef location="permissions-claim-notSkippable-initiator.bunit"/>
+   <abs:bUnitRef location="permissions-notification.bunit"/>
+   <abs:bUnitRef location="permissions-notification-admin.bunit"/>
+</abs:bSuite>

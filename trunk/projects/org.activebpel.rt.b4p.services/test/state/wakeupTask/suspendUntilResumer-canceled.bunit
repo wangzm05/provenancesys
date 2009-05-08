@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abu:bpelUnit xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd" xmlns:abx="http://www.activebpel.org/bpel/extension" xmlns:aetcmn="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl" xmlns:aetrtxd="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:aetst="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl" xmlns:aetstxd="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <abu:trace>on</abu:trace> 
+   <abu:engineProperties>
+      <abu:engineProperty path="Logging" value="urn:ae:execution"/>
+      <abu:engineProperty path="ProcessLogger/Class" value="com.activee.rt.bunit.impl.AeConsoleProcessLogger"/>
+   </abu:engineProperties>
+   <abu:bpels>
+      <abu:bpel location="../../../bpel/aeb4p-task-suspenduntilresumer.bpel"/>
+   </abu:bpels>
+   <abu:wsdls>
+      <abu:wsdl location="../../../wsdl/aeb4p-task-state.wsdl"/>
+      <abu:wsdl location="../../../wsdl/aeb4p-task-common.wsdl"/>
+   </abu:wsdls>
+   <abu:alarms>
+      <abu:alarm locationPath="/process/sequence/pick[@name='WaitForCancelOrTimeOut']/onAlarm"/>
+   </abu:alarms>
+   <abu:commands>
+      <abu:sendMessage xmlns:ns="http://www.activebpel.org/b4p/2007/10/wshumantask" operation="scheduleWakeup" partnerLink="wakeupPL" processName="ns:aeb4p-task-suspenduntilresumer">
+         <abu:message type="aetst:ScheduleWakeupRequest">
+            <abu:parts>
+               <abu:part name="scheduleWakeupRequest">
+                  <tsst:scheduleWakeupRequest xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:tsst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd">
+   <trt:identifier>12345</trt:identifier>
+   <tsst:alarm>2020-01-09T15:50:25.609Z</tsst:alarm>
+</tsst:scheduleWakeupRequest>
+               </abu:part>
+            </abu:parts>
+         </abu:message>
+         <abu:asserts>
+            <abu:assertEquals part="scheduleWakeupResponse">
+               <aetgt:scheduleWakeupResponse xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd">1</aetgt:scheduleWakeupResponse>
+            </abu:assertEquals>
+         </abu:asserts>
+      </abu:sendMessage>
+      <abu:sendMessage xmlns:ns="http://www.activebpel.org/b4p/2007/10/wshumantask" operation="cancelWakeup" partnerLink="wakeupPL" processName="ns:aeb4p-task-suspenduntilresumer">
+         <abu:message type="aetst:CancelWakeupRequest">
+            <abu:parts>
+               <abu:part name="cancelWakeupRequest">
+                  <tsst:cancelWakeupRequest xmlns:tsst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd">1</tsst:cancelWakeupRequest>
+               </abu:part>
+            </abu:parts>
+         </abu:message>
+      </abu:sendMessage>
+   </abu:commands>
+</abu:bpelUnit>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!-- 
+  Active Endpoints Inc., Configuration file for WorkFlow war application.
+ -->
+<config>
+	<!--  WS-HT Task Client operations service URL -->
+	<!--  This endpoint must be secured with role abTaskClient -->
+	<entry name="HtTaskClientServiceUrl" value="http://localhost:8080/active-bpel/services/AeB4PTaskClient-taskOperations" />
+	
+	<!--  AE specific task Client operations service URL (if base path to service is different that WS-HT Task Client URL -->
+	<!--  This endpoint must be secured with role abTaskClient --> 
+   <!-- 
+		<entry name="AeTaskClientServiceUrl" value ="http://localhost:8080/active-bpel/services/AeB4PTaskClient-aeTaskOperations" /> 
+	-->
+	
+	<!--  Catalog Servlet -->
+	<!-- 
+	<entry name="XslCatalogUrl" value ="http://localhost:8080/active-bpel/catalog" />
+	-->
+
+	<!--  XSL Stylesheet  Impl. -->
+   <entry name="StyleSheetStore">
+       <entry name="Class" value ="org.activebpel.b4p.war.xsl.AeInMemoryCachingTaskXslStylesheetStore" />
+   </entry>	
+   
+   <!--  Style sheet cache settings  -->
+   
+   <!--  Cache size - defines maximum number of stylesheets that are kept in memory  -->
+   <entry name="CacheSize" value="500" />
+   <!--  Cache duration - defines number of minutes the cache is kept before being invalidated  -->
+   <entry name="CacheDurationMins" value="5" />
+
+</config>

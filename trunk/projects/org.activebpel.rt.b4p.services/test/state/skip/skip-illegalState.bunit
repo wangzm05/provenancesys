@@ -1,0 +1,113 @@
+<abu:bpelUnit
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:abx="http://www.activebpel.org/bpel/extension"
+	xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+	xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl"
+	xmlns:htd="http://www.example.org/WS-HT"
+	xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+	xmlns:ts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"
+	xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+   >
+	<abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml" />
+	<xi:include href="../includes/bpels.xml" />
+	<xi:include href="../includes/wsdls.xml" />
+	<abu:invokes>
+		<abu:invoke name="StoreTask">
+			<abu:defaultInvoke />
+		</abu:invoke>
+		<abu:invoke count="3" name="UpdateTask">
+			<abu:defaultInvoke />
+		</abu:invoke>
+		<abu:invoke name="AssertPotentialOwnerOrAdmin-start">
+			<xi:include href="../includes/identityServiceInvoke.xml" />
+		</abu:invoke>
+		<abu:invoke name="AssertAdmin-skip">
+			<xi:include href="../includes/identityServiceInvoke.xml" />
+		</abu:invoke>
+		<abu:invoke count="2" name="NotifyListener">
+			<abu:defaultInvoke />
+		</abu:invoke>
+	</abu:invokes>
+
+	<abu:commands>
+		<abu:sendMessage operation="create" partnerLink="internal">
+			<abu:message type="ts:CreateTaskRequest">
+				<abu:parts>
+					<abu:part href="../data/createTask-ready.xml"
+						name="createTaskRequest" />
+				</abu:parts>
+			</abu:message>
+			<abu:asserts>
+				<abu:assertEquals href="../data/createTaskResponse.xml"
+					part="createTaskResponse" />
+			</abu:asserts>
+		</abu:sendMessage>
+		<abu:sendMessage operation="start" partnerLink="taskOperations">
+			<abu:headers>
+				<abx:principal>user1</abx:principal>
+			</abu:headers>
+			<abu:message type="htapiw:start">
+				<abu:parts>
+					<abu:part name="start">
+						<htdt:start>
+							<htdt:identifier>urn:b4p:1</htdt:identifier>
+						</htdt:start>
+					</abu:part>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+		<abu:sendMessage operation="setOutput" partnerLink="taskOperations">
+			<abu:headers>
+				<abx:principal>user1</abx:principal>
+			</abu:headers>
+			<abu:message type="htapiw:setOutput">
+				<abu:parts>
+					<abu:part name="setOutput">
+						<htdt:setOutput>
+							<htdt:identifier>urn:b4p:1</htdt:identifier>
+							<htdt:part>outputPart1</htdt:part>
+							<htdt:taskData>
+								<ns:someData xmlns:ns="urn:foo" />
+							</htdt:taskData>
+						</htdt:setOutput>
+					</abu:part>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+		<abu:sendMessage operation="complete" partnerLink="taskOperations">
+			<abu:headers>
+				<abx:principal>user1</abx:principal>
+			</abu:headers>
+			<abu:message type="htapiw:complete">
+				<abu:parts>
+					<abu:part name="complete">
+						<htdt:complete>
+							<htdt:identifier>urn:b4p:1</htdt:identifier>
+						</htdt:complete>
+					</abu:part>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+		<abu:sendMessage operation="skip" partnerLink="taskOperations">
+			<abu:headers>
+				<abx:principal>admin</abx:principal>
+			</abu:headers>
+			<abu:message type="htapiw:skip">
+				<abu:parts>
+					<abu:part name="skip">
+						<htdt:skip>
+                     <htdt:identifier>urn:b4p:1</htdt:identifier>
+                  </htdt:skip>
+					</abu:part>
+				</abu:parts>
+			</abu:message>
+			<abu:assertFault name="htapiw:illegalStateFault"/>
+		</abu:sendMessage>
+		<xi:include href="../includes/finalWaitUntil.xml"/>
+		
+	</abu:commands>
+</abu:bpelUnit>

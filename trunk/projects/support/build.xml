@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="../" default="help" name="Buildfile for Active Endpoints Project Management Procedures">
+    <scriptdef language="javascript" name="get.eclipse.manifest.cp">
+        <attribute name="source"/>        <![CDATA[
+
+          importClass(java.io.FileReader);
+          importClass(java.io.BufferedReader);
+
+          var input = new FileReader(attributes.get("source"));
+          project.log(attributes.get("source"));
+          var bufRead = new BufferedReader(input);
+          var line;    // String that holds current file line
+          line = bufRead.readLine();
+          var cpEntries = "";
+          var foundBCLine = "false";
+
+          while (line != null)
+          {
+
+            if ( foundBCLine != "true" )
+            {
+
+               if ( line.toLowerCase().indexOf("bundle-classpath:") == 0  )
+               {
+                  foundBCLine = "true";
+                  cpEntries = line.substring(18,line.length());
+
+                  if ( line.lastIndexOf(",") == -1  )  
+                  {
+                  
+                     break;
+                  }
+
+               }
+            }
+            else if ( foundBCLine == "true" ) 
+            {
+               cpEntries += line;
+               if ( line.lastIndexOf(",") == -1  )  
+               {
+                  break;
+               }
+            }
+
+            line = bufRead.readLine();
+          }
+
+          if ( cpEntries == "" ) 
+          {
+            cpEntries = "foo.zip"
+          }
+
+         bufRead.close();
+
+         project.setProperty("eclipse.manifest.cp", cpEntries);
+       
+   ]]>
+
+    </scriptdef>
+    <target name="help">
+        <java classname="org.apache.tools.ant.Main">
+            <arg value="-projecthelp"/>
+        </java>
+    </target>
+    <target name="base.init">
+        <property name="cvs.noexec" value="false"/>
+        <property name="cvs.quiet" value="true"/>
+        <property name="cvs.really.quiet" value="true"/>
+        <property name="root" value="${basedir}"/>
+        <property name="devroot" value="${basedir}/.."/>
+        <property name="eclipse.home" value="/eclipse"/>
+        <property name="ae.dist" value="${devroot}/dist"/>
+        <property name="ae.lib" value="${devroot}/lib/"/>
+        <property name="ae.mail.user" value="aedevelopment01@active-endpoints.com"/>
+        <property name="ae.mail.password" value="bp3l3pb"/>
+        <tstamp>
+            <format pattern="yyyyMMddHHmm" property="ae.timestamp"/>
+        </tstamp>
+        
+        
+    </target>
+    <target depends="base.init, project.props.init, project.tag.init" name="project.init">
+        <property name="ae.project.patch.tag" value=""/>
+        <property name="ae.project.patch.desc" value=""/>
+    </target>
+    <target if="aux.project.properties" name="project.props.aux.init">
+        <loadproperties srcFile="support/${aux.project.properties}"/>
+    </target>
+    <target depends="base.init" name="project.props.base.init">
+        <basename file="${propfile}" property="project" suffix=".properties"/>
+        <available file="${project}/ae.build.properties" property="propfile.exists" type="file" value="./${project}/ae.build.properties"/>
+        <available file="${project}/ae.build.properties" property="project.rel.root" type="file" value="../projects"/>
+        <available file="../projects.net/${project}/ae.build.properties" property="propfile.exists" type="file" value="../projects.net/${project}/ae.build.properties"/>
+        <available file="../projects.net/${project}/ae.build.properties" property="project.rel.root" type="file" value="../projects.net"/>
+        <property location="${project.rel.root}" name="projectsroot"/>
+        <fail unless="propfile.exists">You must set the project to build!
+         For example: ant -Dproject=com.activee.rt</fail>
+        <loadproperties srcFile="${propfile.exists}"/>
+        <property location="${projectsroot}/${project}" name="projectloc"/>
+        <property location="${projectloc}/src/" name="ae.src"/>
+        <property location="${ae.src}" name="ae.java.src"/>
+        <property location="${projectloc}/classes/" name="ae.classes"/>
+        <property name="output.jardir" value="${ae.dist}"/>
+        <property name="ae.buildpackage" value="${cvspackage}${project}/src/${buildnum.dir}"/>
+        <property name="project.relative.path" value="${project.rel.root}/${project}"/>
+        <property name="ae.buildnum" value="${project.relative.path}/src/${buildnum.dir}${buildnum.file}"/>
+        <available file="${projectloc}/CVS/Tag" property="ae.project.patch" value="true"/>
+        <mkdir dir="${ae.classes}"/>
+        <mkdir dir="${ae.dist}"/>
+    </target>
+    <target depends="base.init, project.props.base.init, project.props.aux.init" name="project.props.init"/>
+    <target if="ae.project.patch" name="project.tag.init">
+        <loadfile property="ae.project.patch.tag.temp" srcFile="${projectloc}/CVS/Tag">
+            <filterchain>
+                <striplinebreaks/>
+            </filterchain>
+        </loadfile>
+        <script language="javascript">project.setProperty("ae.project.patch.tag", project.getProperty("ae.project.patch.tag.temp").substring(1) );</script>
+        <property name="ae.project.patch.desc" value=" branch ${ae.project.patch.tag}"/>
+    </target>
+    <target depends="base.init" description="Backup the projects and project.net directory tree" name="backup.projects.and.dotnet">
+        <antcall target="backup"/>
+        <antcall target="backup.projects.dotnet"/>
+    </target>
+    <target depends="base.init" description="Backup the project.net directory tree" name="backup.projects.dotnet">
+        <property name="ae.backup.file" value="Backup.Net"/>
+        <property location="${devroot}/projects.net" name="ae.backup.base"/>
+        <antcall target="backup"/>
+    </target>
+    <target depends="project.init" description="Remove previously built classes" name="clean" unless="project.nocompile">
+        <echo message="Cleaning classes..."/>
+        <delete dir="${ae.classes}/org" quiet="true"/>
+        <delete dir="${ae.classes}/com" quiet="true"/>
+        <delete dir="${ae.classes}/WEB-INF" quiet="true"/>
+        <delete dir="${ae.classes}/META-INF" quiet="true"/>
+    </target>
+    <target depends="project.init" description="Compile source for the specified project" name="compile" unless="project.nocompile">
+        <echo message="Compiling source code in ${ae.java.src}"/>
+        <javac classpath="${project.class.path}" debug="${compile.debug}" deprecation="${deprecation}" destdir="${ae.classes}" failonerror="${fail}" optimize="${compile.optimize}" srcdir="${ae.java.src}"/>
+        <echo message="Copying support files from ${ae.src}"/>
+        <copy todir="${ae.classes}">
+            <fileset dir="${ae.src}">
+                <exclude name="**/*.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+        </copy>
+    </target>
+    <target depends="create_project_jar" description="Creates the java archive file for the specified project" name="jar_noclean">
+        <antcall target="internal.aux.post.build"/>
+    </target>
+    <target depends="compile, internal.aux.build" description="Create the java archive file for the specified project" name="create_project_jar" unless="project.nojar">
+        <echo message="Creating java archive library: ${output.jarfile}"/>
+        <delete file="${output.jardir}/${output.jarfile}" quiet="true"/>
+        <jar jarfile="${output.jardir}/${output.jarfile}">
+            <fileset dir="${ae.classes}">
+                <exclude name="**/package.html"/>
+            </fileset>
+        </jar>
+        <antcall target="build.plugins.base"/>
+    </target>
+    <target depends="build.help.plugin, build.plugin" name="build.plugins.base"/>
+    <target depends="base.init" description="Create the java archive file for the specified project" if="is.help.plugin.project" name="build.help.plugin">
+        <loadproperties srcFile="support/master.build.properties"/>
+        <copy file="${project}/META-INF/MANIFEST.MF" toFile="${ae.dist}/tmp/META-INF/MANIFEST.MF"/>
+        <replace file="${ae.dist}/tmp/META-INF/MANIFEST.MF" token="../../lib/" value="lib/"/>
+        <replaceregexp byline="true" file="${ae.dist}/tmp/META-INF/MANIFEST.MF" match="^Bundle-Version:.*" replace="Bundle-Version: ${plugin.project.version}"/>
+        <zip defaultexcludes="false" destfile="${ae.dist}/plugin_jars/${project}_${plugin.project.version}.jar" roundup="false">
+            <fileset dir="${project}">
+                <exclude name="ae.build.properties"/>
+                <exclude name="ae.build.properties.*"/>
+                <include name="about.html"/>
+                <include name="about.html"/>
+                <include name="book.xml"/>
+                <include name="doc.zip"/>
+                <include name="helpData.xml"/>
+                <include name="plugin.xml"/>
+                <include name="plugin.properties"/>
+                <include name="plugin_customization.ini"/>
+                <include name="plugin_customization.properties"/>
+                <include name="*.xml"/>
+                <include name="*.properties"/>
+                <include name="*.html"/>
+                <include name="support/**"/>
+            </fileset>
+            <fileset dir="${ae.dist}/tmp">
+                <include name="META-INF/MANIFEST.MF"/>
+            </fileset>
+        </zip>
+        <unzip dest="${ae.dist}/plugin_exploded/${project}_${plugin.project.version}" overwrite="true" src="${ae.dist}/plugin_jars/${project}_${plugin.project.version}.jar"/>
+        <delete dir="${ae.dist}/tmp"/>
+    </target>
+    <target description="Create the java archive file for the specified project" if="is.plugin.project" name="build.plugin">
+        <loadproperties srcFile="support/master.build.properties"/>
+        <mkdir dir="${ae.dist}/plugin_jars"/>
+        <mkdir dir="${ae.dist}/plugin_exploded"/>
+        <copy file="${project}/META-INF/MANIFEST.MF" toFile="${ae.dist}/tmp/META-INF/MANIFEST.MF"/>
+        <replace file="${ae.dist}/tmp/META-INF/MANIFEST.MF" token="../../lib/" value="lib/"/>
+        <replaceregexp byline="true" file="${ae.dist}/tmp/META-INF/MANIFEST.MF" match="^Bundle-Version:.*" replace="Bundle-Version: ${plugin.project.version}"/>
+        <copy file="${project}/plugin.properties" toFile="${ae.dist}/tmp/plugin.properties"/>
+        <replace file="${ae.dist}/tmp/plugin.properties" token="Version: 3.0.1" value="Version: ${plugin.project.version}"/>
+        <get.eclipse.manifest.cp source="${ae.dist}/tmp/META-INF/MANIFEST.MF"/>
+        <zip defaultexcludes="false" destfile="${ae.dist}/plugin_jars/${project}_${plugin.project.version}.jar" roundup="false">
+            <zipfileset excludes="META-INF/*" includes="org/**" prefix="classes" src="${ae.dist}/${output.jarfile}"/>
+            <zipfileset excludes="META-INF/*" includes="com/**" prefix="classes" src="${ae.dist}/${output.jarfile}"/>
+            <fileset dir="${project}">
+                <include name="about.*"/>
+                <include name="introContent.xml"/>
+                <include name="helpData.xml"/>
+                <include name="plugin.xml"/>
+                <include name="plugin_customization.ini"/>
+                <include name="plugin_customization.properties"/>
+                <include name="splash.bmp"/>
+                <include name="*.jpg"/>
+                <include name="*.gif"/>
+                <include name="*.ico"/>
+                <include name="ant_tasks/**"/>
+                <include name="css/**"/>
+                <include name="cheatsheets/**"/>
+                <include name="html/**"/>
+                <include name="icons/**"/>
+                <include name="images/**"/>
+                <include name="model/**"/>
+                <include name="schema/**"/>
+                <include name="support/**"/>
+            </fileset>
+            <fileset dir="${ae.lib}/.." includes="${eclipse.manifest.cp}"/>
+            <fileset dir="${ae.dist}/tmp">
+                <include name="META-INF/MANIFEST.MF"/>
+                <include name="plugin.properties"/>
+            </fileset>
+        </zip>
+        <unzip dest="${ae.dist}/plugin_exploded/${project}_${plugin.project.version}" overwrite="true" src="${ae.dist}/plugin_jars/${project}_${plugin.project.version}.jar"/>
+        <delete dir="${ae.dist}/tmp"/>
+    </target>
+    <target depends="base.init, compile, internal.aux.war.build, internal.aux.post.build" if="project.war" name="war">
+        <delete failonerror="false" file="${output.jardir}/${output.jarfile}" quiet="true"/>
+        <war destfile="${output.jardir}/${output.jarfile}" webxml="${projectloc}/metadata/web.xml">
+            <fileset dir="${projectloc}/war" excludes="CVS/*,*.jar"/>
+            <metainf dir="${projectloc}/metadata">
+                <exclude name="web.xml"/>
+            </metainf>
+            <classes dir="${projectloc}/classes"/>
+        </war>
+    </target>
+    <target depends="clean, jar_noclean, war" description="Clean classes and create the java archive file for the specified project" name="jar"/>
+    <target depends="compile" if="aux.build" name="internal.aux.build">
+        <echo message="Executing pre-jar build"/>
+        <ant dir="${aux.build}"/>
+    </target>
+    <target if="aux.post.build" name="internal.aux.post.build">
+        <echo message="Executing post-jar build"/>
+        <ant dir="${aux.post.build}"/>
+    </target>
+    <target depends="compile" if="aux.war.build" name="internal.aux.war.build">
+        <ant dir="${aux.war.build}"/>
+    </target>
+    <target depends="project.init" description="Generate javadocs for the specified project" if="perform.javadoc" name="javadoc">
+        <echo message="Generating Javadoc"/>
+        <javadoc access="private" author="true" classpath="${project.class.path}" defaultexcludes="yes" destdir="${projectloc}/doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="com.activee.*,org.activebpel.*" sourcepath="${ae.src}" splitindex="true" use="true" version="true" windowtitle="${project} API">
+            <link href="${project.javadoc.link1}"/>
+            <link href="${project.javadoc.link2}"/>
+            <link href="${project.javadoc.link3}"/>
+            <link href="${project.javadoc.link4}"/>
+            <link href="${project.javadoc.link5}"/>
+            <link href="${project.javadoc.link6}"/>
+            <link href="${project.javadoc.link7}"/>
+            <link href="${project.javadoc.link8}"/>
+            <tag description="To do:" name="todo"/>
+            <doctitle>                <![CDATA[<h1></h1>${project} API]]>
+</doctitle>
+            <bottom>                <![CDATA[<i>Copyright &#169; 2003, 2004 Active Endpoints. All Rights Reserved.</i>]]>
+</bottom>
+        </javadoc>
+    </target>
+    <target depends="checkin.lockfile.handler" name="checkin.cancel">
+        <mail encoding="auto" failonerror="false" from="buildnotice@active-endpoints.com" mailhost="mail.active-endpoints.com" message="${user.name} canceling checkin" messagemimetype="text/plain" password="${ae.mail.password}" subject="${user.name} canceling checkin." tolist="${ae.mail.dist}" user="${ae.mail.user}"/>
+        <delete failonerror="false" file="${ae.lockfile}"/>
+    </target>
+    <target depends="base.init,checkinstart.lockfile.handler" name="checkin.start">
+        <echo message="Lockfile acquired. Starting checkin...."/>
+        <input addproperty="unit.test.passed" message="Have unit tests run successfully?" validargs="y,n"/>
+        <mail encoding="auto" failonerror="false" from="buildnotice@active-endpoints.com" mailhost="mail.active-endpoints.com" messagemimetype="text/plain" password="${ae.mail.password}" subject="${user.name} starting checkin." tolist="${ae.mail.dist}" user="${ae.mail.user}">
+            <message>${user.name} acquired lockfile. Starting checkin...
+           Unit Test Successful: ${unit.test.passed}</message>
+        </mail>
+        <echo message="Proceed with checkin."/>
+    </target>
+    <target depends="lockfile.exists,create.lockfile,get.lockfile.owner" name="checkinstart.lockfile.handler">
+        <fail message="Checkin already in progress: ${lock.owner}" unless="lockfile.acquired"/>
+    </target>
+    <target depends="lockfile.exists,get.lockfile.owner" name="checkin.lockfile.handler">
+        <fail message="Lockfile not found. Run checkin.start to acquire lockfile." unless="lockfile.exists"/>
+        <fail message="Not lockfile owner. ${lock.owner} is owner." unless="lockfile.acquired"/>
+    </target>
+    <target depends="base.init" name="lockfile.exists">
+        <condition property="lockfile.exists">
+            <available file="${ae.lockfile}"/>
+        </condition>
+        <echo message="${lockfile.exists}"/>
+    </target>
+    <target if="lockfile.exists" name="get.lockfile.owner">
+        <loadproperties srcFile="${ae.lockfile}"/>
+        <condition property="lockfile.acquired">
+            <equals arg1="${user.name}" arg2="${lock.owner}" casesensitive="false" trim="true"/>
+        </condition>
+    </target>
+    <target name="create.lockfile" unless="lockfile.exists">
+        <echo message="Checkin lockfile acquired"/>
+        <concat destfile="${ae.lockfile}">lock.owner=${user.name}</concat>
+        <property name="lockfile.exists" value="true"/>
+    </target>
+    <target name="debug">
+        <echo message="Setting debug properties"/>
+        <property name="cvs.noexec" value="true"/>
+        <property name="cvs.quiet" value="false"/>
+        <property name="cvs.really.quiet" value="false"/>
+    </target>
+</project>

@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<xs:schema
+   targetNamespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+   xmlns:tns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+   xmlns:htd="http://www.example.org/WS-HT"
+   xmlns:api="http://www.example.org/WS-HT/api"
+   xmlns:htdp="http://www.example.org/WS-HT/protocol"
+   xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   elementFormDefault="qualified">
+
+   <xs:import namespace="http://www.w3.org/2001/XMLSchema" />
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+
+   <xs:import namespace="http://www.example.org/WS-HT"
+      schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask.xsd" />
+      
+	<xs:import namespace="http://www.example.org/WS-HT/api"
+		schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask-api.xsd" />      
+
+	<xs:import namespace="http://www.example.org/WS-HT/protocol"
+		schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask-protocol.xsd" />      
+
+	<xs:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+		schemaLocation="aeb4p-task-rt.xsd" />      
+
+   <!--  Parent or people activity process id.  -->
+   <xs:element name="peopleActivityPid" type="xs:long" />
+   <!--  A unique identifier within PA process to identity the PA. E.g. its Location Id.  -->
+   <xs:element name="peopleActivityId" type="xs:integer" />
+
+	<xs:element name="processTaskRequest" type="tns:tProcessTaskRequest"/>
+   <xs:complexType name="tProcessTaskRequest">
+      <xs:annotation>
+         <xs:documentation>
+            Contains ws-ht task definition and creation data overides.
+         </xs:documentation>
+      </xs:annotation>    
+      <xs:sequence>
+         <xs:element ref="htd:task" />
+         <xs:element ref="trt:initialState" />
+         <xs:element ref="trt:interfaceMetadata" />
+			<xs:element ref="tns:peopleActivityPid" />         
+			<xs:element ref="tns:peopleActivityId" />
+      </xs:sequence>
+   </xs:complexType>
+   
+   <xs:element name="processTaskResponse" type="tns:tProcessTaskResponse"/>   
+   <xs:complexType name="tProcessTaskResponse">
+      <xs:annotation>
+         <xs:documentation>
+            Contains response after executing a ws-task.
+         </xs:documentation>
+      </xs:annotation>    
+      <xs:sequence>
+	      <xs:element ref="trt:identifier"/>
+	      <xs:element name="metadata" type="trt:tContextData"/>   
+         <xs:element ref="trt:output" minOccurs="0" />
+         <xs:element ref="trt:fault" minOccurs="0"/>         
+         <xs:element ref="trt:comments" minOccurs="0"/>
+         <xs:element ref="trt:attachments" minOccurs="0" />  	      
+      </xs:sequence>
+   </xs:complexType>
+   
+   <xs:element name="cancelTaskRequest">   
+	   <xs:complexType>
+	      <xs:annotation>
+	         <xs:documentation>
+	            Contains  request data to cancel a task
+	         </xs:documentation>
+	      </xs:annotation>    
+	      <xs:sequence>
+				<xs:element ref="tns:peopleActivityPid" />         
+				<xs:element ref="tns:peopleActivityId" />
+	      </xs:sequence>
+	   </xs:complexType>   
+	</xs:element>
+	
+	<xs:element name="nonRecoverableError" type="xs:string"/>
+</xs:schema>

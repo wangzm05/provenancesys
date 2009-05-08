@@ -1,0 +1,76 @@
+<abu:bpelUnit xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd" 
+        xmlns:abx="http://www.activebpel.org/bpel/extension" 
+        xmlns:aeb4pcnt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-custom-notification.xsd" 
+        xmlns:aeb4pnt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-notifications-wsdl.xsd" 
+        xmlns:aeb4pnw="http://www.activebpel.org/b4p/2007/12/wshumantask/aeb4p-task-custom-notification.wsdl" 
+        xmlns:aeesc="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-escalations.wsdl" 
+        xmlns:aeesct="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd" 
+        xmlns:b4plct="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd" 
+        xmlns:b4ptrt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" 
+        xmlns:b4pts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl" 
+        xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" 
+        xmlns:htd="http://www.example.org/WS-HT" 
+        xmlns:xi="http://www.w3.org/2001/XInclude" 
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+        name="escalation_16_1deadline_2esc-notify-reassign">
+
+   <abu:trace>on</abu:trace>
+
+   <xi:include href="../common-config/engineProperties.xml"/>
+   <xi:include href="../common-config/bpels.xml"/>
+   <xi:include href="../common-config/wsdls.xml"/>
+   <xi:include href="../common-config/schemas.xml"/>
+
+   <abu:invokes>
+      <abu:invoke name="notifyTaskAsEscalated">
+         <abu:defaultInvoke/>
+      </abu:invoke>
+      <abu:invoke name="InvokeHtNotification">
+         <abu:defaultInvoke/>
+      </abu:invoke>
+      <abu:invoke name="Reassign">
+         <abu:defaultInvoke/>
+      </abu:invoke>
+      <abu:invoke name="GetTaskInstance">
+         <abu:defaultInvoke>
+            <abu:simulatedResponse>
+               <abu:message type="b4pts:GetTaskInstanceResponse">
+                  <abu:parts>
+                     <abu:part name="taskInstance" href="../data/taskInstance.xml" />
+                  </abu:parts>
+               </abu:message>
+            </abu:simulatedResponse>
+         </abu:defaultInvoke>
+      </abu:invoke>
+   </abu:invokes>
+   
+   <abu:commands>
+      <abu:sendMessage operation="start" partnerLink="taskEscalationServicePLT">
+         <abu:message type="aeesc:StartDeadlinesRequest">
+            <abu:parts>
+               <abu:part href="../data/createDeadlinesData-1Deadline-2Esc-NotifyReassign.xml" name="createDeadlinesData"/>
+            </abu:parts>
+         </abu:message>
+         <abu:asserts>
+            <abu:assertEquals part="createDeadlinesReponse">
+               <ns:createDeadlinesResponse xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd">
+                  <ns:pid>1</ns:pid>
+               </ns:createDeadlinesResponse>
+            </abu:assertEquals>
+         </abu:asserts>
+      </abu:sendMessage>
+      <abu:sendMessage async="true" delay="2000" operation="cancel" partnerLink="taskEscalationServicePLT">
+         <abu:message type="aeesc:DeadlineOpRequest">
+            <abu:parts>
+               <abu:part name="deadlineOpData">
+               	<aeesct:deadlineOpData>
+               		<trt:identifier xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">anyURI</trt:identifier>
+               		<aeesct:type>start</aeesct:type>
+               	</aeesct:deadlineOpData>
+               </abu:part>
+            </abu:parts>
+         </abu:message>
+      </abu:sendMessage>      
+      <abu:waitUntil processId="1" timeout="10000"/>
+   </abu:commands>
+</abu:bpelUnit>

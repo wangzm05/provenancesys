@@ -1,0 +1,17 @@
+<aeptstx:removeOwnerRequest 
+	xmlns:aeptstx="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+	xmlns:htd="http://www.example.org/WS-HT">
+	<aeptstx:recipients>
+		<htd:users>
+			<htd:user>owner1</htd:user>
+			<htd:user>owner2</htd:user>
+		</htd:users>
+	</aeptstx:recipients>
+	<aeptstx:excludedOwners>
+		<htd:users>
+			<htd:user>owner2</htd:user>
+		</htd:users>
+	</aeptstx:excludedOwners>
+	<aeptstx:principalName>owner1</aeptstx:principalName>
+	<aeptstx:excludedOwnersCount>1</aeptstx:excludedOwnersCount>
+</aeptstx:removeOwnerRequest>

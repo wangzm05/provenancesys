@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="setFault">
+   <abs:bUnitRef location="setFault.bunit"/>
+   <abs:bUnitRef location="setFault-illegalAccess.bunit"/>
+   <abs:bUnitRef location="setFault-illegalOperation.bunit"/>
+   <abs:bUnitRef location="setFault-illegalArgument.bunit"/>
+   <abs:bUnitRef location="setFault-illegalState.bunit"/>
+</abs:bSuite>

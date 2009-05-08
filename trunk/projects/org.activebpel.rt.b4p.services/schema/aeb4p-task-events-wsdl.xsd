@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<xs:schema
+   targetNamespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd"
+   xmlns:tns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd"
+   xmlns:api="http://www.example.org/WS-HT/api"
+   xmlns:sref="http://docs.oasis-open.org/wsbpel/2.0/serviceref"
+   xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   elementFormDefault="qualified">
+
+   <xs:import namespace="http://www.w3.org/2001/XMLSchema" />
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+   <xs:import namespace="http://docs.oasis-open.org/wsbpel/2.0/serviceref" 
+		schemaLocation="ws-bpel_serviceref.xsd" />   		
+	<xs:import namespace="http://www.example.org/WS-HT/api" 
+		schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask-api.xsd" />      
+	<xs:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+		schemaLocation="aeb4p-task-rt.xsd" />      
+ 	
+ 	<xs:element name="listenerId" type="tns:tListenerId" />
+   <xs:complexType name="tListenerId">
+      <xs:annotation>
+         <xs:documentation>
+            A unique ID assigned to a listener when a listener registers with an event generator.
+         </xs:documentation>
+      </xs:annotation>   
+      <xs:simpleContent>
+         <xs:extension base="xs:int" />
+      </xs:simpleContent>
+   </xs:complexType>      
+	
+	<xs:element name="taskListener" type="tns:tTaskListener" />
+   <xs:complexType name="tTaskListener">
+      <xs:annotation>
+         <xs:documentation>
+            Defines a task listener. A Task listener has a unique id (per task)
+            as well as the listener callback EPR.
+         </xs:documentation>
+      </xs:annotation>   
+      <xs:sequence>
+         <xs:element ref="tns:listenerId" />
+         <xs:element ref="sref:service-ref"/>
+      </xs:sequence>      
+   </xs:complexType>  		
+	
+	<xs:element name="listenerList" type="tns:tListenerList" />   
+   <xs:complexType name="tListenerList">
+      <xs:annotation>
+         <xs:documentation>
+            Contains a list of listeners.
+         </xs:documentation>
+      </xs:annotation>   
+      <xs:sequence>
+         <xs:element ref="tns:taskListener" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>      
+   </xs:complexType> 	
+   
+	<xs:element name="addListenerData" type="tns:tAddListenerData" /> 
+   <xs:complexType name="tAddListenerData">
+      <xs:annotation>
+         <xs:documentation>
+            Contains task listener registration data.
+         </xs:documentation>
+      </xs:annotation>      
+      <xs:sequence>
+      	<!--  the task id is used for correlation purposes  -->
+         <xs:element ref="trt:identifier"/>
+         <xs:element ref="sref:service-ref"/>
+      </xs:sequence>
+   </xs:complexType>
+   
+	<xs:element name="removeListenerData" type="tns:tRemoveListenerData" /> 
+   <xs:complexType name="tRemoveListenerData">
+      <xs:annotation>
+         <xs:documentation>
+            Contains task listener de-registration data.
+         </xs:documentation>
+      </xs:annotation>      
+      <xs:sequence>
+         <xs:element ref="trt:identifier"/>
+         <xs:element ref="tns:listenerId"/>
+      </xs:sequence>
+   </xs:complexType>
+	
+	<xs:element name="taskStateChangeEvent">	
+	   <xs:complexType>
+	      <xs:annotation>
+	         <xs:documentation>
+	            Defines a task state change event.
+	         </xs:documentation>
+	      </xs:annotation>	   
+	      <xs:sequence>
+	         <xs:element ref="tns:listenerId"/>
+	         <xs:element ref="trt:identifier"/>
+	         <xs:element name="state" type="api:tStatus" />
+	         <xs:element name="oldState" type="api:tStatus" minOccurs="0" />
+	      </xs:sequence>
+	   </xs:complexType>
+	</xs:element>	
+	
+</xs:schema>

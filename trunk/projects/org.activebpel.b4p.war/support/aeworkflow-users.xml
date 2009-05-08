@@ -1,0 +1,27 @@
+<tomcat-users>
+
+	<role rolename="abTaskClient"/>
+	<user name="aeadmin" password="aeadmin" roles="manager" email="test@active-endpoints.com"/>
+	<user name="user0" password="user0" roles="abTaskClient" email="test@active-endpoints.com"/>
+	<user name="user1" password="user1" roles="abTaskClient"  email="test@active-endpoints.com"/>
+	<user name="user2" password="user2" roles="abTaskClient"  email="test@active-endpoints.com"/>
+	<user name="user3" password="user3" roles="abTaskClient, workflowtaskadmin"  email="test@active-endpoints.com"/>  
+	<user name="qauser1" password="qauser1" roles="abTaskClient"  email="test@active-endpoints.com"/>
+	<user name="qa1" password="qa1" roles="abTaskClient"  email="test@active-endpoints.com"/>
+	<user name="mford" password="mford" roles="abTaskClient"  email="test@active-endpoints.com"/>	  
+	<user name="ckeller" password="ckeller" roles="abTaskClient"  email="test@active-endpoints.com"/>  
+	<user name="ewittmann" password="ewittmann" roles="abTaskClient"  email="test@active-endpoints.com"/>  
+	<user name="pjayanetti" password="pjayanetti" roles="abTaskClient" email="test@active-endpoints.com"/>
+	<user name="rnaylor" password="rnaylor" roles="abTaskClient" email="test@active-endpoints.com"/>
+	
+	<role name="loanreps"/>
+	<role name="loanmgrs"/>
+	<role name="loancsrs"/>  
+	<user name="loanrep1" password="loanrep1" roles="abTaskClient,loanreps"/>
+	<user name="loanrep2" password="loanrep2" roles="abTaskClient,loanreps"/>
+	<user name="loanrep3" password="loanrep3" roles="abTaskClient,loanreps"/>
+	<user name="loanmgr1" password="loanmgr1" roles="abTaskClient,loanmgrs"/>
+	<user name="loanmgr2" password="loanmgr2" roles="abTaskClient,loanmgrs"/>
+	<user name="loancsr1" password="loancsr1" roles="abTaskClient,loancsrs"/>
+		
+</tomcat-users>

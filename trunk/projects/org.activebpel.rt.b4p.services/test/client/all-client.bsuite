@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="client">
+   <abs:bUnitRef location="getTasks/getTasks.bunit"/>
+   <abs:bUnitRef location="getMyTasks/getMyTasks.bunit"/>
+   <abs:bUnitRef location="getMyTaskAbstracts/getMyTaskAbstracts.bunit"/>
+   <abs:bUnitRef location="getAttachmentInfos/getAttachmentInfos.bunit"/>
+   <abs:bUnitRef location="getAttachments/getAttachments.bunit"/>
+   <abs:bUnitRef location="getComments/getComments.bunit"/>
+   <abs:bUnitRef location="getFault/getFault.bunit"/>
+   <abs:bUnitRef location="getInput/getInput.bunit"/>
+   <abs:bUnitRef location="getOutput/getOutput.bunit"/>
+   <abs:bUnitRef location="getRendering/getRendering.bunit"/>
+   <abs:bUnitRef location="getRenderingTypes/getRenderingTypes.bunit"/>
+   <abs:bUnitRef location="getTaskDescription/getTaskDescription.bunit"/>
+   <abs:bUnitRef location="aeGetTaskInstance/getInstance.bunit"/>
+   <abs:bSuiteRef location="xsiType/xsiType.bsuite"/>
+</abs:bSuite>

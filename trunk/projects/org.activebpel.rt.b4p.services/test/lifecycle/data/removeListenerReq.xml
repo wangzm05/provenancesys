@@ -1,0 +1,4 @@
+<aetgt:removeListenerData xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd" xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd" xmlns:result="http://saxon.sf.net/xquery-results" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <trt:identifier xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">1</trt:identifier>
+   <ns:listenerId>1</ns:listenerId>
+</aetgt:removeListenerData>

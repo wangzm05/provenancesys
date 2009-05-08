@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl" 
+	xmlns:tns="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl" 
+	xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" 
+	xmlns:tsst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+	xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+	
+	<plnk:partnerLinkType xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" name="storagePLT">
+	   <plnk:role name="system" portType="tns:IAeTaskStorageService"/>
+	</plnk:partnerLinkType>
+	
+  <wsdl:types>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl">
+
+         <xsd:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" schemaLocation="../schema/aeb4p-task-rt.xsd"/>
+         <xsd:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" schemaLocation="../schema/aeb4p-task-state-wsdl.xsd"/>
+			<xsd:import namespace="http://www.example.org/WS-HT/api/xsd" schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask-api-wsdl.xsd"/>
+         <!-- Elements -->
+         <xsd:element name="storeTaskData">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="processId" type="xsd:long"/>
+                  <xsd:element ref="trt:taskInstance"/>
+                  <xsd:element name="update" type="xsd:boolean"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         
+         <xsd:element name="deleteTaskData" type="xsd:long"/>
+         <xsd:element name="principal" type="xsd:string"/>
+         <xsd:element name="faultData" type="xsd:string"/>
+         
+         <xsd:element name="roleList">
+         	<xsd:complexType>
+         		<xsd:sequence>
+         			<xsd:element name="role" minOccurs="0" maxOccurs="unbounded" type="xsd:string"/>
+         		</xsd:sequence>
+         	</xsd:complexType>
+         </xsd:element>
+
+       	<xsd:complexType name="tGetMyTasksAuthorization">
+       		<xsd:sequence>
+       			<xsd:element ref="tns:principal" />
+       			<xsd:element ref="tns:roleList" />
+       		</xsd:sequence>
+       	</xsd:complexType>
+
+       	<xsd:element name="listTaskAbstracts">
+       		<xsd:complexType>
+       			<xsd:complexContent>
+       				<xsd:extension
+       					base="tns:tGetMyTasksAuthorization">
+       					<xsd:sequence>       						
+       						<xsd:element ref="htdt:getMyTaskAbstracts" /> 
+       						<xsd:element ref="tsst:taskIndexOffset" minOccurs="0" />
+       						<xsd:element ref="tsst:orderBy" minOccurs="0" />
+       					</xsd:sequence>
+       				</xsd:extension>
+       			</xsd:complexContent>
+       		</xsd:complexType>
+       	</xsd:element>
+       	<xsd:element name="listTaskAbstractsResponse">
+            <xsd:complexType>
+               <xsd:sequence>
+               	<xsd:element ref="tsst:taskTotalCount" />
+                  <xsd:element ref="htdt:getMyTaskAbstractsResponse"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>                  
+
+       	<xsd:element name="listTasks">
+       		<xsd:complexType>
+       			<xsd:complexContent>
+       				<xsd:extension
+       					base="tns:tGetMyTasksAuthorization">
+       					<xsd:sequence>
+       						<xsd:element ref="htdt:getMyTasks" />
+       						<xsd:element ref="tsst:taskIndexOffset" minOccurs="0" />
+       						<xsd:element ref="tsst:orderBy" minOccurs="0" />
+       						<xsd:element ref="tsst:searchBy" minOccurs="0" />
+       					</xsd:sequence>
+       				</xsd:extension>
+       			</xsd:complexContent>
+       		</xsd:complexType>
+       	</xsd:element>
+         <xsd:element name="listTasksResponse">
+            <xsd:complexType>
+               <xsd:sequence>
+               	<xsd:element ref="tsst:taskTotalCount" />
+                  <xsd:element ref="htdt:getMyTasksResponse"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>                  
+      </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="StoreTaskMessage">
+    <wsdl:part name="storeTaskData" element="tns:storeTaskData"/>
+  </wsdl:message>
+  <wsdl:message name="EmptyMessage">
+  </wsdl:message>
+  <wsdl:message name="DeleteTaskMessage">
+    <wsdl:part name="deleteTaskData" element="tns:deleteTaskData"/>
+  </wsdl:message>
+  <wsdl:message name="ListTaskAbstractsMessage">
+    <wsdl:part name="listTaskAbstracts" element="tns:listTaskAbstracts"/>
+  </wsdl:message>
+  <wsdl:message name="ListTaskAbstractsResponseMessage">
+    <wsdl:part name="listTaskAbstractsResponse" element="tns:listTaskAbstractsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="ListTasksMessage">
+    <wsdl:part name="listTasks" element="tns:listTasks"/>
+  </wsdl:message>
+  <wsdl:message name="ListTasksResponseMessage">
+    <wsdl:part name="listTasksResponse" element="tns:listTasksResponse"/>
+  </wsdl:message>
+  
+  <wsdl:message name="TaskStorageFaultMessage">
+    <wsdl:part name="faultData" element="tns:faultData"/>
+  </wsdl:message>
+  <wsdl:portType name="IAeTaskStorageService">
+    <wsdl:operation name="storeTask">
+      <wsdl:input message="tns:StoreTaskMessage"/>
+      <wsdl:output message="tns:EmptyMessage"/>
+      <wsdl:fault name="taskStoreFault" message="tns:TaskStorageFaultMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="deleteTask">
+      <wsdl:input message="tns:DeleteTaskMessage"/>
+      <wsdl:output message="tns:EmptyMessage"/>
+      <wsdl:fault name="taskStoreFault" message="tns:TaskStorageFaultMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="listTaskAbstracts">
+      <wsdl:input message="tns:ListTaskAbstractsMessage"/>
+      <wsdl:output message="tns:ListTaskAbstractsResponseMessage"/>
+      <wsdl:fault name="taskStoreFault" message="tns:TaskStorageFaultMessage"/>
+    </wsdl:operation>    
+    <wsdl:operation name="listTasks">
+      <wsdl:input message="tns:ListTasksMessage"/>
+      <wsdl:output message="tns:ListTasksResponseMessage"/>
+      <wsdl:fault name="taskStoreFault" message="tns:TaskStorageFaultMessage"/>
+    </wsdl:operation>    
+  </wsdl:portType>
+</wsdl:definitions>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="addAttachment">
+   <abs:bUnitRef location="addAttachment-both.bunit"/>
+   <abs:bUnitRef location="addAttachment-illegalAccess.bunit"/>
+   <abs:bUnitRef location="addAttachment-illegalState.bunit"/>
+   <abs:bUnitRef location="addAttachment-MIME.bunit"/>
+   <abs:bUnitRef location="addAttachment-URL.bunit"/>
+   <abs:bUnitRef location="addAttachment-URL-stakeholder.bunit"/>
+</abs:bSuite>

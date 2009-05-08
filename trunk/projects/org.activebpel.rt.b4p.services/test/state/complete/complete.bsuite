@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="complete">
+   <abs:bUnitRef location="complete.bunit"/>
+   <abs:bUnitRef location="complete-illegalAccess.bunit"/>
+   <abs:bUnitRef location="complete-illegalState.bunit"/>
+   <abs:bUnitRef location="complete-illegalState-noData.bunit"/>
+   <abs:bUnitRef location="complete-withData.bunit"/>
+   <abs:bUnitRef location="complete-withData-illegalArgument-notSinglePart.bunit"/>
+</abs:bSuite>

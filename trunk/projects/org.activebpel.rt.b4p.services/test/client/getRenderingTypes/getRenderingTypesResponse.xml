@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<htapis:getRenderingTypesResponse xmlns:htapis="http://www.example.org/WS-HT/api/xsd">
+   <htapis:renderingType>qname</htapis:renderingType>
+</htapis:getRenderingTypesResponse>

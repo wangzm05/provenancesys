@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abu:bpelUnit
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl"
+	xmlns:ts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"
+	xmlns:xi="http://www.w3.org/2001/XInclude"	
+   >
+	<abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml"/>
+	<xi:include href="../includes/bpels.xml"/>
+	<xi:include href="../includes/wsdls.xml"/>
+	<xi:include href="../includes/schemas.xml"/>
+   <abu:partnerLinks xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd">
+      <abu:partnerLink name="aeTaskOperationsPL" processName="bpelNS:aeb4p-task-client" xmlns:bpelNS="http://www.activebpel.org/b4p/2007/10/wshumantask">
+         <abu:partnerRole endpointReference="static">
+            <wsa:EndpointReference xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing">
+            	<wsa:Address>taskStateMachineExtra</wsa:Address>
+            </wsa:EndpointReference>
+         </abu:partnerRole>
+      </abu:partnerLink>
+   </abu:partnerLinks>	<abu:invokes>
+		<abu:invoke name="getInstance" partnerAddress="taskStateMachineExtra-getInstance">
+			<abu:defaultInvoke>
+				<abu:simulatedResponse>
+					<abu:message type="ts:GetTaskInstanceResponse">
+						<abu:parts>
+							<abu:part name="taskInstance" href="getInstanceResponse.xml"/>
+						</abu:parts>
+					</abu:message>
+				</abu:simulatedResponse>
+			</abu:defaultInvoke>
+		</abu:invoke>
+	</abu:invokes>
+	<abu:commands>
+		<abu:sendMessage operation="getInstance" partnerLink="aeTaskOperationsPL">
+			<abu:message type="ts:GetTaskInstanceRequest">
+				<abu:parts>
+					<abu:part name="getTaskInstance" href="getInstance.xml"/>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+	</abu:commands>
+</abu:bpelUnit>

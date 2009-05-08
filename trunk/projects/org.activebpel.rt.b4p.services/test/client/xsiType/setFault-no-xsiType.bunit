@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abu:bpelUnit
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:htapis="http://www.example.org/WS-HT/api/xsd"
+	xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy"
+	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+    xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl"
+	xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	name="setFault-no-xsiType">
+	<abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml"/>
+	<xi:include href="../includes/bpels.xml"/>
+	<xi:include href="../includes/wsdls.xml"/>
+	<xi:include href="../includes/schemas.xml"/>
+	<xi:include href="../includes/resources.xml"/>
+	<xi:include href="../includes/partnerLinks-noValidation.xml"/>
+	<abu:invokes>
+		<abu:invoke name="setFault">
+			<abu:defaultInvoke>
+				<abu:asserts>
+					<abu:assertEquals part="setFault" query="count(//@xsi:type) = 0">true</abu:assertEquals>
+				</abu:asserts>
+				<abu:simulatedResponse>
+					<abu:message type="htapiw:setFaultResponse">
+						<abu:parts>
+							<abu:part name="setFaultResponse">
+								<htapis:setFaultResponse/>
+							</abu:part>
+						</abu:parts>
+					</abu:message>
+				</abu:simulatedResponse>
+			</abu:defaultInvoke>
+		</abu:invoke>
+	</abu:invokes>
+	<abu:commands>
+		<abu:sendMessage operation="setFault" partnerLink="taskClientPL">
+			<abu:message type="htapiw:setFault">
+				<abu:parts>
+					<abu:part name="setFault">
+						<htdt:setFault>
+							<htdt:identifier>urn:b4p:1</htdt:identifier>
+							<htdt:faultName>fault1</htdt:faultName>
+							<htdt:faultData>
+								<ns:someFault xmlns:ns="urn:fault">
+									<inout:errorInteger xmlns:inout="http://example.com/loan-approval/xsd/InOut/">1</inout:errorInteger>
+								</ns:someFault>
+     						</htdt:faultData>
+						</htdt:setFault>
+					</abu:part>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+	</abu:commands>
+</abu:bpelUnit>

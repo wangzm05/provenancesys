@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+   targetNamespace="http://www.activebpel.org/b4p/2007/10/wshumantask/taskLifecycle.wsdl"
+   xmlns:tns="http://www.activebpel.org/b4p/2007/10/wshumantask/taskLifecycle.wsdl"
+   xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   xmlns:htd="http://www.example.org/WS-HT"
+   xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:ae="urn:active-endpoints:documentation"
+   xmlns:aecmn="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl" 
+   xmlns:aeadmin="http://docs.active-endpoints/wsdl/activebpeladmin/2007/01/activebpeladmin.wsdl"
+   xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop">
+
+	<import location="aeb4p-task-common.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl" />
+	<import location="../../org.activebpel.rt.bpel.server/support/ActiveBpelAdmin.wsdl" namespace="http://docs.active-endpoints/wsdl/activebpeladmin/2007/01/activebpeladmin.wsdl" />
+		
+   <plnk:partnerLinkType name="taskLifecyclePLT">
+      <plnk:role name="process" portType="tns:IAeTaskLifecycleService"/>
+   </plnk:partnerLinkType>
+
+   <plnk:partnerLinkType name="cancelTaskLifecyclePLT">
+      <plnk:role name="process" portType="tns:IAeTaskLifecycleCancel"/>
+   </plnk:partnerLinkType>
+   
+	<plnk:partnerLinkType name="activeBpelAdmin">
+	   <plnk:role name="simple" portType="aeadmin:IAeAxisActiveBpelAdmin"/>
+	</plnk:partnerLinkType>
+   
+	<!--  correlation property used to cancel task lifecycle -->
+	<!--  
+	<vprop:property name="parentpid" type="xs:integer" />   
+   <vprop:propertyAlias propertyName="tns:parentpid" element="tlc:processTaskRequest">
+	   <vprop:query>tlc:peopleActivityPid/text()</vprop:query>
+   </vprop:propertyAlias>	
+   <vprop:propertyAlias propertyName="tns:parentpid" element="tlc:cancelTaskRequest">
+	   <vprop:query>tlc:peopleActivityPid/text()</vprop:query>
+   </vprop:propertyAlias>	
+   -->
+   
+	<vprop:propertyAlias propertyName="aecmn:peopleActivityPid" element="tlc:processTaskRequest">
+	   <vprop:query>tlc:peopleActivityPid/text()</vprop:query>
+   </vprop:propertyAlias>    
+	<vprop:propertyAlias propertyName="aecmn:peopleActivityPid" element="tlc:cancelTaskRequest">
+	   <vprop:query>tlc:peopleActivityPid/text()</vprop:query>
+   </vprop:propertyAlias>    
+
+	<vprop:propertyAlias propertyName="aecmn:peopleActivityId" element="tlc:processTaskRequest">
+	   <vprop:query>tlc:peopleActivityId/text()</vprop:query>
+   </vprop:propertyAlias>    
+	<vprop:propertyAlias propertyName="aecmn:peopleActivityId" element="tlc:cancelTaskRequest">
+	   <vprop:query>tlc:peopleActivityId/text()</vprop:query>
+   </vprop:propertyAlias>    
+   
+   <types>
+      <xs:schema elementFormDefault="qualified"
+         targetNamespace="http://www.activebpel.org/b4p/2007/10/wshumantask/taskLifecycle.wsdl"
+         xmlns:xs="http://www.w3.org/2001/XMLSchema">
+         
+		<xs:import namespace="http://www.example.org/WS-HT"
+			schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask.xsd" />         
+		<xs:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+			schemaLocation="../schema/aeb4p-task-lifecycle-wsdl.xsd" />			
+		</xs:schema>
+	</types>
+
+  <!-- Messages  -->
+   <message name="processTaskRequestMessage">
+      <part name="processTaskRequest" element="tlc:processTaskRequest" />
+   </message>
+   <message name="processTaskResponseMessage">
+      <part name="processTaskResponse" element="tlc:processTaskResponse" />
+   </message>
+   <message name="cancelMessage">
+      <part name="peopleActivityPid" element="tlc:cancelTaskRequest" />
+   </message>
+   <message name="nonRecoverableError">
+   	<part name="nonRecoverableError" element="tlc:nonRecoverableError"/>
+   </message>   
+	<!--  Interfaces -->	
+	<!--  Main entry PT to create a task -->
+   <portType name="IAeTaskLifecycleService">   	
+      <operation name="processTask">
+      	<documentation>
+            <ae:doc>
+               <ae:desc>
+               	Main entry point to the task framework.
+               	This method creates the task lifecyle, state and associated deadlines.
+               	The operation returns only when the task is a final state.
+               </ae:desc>
+            </ae:doc>      	
+      	</documentation>
+         <input message="tns:processTaskRequestMessage" />
+         <output message="tns:processTaskResponseMessage" />
+         <fault name="nonRecoverableError" message="tns:nonRecoverableError"/>
+      </operation>
+      <operation name="cancel">
+      	<documentation>
+            <ae:doc>
+               <ae:desc>
+               	Allows a People Activity to cancel a task.
+               </ae:desc>
+            </ae:doc>      	
+      	</documentation>
+         <input message="tns:cancelMessage" />
+      </operation>            
+	</portType>
+	
+</definitions>

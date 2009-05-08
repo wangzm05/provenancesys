@@ -1,0 +1,98 @@
+<abu:bpelUnit
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+	xmlns:htd="http://www.example.org/WS-HT"
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+	xmlns:ts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"
+	xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+	xmlns:htapi="http://www.example.org/WS-HT/api"
+	xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl"
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:abx="http://www.activebpel.org/bpel/extension" 
+   >
+	<abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml" />
+	<xi:include href="../includes/bpels.xml" />
+	<xi:include href="../includes/wsdls.xml" />
+	<xi:include href="../includes/resources.xml" />
+
+	<abu:invokes>
+		<abu:invoke name="StoreTask">
+			<abu:defaultInvoke/>
+		</abu:invoke>
+      <abu:invoke name="UpdateTask">
+			<abu:defaultInvoke>
+				<abu:asserts>
+					<abu:assertEquals part="storeTaskData" query="//trt:presentation">
+						<trt:presentation>
+							<trt:name>Task 1</trt:name>
+							<trt:name xml:lang="en-US">Task 1 (USA)</trt:name>
+							<trt:name xml:lang="en-CA">Task 1 (Canada)</trt:name>
+							<trt:subject>Task Subject</trt:subject>
+							<trt:subject xml:lang="en-US">Task Subject (USA)</trt:subject>
+							<trt:subject xml:lang="en-CA">Task Subject (Canada)</trt:subject>
+                     <trt:description>Task Desc</trt:description>
+                     <trt:description contentType="text/plain">Task Desc (text/plain)</trt:description>
+                     <trt:description xml:lang="en-CA" contentType="text/html">&lt;b&gt;Task Desc&lt;/b&gt; (en-CA text/xhtml)</trt:description>
+						</trt:presentation>
+					</abu:assertEquals>
+				</abu:asserts>
+			</abu:defaultInvoke>
+      </abu:invoke>
+      <abu:invoke name="NotifyListener">
+         <abu:defaultInvoke />
+      </abu:invoke>
+	</abu:invokes>
+
+	<abu:commands>
+		<abu:sendMessage operation="create" partnerLink="internal">
+			<abu:message type="ts:CreateTaskRequest">
+				<abu:parts>
+					<abu:part href="../data/createTask.xml"
+						name="createTaskRequest" xsl="../xsl/removeDeferActivation.xsl" />
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+      <abu:sendMessage operation="start" partnerLink="taskOperations">
+         <abu:headers>
+            <abx:principal>user1</abx:principal>
+         </abu:headers>
+         <abu:message type="htapiw:start">
+            <abu:parts>
+               <abu:part name="start">
+                  <htdt:start>
+                     <htdt:identifier>urn:b4p:1</htdt:identifier>
+                  </htdt:start>
+               </abu:part>
+            </abu:parts>
+         </abu:message>
+      </abu:sendMessage>
+      <abu:sendMessage delay="500" operation="getInstance" partnerLink="internal">
+         <abu:message type="ts:GetTaskInstanceRequest">
+            <abu:parts>
+               <abu:part name="getTaskInstance">
+                  <tsw:getTaskInstance><trt:identifier>urn:b4p:1</trt:identifier></tsw:getTaskInstance>
+               </abu:part>
+            </abu:parts>
+         </abu:message>
+         <abu:asserts>
+            <abu:assertEquals part="taskInstance" query="//trt:presentation">
+               <trt:presentation>
+                  <trt:name>Task 1</trt:name>
+                  <trt:name xml:lang="en-US">Task 1 (USA)</trt:name>
+                  <trt:name xml:lang="en-CA">Task 1 (Canada)</trt:name>
+                  <trt:subject>Task Subject</trt:subject>
+                  <trt:subject xml:lang="en-US">Task Subject (USA)</trt:subject>
+                  <trt:subject xml:lang="en-CA">Task Subject (Canada)</trt:subject>
+                  <trt:description>Task Desc</trt:description>
+                  <trt:description contentType="text/plain">Task Desc (text/plain)</trt:description>
+                  <trt:description xml:lang="en-CA" contentType="text/html">&lt;b&gt;Task Desc&lt;/b&gt; (en-CA text/xhtml)</trt:description>
+               </trt:presentation>
+            </abu:assertEquals>
+         </abu:asserts>
+      </abu:sendMessage>
+      <xi:include href="../includes/finalWaitUntil.xml"/>
+	</abu:commands>
+</abu:bpelUnit>

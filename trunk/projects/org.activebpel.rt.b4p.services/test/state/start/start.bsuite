@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="start">
+   <abs:bUnitRef location="start.bunit"/>
+   <abs:bUnitRef location="start-admin.bunit"/>
+   <abs:bUnitRef location="start-illegalAccess.bunit"/>
+   <abs:bUnitRef location="start-illegalState.bunit"/>
+   <abs:bUnitRef location="start-stakeholder.bunit"/>
+</abs:bSuite>

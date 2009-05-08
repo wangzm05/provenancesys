@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsst:getTasks xmlns:tsst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd">
+	<htdt:getMyTasks xmlns:htdt="http://www.example.org/WS-HT/api/xsd">
+	   <htdt:taskType>ALL</htdt:taskType>
+	   <htdt:status>READY</htdt:status>
+	   <htdt:status>RESERVED</htdt:status>
+	   <htdt:status>IN_PROGRESS</htdt:status>
+	   <htdt:status>SUSPENDED</htdt:status>
+	   <htdt:maxTasks>15</htdt:maxTasks>
+	</htdt:getMyTasks>
+	<tsst:taskIndexOffset>10</tsst:taskIndexOffset>
+   <tsst:orderBy>
+      <tsst:fieldId>-Priority</tsst:fieldId>
+      <tsst:fieldId>Owner</tsst:fieldId>
+   </tsst:orderBy>	
+</tsst:getTasks>

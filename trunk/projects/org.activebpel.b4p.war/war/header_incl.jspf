@@ -1,0 +1,5 @@
+		<div id="header">
+			<div id="logout"></div>
+			<img src="images/logo.gif" style="border:0px" />
+			<h1><%= request.getAttribute("aeWorkFlowApplicationName") %></h1>
+		</div><!-- header -->

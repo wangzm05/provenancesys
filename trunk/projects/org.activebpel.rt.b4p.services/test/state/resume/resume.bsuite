@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="resume">
+   <abs:bUnitRef location="resume-from-suspendUntil.bunit"/>
+   <abs:bUnitRef location="resume-illegalAccess.bunit"/>
+   <abs:bUnitRef location="resume-illegalState.bunit"/>
+   <abs:bUnitRef location="resume-ready.bunit"/>
+   <abs:bUnitRef location="resume-reserved.bunit"/>
+   <abs:bUnitRef location="resume-reserved-admin.bunit"/>
+   <abs:bUnitRef location="resume-reserved-stakeholder.bunit"/>
+</abs:bSuite>

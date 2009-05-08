@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<htapis:getAttachmentInfosResponse xmlns:htapis="http://www.example.org/WS-HT/api/xsd" xmlns:ns="http://www.example.org/WS-HT/api">
+   <htapis:info>
+      <ns:name>string</ns:name>
+      <ns:accessType>string</ns:accessType>
+      <ns:contentType>string</ns:contentType>
+      <ns:attachedAt>2008-02-01T14:53:20.678Z</ns:attachedAt>
+      <ns:attachedBy>string</ns:attachedBy>
+   </htapis:info>
+</htapis:getAttachmentInfosResponse>

@@ -1,0 +1,7 @@
+<ae:IfTrue name="aeRequestContext" property="hasMessage">
+	<div class="messagepanel">
+		<p>
+		   <ae:XMLStringFormatter name="aeRequestContext" property="message" />
+		</p>
+	</div>				
+</ae:IfTrue>

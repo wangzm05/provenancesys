@@ -1,0 +1,114 @@
+<abu:bpelUnit
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:abx="http://www.activebpel.org/bpel/extension"
+	xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+	xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+	xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl"
+	xmlns:htd="http://www.example.org/WS-HT"
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+	xmlns:ts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"
+	xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+	xmlns:tew="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd"
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   >
+	<abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml" /> 
+	<xi:include href="../includes/bpels.xml" />
+	<xi:include href="../includes/wsdls.xml" />
+
+	<abu:invokes>
+		<abu:invoke name="StoreTask">
+			<abu:defaultInvoke />
+		</abu:invoke>
+		<abu:invoke name="UpdateTask">
+			<abu:defaultInvoke />
+		</abu:invoke>
+		<abu:invoke name="AssertPotentialOwnerOrAdmin-getInput" count="2">
+			<xi:include href="../includes/identityServiceInvoke.xml" />
+		</abu:invoke>
+		<abu:invoke name="RemoveOwner">
+			<abu:invokeIteration index="1">
+				<abu:asserts>
+					<abu:assertEquals part="removeOwnerRequest" query="//tsw:principalName">user1</abu:assertEquals>
+				</abu:asserts>
+				<abu:simulatedResponse>
+					<abu:message type="ts:RemoveOwnerResponse">
+						<abu:parts>
+							<abu:part name="removeOwnerResponse"> 
+							    <tsw:removeOwnerResponse>
+							    	<tsw:ownersRemovalComplete>false</tsw:ownersRemovalComplete>
+					    			<tsw:excludedOwners>
+					    				<htd:users>
+					    					<htd:user>user1</htd:user>
+					    				</htd:users>
+					    			</tsw:excludedOwners>
+						    	</tsw:removeOwnerResponse>
+							</abu:part>
+						</abu:parts>
+					</abu:message>
+				</abu:simulatedResponse>
+			</abu:invokeIteration>
+		</abu:invoke>
+	</abu:invokes>
+
+	<abu:commands>
+		<abu:sendMessage operation="create" partnerLink="internal">
+			<abu:message type="ts:CreateTaskRequest">
+				<abu:parts>
+					<abu:part href="../data/createNotification.xml" name="createTaskRequest"/>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+		<!-- verify that the caller can access the input -->
+		<abu:sendMessage operation="getInput" partnerLink="taskOperations-getInput">
+			<abu:headers>
+				<abx:principal>user1</abx:principal>
+			</abu:headers>
+			<abu:message type="htapiw:getInput">
+				<abu:parts>
+					<abu:part name="getInput" href="data/getInput.xml"/>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+		<!-- remove the notification from user's inbox -->
+		<abu:sendMessage operation="remove" partnerLink="taskOperations">
+			<abu:headers>
+				<abx:principal>user1</abx:principal>
+			</abu:headers>
+			<abu:message type="htapiw:remove">
+				<abu:parts>
+					<abu:part name="remove">
+						<htdt:remove>
+							<htdt:identifier>urn:b4pn:1</htdt:identifier>
+						</htdt:remove>
+					</abu:part>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+      <abu:sendMessage operation="getInstance" partnerLink="internal">
+         <abu:message type="ts:GetTaskInstanceRequest">
+            <abu:parts>
+               <abu:part name="getTaskInstance">
+                  <tsw:getTaskInstance><trt:identifier>urn:b4pn:1</trt:identifier></tsw:getTaskInstance>
+               </abu:part>
+            </abu:parts>
+         </abu:message>
+         <abu:asserts>
+            <abu:assertEquals part="taskInstance" query="//trt:excludedOwners//htd:user[text() = 'user1']">user1</abu:assertEquals>
+         </abu:asserts>
+      </abu:sendMessage>
+		<!-- verify that the caller can no longer access the input -->
+		<abu:sendMessage delay="125" operation="getInput" partnerLink="taskOperations-getInput">
+			<abu:headers>
+				<abx:principal>user1</abx:principal>
+			</abu:headers>
+			<abu:message type="htapiw:getInput">
+				<abu:parts>
+					<abu:part name="getInput" href="data/getInput.xml"/>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+		<xi:include href="../includes/finalWaitUntil.xml"/>
+	</abu:commands>
+</abu:bpelUnit>

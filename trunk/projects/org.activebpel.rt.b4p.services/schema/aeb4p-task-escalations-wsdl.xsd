@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<xs:schema 
+	targetNamespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"
+   xmlns:tns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"
+   xmlns:htd="http://www.example.org/WS-HT"
+   xmlns:api="http://www.example.org/WS-HT/api"
+   xmlns:htdp="http://www.example.org/WS-HT/protocol"
+   xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+   xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   elementFormDefault="qualified">
+
+   <xs:import namespace="http://www.w3.org/2001/XMLSchema" />
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace" /> 
+
+   <xs:import namespace="http://www.example.org/WS-HT"
+      schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask.xsd" />
+      
+	<xs:import namespace="http://www.example.org/WS-HT/api"
+		schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask-api.xsd" />      
+
+	<xs:import namespace="http://www.example.org/WS-HT/protocol"
+		schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask-protocol.xsd" />      
+
+	<xs:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+		schemaLocation="aeb4p-task-rt.xsd" />      
+
+	<xs:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+		schemaLocation="aeb4p-task-lifecycle-wsdl.xsd" />      
+
+	<xs:simpleType name="tDeadlineType">
+		<xs:restriction base="xs:string">
+		   <xs:enumeration value="start" />
+		   <xs:enumeration value="completion" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:element name="deadlineInstance" type="tns:tDeadlineInstance" />
+	<xs:complexType name="tDeadlineInstance">
+		<xs:sequence>
+			<xs:element name="deadlineDef" type="htd:tDeadline" />
+		   <!--  calculated date-time stamp, used for sorting list of deadlines instances.  -->
+		   <xs:element name="deadlineDateTime" type="xs:dateTime" nillable="true"/>			
+		</xs:sequence>	
+	</xs:complexType>
+    
+	<xs:element name="deadlineList" type="tns:tDeadlineList" />
+	<xs:complexType name="tDeadlineList">	
+		<xs:sequence>
+			<xs:element ref="tns:deadlineInstance" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+    
+   <xs:element name="createDeadlinesData">    
+      <xs:complexType>
+      <xs:annotation>
+         <xs:documentation>
+            Contains start or completion deadline data for the escalation service.
+         </xs:documentation>
+      </xs:annotation>      
+         <xs:sequence>
+         	<xs:element ref="trt:identifier"/>
+         	<xs:element name="type" type="tns:tDeadlineType"/>
+         	<!--  
+         		taskCreatedDate is the date-time when the task state enters CREATED state.
+         		This date-time can be used to calculate the actual deadline based on duration inputs.
+         	 -->
+         	<xs:element name="taskCreatedDate" type="xs:dateTime" minOccurs="0"/>
+         	<xs:element ref="tns:deadlineList" />
+				<xs:element ref="trt:initialState" />
+            <xs:element ref="trt:taskInstance" />
+				<xs:element ref="tlc:peopleActivityPid" />         
+				<xs:element ref="tlc:peopleActivityId" />				
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>  
+
+   <xs:element name="createDeadlinesResponse">    
+      <xs:complexType>
+      <xs:annotation>
+         <xs:documentation>
+            Response data for create dealines request.
+         </xs:documentation>
+      </xs:annotation>      
+         <xs:sequence>
+         	<xs:element name="pid" type="xs:long"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>  
+
+	<!--  Element containing correlation data for cancelling, suspending and resuming a escalation process -->
+   <xs:element name="deadlineOpData" type="tns:tDeadlineOpData" />    
+	<xs:complexType name="tDeadlineOpData">
+		<xs:sequence>
+        	<xs:element ref="trt:identifier"/>
+        	<xs:element name="type" type="tns:tDeadlineType"/>
+		</xs:sequence>	
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="All B4P Processes">
+   <abs:bSuiteRef location="client/all-client.bsuite"/>
+   <abs:bSuiteRef location="state/all-state.bsuite"/>
+   <abs:bSuiteRef location="lifecycle/all-lifecycle.bsuite"/>
+   <abs:bSuiteRef location="escalation/all-escalation.bsuite"/>
+   <abs:bSuiteRef location="lifecycle-notification/all-notification.bsuite"/>
+</abs:bSuite>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns:processTaskResponse xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd" xmlns:ns1="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:ns2="http://www.example.org/WS-HT/api">
+   <trt:identifier xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">anyURI</trt:identifier>
+   <ns:status>CREATED</ns:status>
+   <ns1:output>
+      <ns1:part name="ncname"></ns1:part>
+   </ns1:output>
+   <ns1:fault name="qname"/>
+   <ns1:comments>
+      <ns1:comment>
+         <ns2:addedAt>2007-11-26T19:07:18.247Z</ns2:addedAt>
+         <ns2:addedBy>string</ns2:addedBy>
+         <ns2:text>string</ns2:text>
+         <ns1:modified>
+            <ns1:modifiedAt>2007-11-26T19:07:18.247Z</ns1:modifiedAt>
+            <ns1:modifiedBy>string</ns1:modifiedBy>
+         </ns1:modified>
+      </ns1:comment>
+   </ns1:comments>
+   <ns1:attachmentInfos>
+      <ns1:attachmentInfo>
+         <ns2:name>string</ns2:name>
+         <ns2:accessType>string</ns2:accessType>
+         <ns2:contentType>string</ns2:contentType>
+         <ns2:attachedAt>2007-11-26T19:07:18.247Z</ns2:attachedAt>
+         <ns2:attachedBy>string</ns2:attachedBy>
+         <ns1:modified>
+            <ns1:modifiedAt>2007-11-26T19:07:18.247Z</ns1:modifiedAt>
+            <ns1:modifiedBy>string</ns1:modifiedBy>
+         </ns1:modified>
+      </ns1:attachmentInfo>
+   </ns1:attachmentInfos>
+</ns:processTaskResponse>

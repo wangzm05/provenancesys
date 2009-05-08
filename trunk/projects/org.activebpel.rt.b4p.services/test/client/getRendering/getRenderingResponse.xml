@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<htapis:getRenderingResponse xmlns:htapis="http://www.example.org/WS-HT/api/xsd">
+   <htapis:rendering>anyType</htapis:rendering>
+</htapis:getRenderingResponse>

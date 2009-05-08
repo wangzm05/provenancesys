@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="notificationLifecycle">
+   <abs:bUnitRef location="bunits/createsContext.bunit"/>
+   <abs:bUnitRef location="bunits/createsInterfaceMetadata.bunit"/>
+   <abs:bUnitRef location="bunits/hasIdCheck-hasRecips.bunit"/>
+   <abs:bUnitRef location="bunits/hasIdCheck-noRecips.bunit"/>
+   <abs:bUnitRef location="bunits/noIdCheck.bunit"/>
+   <abs:bUnitRef location="bunits/create-has-attachments.bunit"/>
+</abs:bSuite>

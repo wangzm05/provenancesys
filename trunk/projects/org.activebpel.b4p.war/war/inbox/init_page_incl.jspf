@@ -1,0 +1,2 @@
+<%@ include file="../init_page_incl.jspf" %>
+<jsp:useBean id="aeWorkFlowUserSession" class="org.activebpel.b4p.war.web.bean.AeUserSession" scope="session"/>

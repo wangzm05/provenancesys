@@ -1,0 +1,108 @@
+<abu:bpelUnit
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+	xmlns:htd="http://www.example.org/WS-HT"
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+	xmlns:ts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"
+	xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+	xmlns:htapi="http://www.example.org/WS-HT/api"
+	xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl"
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:abx="http://www.activebpel.org/bpel/extension" 
+   >
+	<abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml" />
+	<xi:include href="../includes/bpels.xml" />
+	<xi:include href="../includes/wsdls.xml" />
+	<xi:include href="../includes/resources.xml" />
+
+	<abu:invokes>
+		<abu:invoke name="StoreTask">
+			<abu:defaultInvoke/>
+		</abu:invoke>
+      <abu:invoke name="AssertAdmin-aeGetTaskInstance" count="2">
+			<xi:include href="../includes/identityServiceInvoke.xml" />
+      </abu:invoke>
+	</abu:invokes>
+
+	<abu:commands>
+		<abu:sendMessage operation="create" partnerLink="internal">
+			<abu:message type="ts:CreateTaskRequest">
+				<abu:parts>
+					<abu:part href="../data/createTask.xml"
+						name="createTaskRequest" xsl="../xsl/removeDeferActivation.xsl" />
+				</abu:parts>
+			</abu:message>
+			<abu:asserts>
+				<abu:assertEquals href="../data/createTaskResponse.xml"
+					part="createTaskResponse" xsl="../xsl/setState.xsl">
+					<abu:params>
+						<abu:param name="state" value="RESERVED" />
+					</abu:params>
+				</abu:assertEquals>
+			</abu:asserts>
+		</abu:sendMessage>
+      <abu:sendMessage operation="getInstance" partnerLink="aeTaskOperations-getInstance">
+         <abu:headers>
+            <abx:principal>user1</abx:principal>
+            <abx:lang>en-US</abx:lang>
+         </abu:headers>
+         <abu:message type="ts:GetTaskInstanceRequest">
+            <abu:parts>
+               <abu:part name="getTaskInstance">
+                  <tsw:getTaskInstance><trt:identifier>urn:b4p:1</trt:identifier></tsw:getTaskInstance>
+               </abu:part>
+            </abu:parts>
+         </abu:message>
+         <abu:asserts>
+            <abu:assertEquals part="taskInstance"
+               query="count(//trt:presentation/trt:name)">1.0</abu:assertEquals>
+            <abu:assertEquals part="taskInstance"
+               query="count(//trt:presentation/trt:subject)">1.0</abu:assertEquals>
+            <abu:assertEquals part="taskInstance"
+               query="count(//trt:presentation/trt:description)">2.0</abu:assertEquals>
+            <abu:assertEquals part="taskInstance"
+               query="//trt:presentation/trt:name">Task 1 (USA)</abu:assertEquals>
+            <abu:assertEquals part="taskInstance"
+               query="//trt:presentation/trt:subject">Task Subject (USA)</abu:assertEquals>
+            <abu:assertEquals part="taskInstance"
+               query="//trt:presentation/trt:description[1]">Task Desc</abu:assertEquals>
+            <abu:assertEquals part="taskInstance"
+               query="//trt:presentation/trt:description[2]">Task Desc (text/plain)</abu:assertEquals>
+         </abu:asserts>
+      </abu:sendMessage>
+      <abu:sendMessage operation="getInstance" partnerLink="aeTaskOperations-getInstance">
+         <abu:headers>
+            <abx:principal>user1</abx:principal>
+            <abx:lang>en-CA</abx:lang>
+         </abu:headers>
+         <abu:message type="ts:GetTaskInstanceRequest">
+            <abu:parts>
+               <abu:part name="getTaskInstance">
+                  <tsw:getTaskInstance><trt:identifier>urn:b4p:1</trt:identifier></tsw:getTaskInstance>
+               </abu:part>
+            </abu:parts>
+         </abu:message>
+         <abu:asserts>
+            <abu:assertEquals part="taskInstance"
+               query="count(//trt:presentation/trt:name)">1.0</abu:assertEquals>
+            <abu:assertEquals part="taskInstance"
+               query="count(//trt:presentation/trt:subject)">1.0</abu:assertEquals>
+            <abu:assertEquals part="taskInstance"
+               query="count(//trt:presentation/trt:description)">3.0</abu:assertEquals>
+            <abu:assertEquals part="taskInstance"
+               query="//trt:presentation/trt:name">Task 1 (Canada)</abu:assertEquals>
+            <abu:assertEquals part="taskInstance"
+               query="//trt:presentation/trt:subject">Task Subject (Canada)</abu:assertEquals>
+            <abu:assertEquals part="taskInstance"
+               query="//trt:presentation/trt:description[1]">Task Desc</abu:assertEquals>
+            <abu:assertEquals part="taskInstance"
+               query="//trt:presentation/trt:description[2]">Task Desc (text/plain)</abu:assertEquals>
+            <abu:assertEquals part="taskInstance"
+               query="//trt:presentation/trt:description[3]">&lt;b&gt;Task Desc&lt;/b&gt; (en-CA text/xhtml)</abu:assertEquals>
+         </abu:asserts>
+      </abu:sendMessage>
+	</abu:commands>
+</abu:bpelUnit>

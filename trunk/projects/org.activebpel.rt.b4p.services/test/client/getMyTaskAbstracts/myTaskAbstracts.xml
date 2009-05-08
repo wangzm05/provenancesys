@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<store:listTaskAbstractsResponse xmlns:htapis="http://www.example.org/WS-HT/api/xsd" xmlns:ns="http://www.example.org/WS-HT/api" xmlns:ns4="http://www.example.org/WS-HT" 
+	xmlns:store="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl" xmlns:tsst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd">
+   <tsst:taskTotalCount>0</tsst:taskTotalCount>	
+   <htapis:getMyTaskAbstractsResponse>
+      <htapis:taskAbstract>
+         <ns:id>string</ns:id>
+         <ns:taskType>string</ns:taskType>
+         <ns:name>qname</ns:name>
+         <ns:status>CREATED</ns:status>
+         <ns:priority>1</ns:priority>
+         <ns:createdOn>2008-02-01T02:35:54.655Z</ns:createdOn>
+         <ns:activationTime>2008-02-01T02:35:54.655Z</ns:activationTime>
+         <ns:expirationTime>2008-02-01T02:35:54.655Z</ns:expirationTime>
+         <ns:isSkipable>true</ns:isSkipable>
+         <ns:hasPotentialOwners>true</ns:hasPotentialOwners>
+         <ns:startByExists>true</ns:startByExists>
+         <ns:completeByExists>true</ns:completeByExists>
+         <ns:presentationName>string</ns:presentationName>
+         <ns:presentationSubject>string</ns:presentationSubject>
+         <ns:renderingMethodExists>true</ns:renderingMethodExists>
+         <ns:hasOutput>true</ns:hasOutput>
+         <ns:hasFault>true</ns:hasFault>
+         <ns:hasAttachments>true</ns:hasAttachments>
+         <ns:hasComments>true</ns:hasComments>
+         <ns:escalated>true</ns:escalated>
+      </htapis:taskAbstract>
+   </htapis:getMyTaskAbstractsResponse>   
+</store:listTaskAbstractsResponse>

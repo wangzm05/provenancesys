@@ -1,0 +1,4 @@
+<ns:removeListenerData xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd">
+   <trt:identifier xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">anyURI</trt:identifier>
+   <ns:listenerId>1</ns:listenerId>
+</ns:removeListenerData>

@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<xs:schema
+   targetNamespace="http://schemas.active-endpoints.com/humanworkflow/2007/07/renderxsl/taskcommands"
+   xmlns:tns="http://schemas.active-endpoints.com/humanworkflow/2007/07/renderxsl/taskcommands"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   xmlns:aefe="http://schemas.active-endpoints.com/humanworkflow/2007/07/renderxsl/errors"
+   elementFormDefault="qualified">
+
+   <xs:import  namespace="http://www.w3.org/2001/XMLSchema" />
+   <xs:import  namespace="http://www.w3.org/XML/1998/namespace" />   
+   <xs:import namespace="http://schemas.active-endpoints.com/humanworkflow/2007/07/renderxsl/errors"
+      schemaLocation="aexslerrors.xsd" />
+   
+   <!-- ======================================================= -->
+   <!-- Complex type defining a single task command             -->
+   <!-- ======================================================= -->   
+   <xs:complexType name="tTaskCommand">
+      <xs:annotation>
+         <xs:documentation>
+            Simple task command which is identified by its name.
+            The contents of the command depends on the name of the command.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <!-- Do not validate contents -->
+         <xs:any processContents="skip"/>
+      </xs:sequence>      
+      <!--  name of command -->
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <!--  optional id  -->
+      <xs:attribute name="id" type="xs:string" />
+   </xs:complexType>
+
+   <!-- ======================================================= -->
+   <!-- Complex type for containing list of command elements  -->
+   <!-- ======================================================= -->   
+   <xs:complexType name="tCommands">
+      <xs:annotation>
+         <xs:documentation>
+            Contains list of task commands.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+	      <xs:element ref="aefe:parameter-error" minOccurs="0" maxOccurs="unbounded" />
+	      <xs:element name="command" type="tns:tTaskCommand" minOccurs="0" maxOccurs="unbounded" />
+	   </xs:sequence>
+      <xs:attribute name="principalName" type="xs:string" ></xs:attribute>
+      <xs:attribute name="taskRef" type="xs:string" ></xs:attribute>      
+   </xs:complexType>
+   
+   <!--  Define element impl based on tns:tCommands --> 
+   <xs:element name="commands" type="tns:tCommands" />
+</xs:schema>

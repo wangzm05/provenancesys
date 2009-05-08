@@ -1,0 +1,78 @@
+/**
+ * Icon decorator for Active Endpoints work flow task state (status)
+ * E.g. usage: <span class="aetaskstateglyph aetaskstateglyph_reserved">Claimed</span>
+ */
+  
+.aetaskstateglyph, .aetaskfilterglyph
+{
+   padding: 1px 10px 5px 20px;
+   background-color:transparent;
+   background-repeat:no-repeat; 
+}
+
+.aetaskstateglyph_READY, .aetaskfilterglyph_unclaimed
+{
+   background-image: url(../images/UnclaimedTask16.gif); 
+}
+.aetaskstateglyph_RESERVED, .aetaskfilterglyph_reserved
+{
+   background-image: url(../images/ClaimedTask16.gif);   
+}
+
+.aetaskstateglyph_IN_PROGRESS, .aetaskfilterglyph_started
+{
+   background-image: url(../images/TaskStarted16.gif);   
+}
+  
+.aetaskstateglyph_COMPLETED, .aetaskfilterglyph_completed
+{
+   background-image: url(../images/TaskCompleted16.gif); 
+}
+  
+.aetaskstateglyph_FAILED, .aetaskfilterglyph_failed
+{
+   background-image: url(../images/TaskFailed16.gif); 
+}
+
+.aetaskstateglyph_ERROR, .aetaskfilterglyph_error
+{
+   background-image: url(../images/TaskError16.gif);  
+}
+
+.aetaskstateglyph_OBSOLETE, .aetaskfilterglyph_obsolete
+{
+   background-image: url(../images/TaskObsolete16.gif);  
+}
+
+.aetaskstateglyph_EXITED, .aetaskfilterglyph_exited
+{
+   background-image: url(../images/TaskExited16.gif); 
+}
+
+.aetaskstateglyph_SUSPENDED, .aetaskfilterglyph_suspended
+{
+   background-image: url(../images/TaskSuspended16.gif); 
+}
+
+.aetaskstateglyph_NOTIFICATION, .aetaskfilterglyph_notifications
+{
+   background-image: url(../images/Mail16.gif); 
+}
+
+.aetaskfilterglyph_open, .aetaskfilterglyph_allopen
+{
+   background-image: url(../images/docs.gif);   
+}
+
+.aetaskfilterglyph_closed
+{
+   background-image: url(../images/docs.gif);   
+}
+
+.aetaskstateglyph_UNKNOWN
+{
+   background-image: url(../images/file.gif);   
+}
+
+
+  

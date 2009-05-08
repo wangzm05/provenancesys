@@ -1,0 +1,728 @@
+<aerule:rules xmlns:aerule="urn:activebpel:wsresource:validation:rules"
+   targetNamespace="http://www.example.org/BPEL4People">
+   <aerule:rule>
+      <aerule:code>HT_TASK_R1</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>ncname</aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.def.validation.rules.AeTaskDefRule1Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_TASK_R2</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>uniqueness w/in collection</aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.def.validation.rules.AeTaskDefRule2Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_TASK_R3</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>must have interface, presentation elements</aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.def.validation.rules.AeTaskDefRule3Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_ABSTRACTDEADLINE_R4</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>must have for or until</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeAbstractDeadlineDefRule4Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_ABSTRACTDEADLINE_R5</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>Must have children or any extensible element</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeAbstractDeadlineDefRule5Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_ABSTRACTGENERICHUMANROLE_R6</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>must have a fromDef</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeAbstractGenericHumanRoleDefRule6Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_ARGUMENT_R8</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>arg name is unique within collection</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeArgumentDefRule8Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_ARGUMENT_R9</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>expression</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeArgumentDefRule9Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_CONDITION_R10</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>expression</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeConditionDefRule10Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_DELEGATION_R11</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>potentialDelegatees value</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeDelegationDefRule11Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_DELEGATION_R12</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         combo of delegatees and from-spec if 'other' then from-spec required otherwise not
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeDelegationDefRule12Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_DESCRIPTION_R13</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>uniqueness of content type and lang</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeDescriptionDefRule13Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_ESCALATION_R14</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>single child (notification, local notification, reassignment)</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeEscalationDefRule14Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_ESCALATION_R15</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>unique escalation name within deadline</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeEscalationDefRule15Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_ESCALATION_R16</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>
+         multiple escalations within same deadline w/o conditions should be warning, only first will fire
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeEscalationDefRule16Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_FROM_R17</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>arg list matches lpg definition</aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.def.validation.rules.AeFromDefRule17Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_FROM_R18</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>args only present when type is lpg</aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.def.validation.rules.AeFromDefRule18Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_FROM_R19</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>referenced lpg is resolved</aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.def.validation.rules.AeFromDefRule19Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_FROM_R20</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         valid style: lpg, literal, or expression for non b4p:peopleAssignments
+      </aerule:description>
+      <aerule:validator>org.activebpel.rt.b4p.validation.rules.AeB4PFromDefRule20Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_GROUPS_R21</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>Must have children</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeGroupsDefRule21Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_LOCALNOTIFICATION_R22</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>referenced notification is resolved</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeLocalNotificationDefRule22Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_LOCALNOTIFICATION_R23</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         people assignment overrides merged with referenced notification's people assignments must produce a
+         strategy for recipients and business administrators
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeLocalNotificationDefRule23Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_LOGICALPEOPLEGROUP_R24</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>valid ncname</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeLogicalPeopleGroupDefRule24Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_LOGICALPEOPLEGROUP_R25</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>name unique w/in parent</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeLogicalPeopleGroupDefRule25Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_LOGICALPEOPLEGROUP_R26</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>warning if not used (const 2 only)</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeB4PLogicalPeopleGroupDefRule26Validator
+
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_NOTIFICATION_R28</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>NCName must be valid</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeNotificationDefRule28Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_NOTIFICATION_R29</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>name unique w/in parent</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeNotificationDefRule29Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_NOTIFICATION_R30</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>warning if not used (const 2 only)</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeB4PNotificationDefRule30Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_NOTIFICATION_R31</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         people assignment must have a strategy for recipients and may have one for business administrators
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeNotificationDefRule31Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_NOTIFICATIONINTERFACE_R32</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>port type / operation resolves to a one-way operation</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeNotificationInterfaceDefRule32Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_ORGANIZATIONALENTITY_R33</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>choice of users or groups</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeOrganizationalEntityRule33Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_OUTCOME_R34</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>query</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeOutcomeDefRule34Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_OUTCOME_R35</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>part name exists within the output message</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeOutcomeDefRule35Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_PARAMETER_R36</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>unique name w/in collection</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeParameterDefRule36Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_PARAMETER_R37</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>ncname</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeParameterDefRule37Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_PARAMETER_R38</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>type is simple type</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeParameterDefRule38Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_PRESENTATIONELEMENTS_R40</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>AE requires subject for use in our inbox</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AePresentationElementsDefRule40Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_SUBJECT_R41</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>any parameters must resolve to the parameter bindings</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeSubjectDefRule41Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_DESCRIPTION_R42</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>any parameters must resolve to the parameter bindings</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeDescriptionDefRule42Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_TASK_R43</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>warning if not used (const 2 only)</aerule:description>
+      <aerule:validator>org.activebpel.rt.b4p.validation.rules.AeB4PTaskDefRule43Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_TASK_R44</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         people assignment must have a strategy for business administrators
+      </aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.def.validation.rules.AeTaskDefRule44Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_TASKINTERFACE_R45</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>port type/operation. Must be a two way or combo of two one-ways</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeTaskInterfaceDefRule45Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_TOPARTS_R46</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>required if notification interface differs from task interface</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeToPartsDefRule46Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_TOPARTS_R47</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>not allowed for reassignment</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeToPartsDefRule47Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_TOPART_R48</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>name matches message part</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeToPartDefRule48Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_TOPART_R49</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>expression</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeToPartDefRule49Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_B4PHUMANINTERACTIONS_R50</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>parented by scope or process</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeB4PHumanInteractionsDefRule50Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_B4PLOCALNOTIFICATION_R51</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>reference resolves to notification</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeB4PLocalNotificationRule51Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_B4PLOCALNOTIFICATION_R52</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         people assignment overrides merged with referenced notification's people assignments must produce a
+         strategy for recipients and business administrators
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeB4PLocalNotificationRule52Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_DEFERACTIVATION_R54</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>has for or until</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeDeferActivationDefRule54Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_EXPIRATION_R55</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>has for or until</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeExpirationDefRule55Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_LOCALTASK_R56</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>reference resolves to task</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeLocalTaskDefRule56Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_LOCALTASK_R57</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         people assignment overrides merged with referenced tasks's people assignments must produce a strategy
+         for business administrators
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeLocalTaskDefRule57Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_PEOPLEACTIVITY_R59</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>valid message producer/consumer strategy</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AePeopleActivityDefRule59Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_PEOPLEACTIVITY_R60</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>skipable for tasks only</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AePeopleActivityDefRule60Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_PEOPLEACTIVITY_R61</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         task data one of task, notification, local task, local notification
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AePeopleActivityDefRule61Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_PEOPLEACTIVITY_R62</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>no output var/fromPart for notification</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AePeopleActivityDefRule62Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_GETLOGICALPEOPLEGROUP_R66</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>name must be resolved to an lpg within scope</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeLogicalPeopleGroupRule66Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_GETACTUALOWNER_R68</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>
+         name must be resolved to a people activity within scope. This reference cannot be ambiguous.
+      </aerule:description>
+      <aerule:validator>org.activebpel.rt.b4p.validation.rules.AeActualOwnerRule68Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_GETTASKINITIATOR_R70</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>
+         name must be resolved to a people activity within scope. This reference cannot be ambiguous.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeTaskInitiatorRule70Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_GETTASKSTAKEHOLDERS_R72</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>
+         name must be resolved to a people activity within scope. This reference cannot be ambiguous.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeTaskStakeholdersRule72Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_GETPOTENTIALOWNERS_R74</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>
+         name must be resolved to a people activity within scope. This reference cannot be ambiguous.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AePotentialOwnersRule74Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_GETADMINISTRATORS_R76</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>
+         name must be resolved to a people activity within scope. This reference cannot be ambiguous.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeAdministratorsRule76Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_GETTASKPRIORITY_R78</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>
+         name must be resolved to a people activity within scope. This reference cannot be ambiguous.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeTaskPriorityRule78Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_GETPOTENTIALOWNERS_R81</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         optional task name must resolve to immediately enclosing task def. i.e. parent task for a
+         notification within an escalation handler.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AePotentialOwnersRule81Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_GETTASKSTAKEHOLDERS_R84</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         optional task name must resolve to immediately enclosing task def. i.e. parent task for a
+         notification within an escalation handler.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeTaskStakeholdersRule84Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_GETBUSINESSADMINISTRATORS_R87</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         optional task name must resolve to immediately enclosing task def. i.e. parent task for a
+         notification within an escalation handler.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeBusinessAdministratorsRule87Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_GETEXCLUDEDOWNERS_R90</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         optional task name must resolve to immediately enclosing task def. i.e. parent task for a
+         notification within an escalation handler.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeExcludedOwnersRule90Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_GETACTUALOWNER_R93</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         optional task name must resolve to immediately enclosing task def. i.e. parent task for a
+         notification within an escalation handler.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeActualOwnerRule93Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_GETTASKINITIATOR_R96</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         optional task name must resolve to immediately enclosing task def. i.e. parent task for a
+         notification within an escalation handler.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeTaskInitiatorRule96Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_GETTASKPRIORITY_R99</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         optional task name must resolve to immediately enclosing task def. i.e. parent task for a
+         notification within an escalation handler.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeTaskPriorityRule99Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_GETINPUT_R102</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         optional task name must resolve to immediately enclosing task def. i.e. parent task for a
+         notification within an escalation handler.
+      </aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.def.validation.rules.AeInputRule102Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_GETINPUT_R103</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>partName is required for single part messages</aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.def.validation.rules.AeInputRule103Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_GETINPUT_R104</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         if present, partName must resolve to a part defined by the input message for the task
+      </aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.def.validation.rules.AeInputRule104Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_GETLOGICALPEOPLEGROUP_R106</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         optional task name must resolve to immediately enclosing task def. i.e. parent task for a
+         notification within an escalation handler.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeLogicalPeopleGroupRule106Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_GETLOGICALPEOPLEGROUP_R107</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>lpgName must resolve to an enclosing lpg</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeLogicalPeopleGroupRule107Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_TASK_R117</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>human tasks never specify recipients</aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.def.validation.rules.AeTaskDefRule117Validator</aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_TOPARTS_R118</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>
+         There MUST be a &lt;toPart&gt; element for every part in the WSDL message definition.
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeToPartsDefRule118Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_LOCALTASK_R119</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>warning if variables from inlined tasks overlap</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeLocalTaskDefRule119Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_NOTIFICATION_R121</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>interface must be present</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeNotificationDefRule121Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_TOPART_R122</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>must have an expression</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeToPartDefRule122Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>HT_REASSIGNMENT_R123</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>If present, the element MUST specify potential owners</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.ht.def.validation.rules.AeReassignmentDefRule123Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_GETACTUALOWNER_R124</aerule:code>
+      <aerule:defaultSeverity>WARNING</aerule:defaultSeverity>
+      <aerule:description>
+         task name must be specified if the function is within a local notification/notification
+      </aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeActualOwnerRule124Validator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_EXPRESSION_SYNTAX</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>Expression syntax must be valid</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeB4PExpressionSyntaxValidator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_LITERAL_ARGS</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>Arguments must be literal</aerule:description>
+      <aerule:validator>
+         org.activebpel.rt.b4p.validation.rules.AeB4PLiteralArgumentValidator
+      </aerule:validator>
+   </aerule:rule>
+   <aerule:rule>
+      <aerule:code>B4P_FUNCTION_USAGE</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>validate b4p functions are used in the appropriate expressions</aerule:description>
+      <aerule:validator>org.activebpel.rt.b4p.validation.rules.AeB4PFunctionUsageVisitor</aerule:validator>
+   </aerule:rule>
+</aerule:rules>

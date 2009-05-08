@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+   targetNamespace="http://www.activebpel.org/b4p/2007/12/wshumantask/aeb4p-task-notification.wsdl"
+   xmlns:aeb4pnw="http://www.activebpel.org/b4p/2007/12/wshumantask/aeb4p-task-notification.wsdl"
+   xmlns:aeb4pnt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-notifications-wsdl.xsd"
+   xmlns:aeb4pcnt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-custom-notification.xsd"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:htd="http://www.example.org/WS-HT"
+   xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"   
+   xmlns:ae="urn:active-endpoints:documentation"
+   xmlns:aecmn="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl"
+   xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+   xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop">
+      
+	<import location="aeb4p-task-common.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl" />
+	      
+   <plnk:partnerLinkType name="taskNotificationServicePLT">
+      <plnk:role name="notify" portType="aeb4pnw:IAeTaskNotificationService"/>
+   </plnk:partnerLinkType>      
+
+   <plnk:partnerLinkType name="taskCustomNotificationServicePLT">
+      <plnk:role name="notify" portType="aeb4pnw:IAeTaskCustomNotificationService"/>
+   </plnk:partnerLinkType>      
+      
+	<vprop:propertyAlias propertyName="aecmn:peopleActivityPid" element="aeb4pnt:processNotificationRequest">
+	   <vprop:query>tlc:peopleActivityPid/text()</vprop:query>
+   </vprop:propertyAlias>    
+	<vprop:propertyAlias propertyName="aecmn:peopleActivityPid" element="aeb4pnt:cancelNotificationRequest">
+	   <vprop:query>tlc:peopleActivityPid/text()</vprop:query>
+   </vprop:propertyAlias>    
+
+	<vprop:propertyAlias propertyName="aecmn:peopleActivityId" element="aeb4pnt:processNotificationRequest">
+	   <vprop:query>tlc:peopleActivityId/text()</vprop:query>
+   </vprop:propertyAlias>    
+	<vprop:propertyAlias propertyName="aecmn:peopleActivityId" element="aeb4pnt:cancelNotificationRequest">
+	   <vprop:query>tlc:peopleActivityId/text()</vprop:query>
+   </vprop:propertyAlias>    
+      
+      
+   <types>
+      <xs:schema elementFormDefault="qualified"
+         targetNamespace="http://schemas.active-endpoints.com/b4p/2007/12/wshumantask/aeb4p-task-custom-notification-wsdl.xsd">
+                  
+			<xs:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+				schemaLocation="../schema/aeb4p-task-lifecycle-wsdl.xsd" />
+				
+			<xs:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-notifications-wsdl.xsd"
+				schemaLocation="../schema/aeb4p-task-notifications-wsdl.xsd" />						
+				
+			<xs:import namespace="http://www.example.org/WS-HT"
+				schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask.xsd" />         
+		</xs:schema>				
+	</types>      
+	     
+   <message name="processNotificationRequest">
+      <part name="processNotificationRequest" element="aeb4pnt:processNotificationRequest" />
+   </message>
+   <message name="processNotificationResponse">
+      <part name="processNotificationResponse" element="aeb4pnt:processNotificationResponse" />
+   </message>
+
+   <message name="cancelNotificationRequest">
+      <part name="cancelNotificationRequest" element="aeb4pnt:cancelNotificationRequest" />
+   </message>   
+   
+   <message name="processCustomNotificationRequest">
+      <part name="processCustomNotificationRequest" element="aeb4pnt:processCustomNotificationRequest" />
+   </message>
+      
+   <portType name="IAeTaskNotificationService">
+      <operation name="processNotification">
+      	<documentation>
+            <ae:doc>
+               <ae:desc>
+               	Main entry point to the notification framework.
+               	This method creates the notification lifecycle and state 
+               </ae:desc>
+            </ae:doc>      	
+      	</documentation>
+         <input message="aeb4pnw:processNotificationRequest" />
+         <output message="aeb4pnw:processNotificationResponse" />
+      </operation>
+      
+      <operation name="cancelNotification">
+      	<documentation>
+            <ae:doc>
+               <ae:desc>
+               	Cancels a current notification. 
+               </ae:desc>
+            </ae:doc>      	
+      	</documentation>
+         <input message="aeb4pnw:cancelNotificationRequest" />
+      </operation>
+      
+   </portType>   
+         	   
+   <portType name="IAeTaskCustomNotificationService">
+      <operation name="processCustomNotification">
+      	<documentation>
+            <ae:doc>
+               <ae:desc>
+               	Main entry point to handle custom notifications. 
+               </ae:desc>
+            </ae:doc>      	
+      	</documentation>
+         <input message="aeb4pnw:processCustomNotificationRequest" />
+      </operation>
+   </portType>   
+   
+  </definitions>

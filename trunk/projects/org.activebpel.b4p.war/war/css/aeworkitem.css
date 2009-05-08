@@ -1,0 +1,79 @@
+/**
+ * CSS file for task work item area.
+ */
+ 
+form.workitemdatagrid
+{
+   background-color:white;
+   padding:5px;
+}
+
+form.workitemdatagrid tr
+{
+   padding:4px;
+   font-size:0.85em;
+}
+
+form.workitemdatagrid td
+{
+   padding:4px;
+   background-color:white;
+   font-size:0.85em;   
+}
+
+.workitemdata_sample 
+{
+	display:none;
+}
+. workitemdata_output
+{}
+
+.workitemdata_input
+{}
+
+.workitemdata_fault
+{}
+
+.workitemdata_readonly
+{
+   background:#eee;
+   border:1px solid #999;
+}
+
+.workitemdata_editable
+{
+   background:#ffc;
+}
+
+.workitemdata_simple
+{
+   font-family:courier;
+   padding:4px;
+}
+
+.workitemdata_complex
+{
+   padding:4px;
+   font-family:courier;
+   width:99%;
+   scroll:auto;   
+}
+
+#workitemdata_outputsection
+{
+   display:None;
+}
+
+#workitemdata_faultsection
+{
+   display:None;
+}
+
+.workitem_input_error_icon
+{
+	padding: 1px 10px 5px 20px;
+	background-color:transparent;
+	background-repeat:no-repeat; 
+	background-image: url(../images/cancel.png);	
+}
+

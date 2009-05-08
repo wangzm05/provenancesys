@@ -1,0 +1,1234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpel:process xmlns:abx="http://www.activebpel.org/bpel/extension" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:cmn="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl" xmlns:htapis="http://www.example.org/WS-HT/api/xsd" xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl" xmlns:id="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl" xmlns:ns10="http://docs.oasis-open.org/wsbpel/2.0/serviceref" xmlns:ns14="http://www.example.org/WS-HT/api" xmlns:ns4="http://www.example.org/WS-HT" xmlns:store="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl" xmlns:tew="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-events.wsdl" xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:ts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl" xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="urn:active-endpoints:expression-language:xquery1.0" name="aeb4p-task-client" suppressJoinFailure="yes" targetNamespace="http://www.activebpel.org/b4p/2007/10/wshumantask">
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-state.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../../org.activebpel.rt.identity/support/wsdl/identity.wsdl" namespace="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-storage.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../../org.activebpel.rt.ht/support/wsdl/ws-humantask-api.wsdl" namespace="http://www.example.org/WS-HT/api/wsdl"/>
+   <bpel:import importType="http://www.w3.org/2001/XMLSchema" location="../schema/ws-bpel_serviceref.xsd" namespace="http://docs.oasis-open.org/wsbpel/2.0/serviceref"/>
+   <bpel:import importType="http://www.w3.org/2001/XMLSchema" location="../schema/aeb4p-task-state-wsdl.xsd" namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-common.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl"/>
+   <bpel:import importType="http://www.w3.org/2001/XMLSchema" location="../schema/aeb4p-task-rt.xsd" namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-events.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-events.wsdl"/>
+   <bpel:partnerLinks>
+      <bpel:partnerLink myRole="process" name="taskClientPL" partnerLinkType="ts:taskOperationsPLT"/>
+      <bpel:partnerLink name="taskStatePL" partnerLinkType="ts:taskOperationsPLT" partnerRole="process"/>
+      <bpel:partnerLink name="identityPL" partnerLinkType="id:identityPLT" partnerRole="service"/>
+      <bpel:partnerLink name="storagePL" partnerLinkType="store:storagePLT" partnerRole="system"/>
+      <bpel:partnerLink myRole="process" name="aeTaskOperationsPL" partnerLinkType="ts:aeTaskOperationsPLT" partnerRole="process"/>
+   </bpel:partnerLinks>
+   <bpel:variables>
+      <bpel:variable messageType="htapiw:claim" name="claim"/>
+      <bpel:variable messageType="htapiw:claimResponse" name="claimResponse"/>
+      <bpel:variable messageType="htapiw:start" name="start"/>
+      <bpel:variable messageType="htapiw:startResponse" name="startResponse"/>
+      <bpel:variable messageType="htapiw:stop" name="stop"/>
+      <bpel:variable messageType="htapiw:stopResponse" name="stopResponse"/>
+      <bpel:variable messageType="htapiw:release" name="release"/>
+      <bpel:variable messageType="htapiw:releaseResponse" name="releaseResponse"/>
+      <bpel:variable messageType="htapiw:suspend" name="suspend"/>
+      <bpel:variable messageType="htapiw:suspendResponse" name="suspendResponse"/>
+      <bpel:variable messageType="htapiw:suspendUntil" name="suspendUntil"/>
+      <bpel:variable messageType="htapiw:suspendUntilResponse" name="suspendUntilResponse"/>
+      <bpel:variable messageType="htapiw:resume" name="resume"/>
+      <bpel:variable messageType="htapiw:resumeResponse" name="resumeResponse"/>
+      <bpel:variable messageType="htapiw:complete" name="complete"/>
+      <bpel:variable messageType="htapiw:completeResponse" name="completeResponse"/>
+      <bpel:variable messageType="htapiw:remove" name="remove"/>
+      <bpel:variable messageType="htapiw:removeResponse" name="removeResponse"/>
+      <bpel:variable messageType="htapiw:fail" name="fail"/>
+      <bpel:variable messageType="htapiw:failResponse" name="failResponse"/>
+      <bpel:variable messageType="htapiw:setPriority" name="setPriority"/>
+      <bpel:variable messageType="htapiw:setPriorityResponse" name="setPriorityResponse"/>
+      <bpel:variable messageType="htapiw:addAttachment" name="addAttachment"/>
+      <bpel:variable messageType="htapiw:addAttachmentResponse" name="addAttachmentResponse"/>
+      <bpel:variable messageType="htapiw:getAttachmentInfos" name="getAttachmentInfos"/>
+      <bpel:variable messageType="htapiw:getAttachmentInfosResponse" name="getAttachmentInfosResponse"/>
+      <bpel:variable messageType="htapiw:getAttachments" name="getAttachments"/>
+      <bpel:variable messageType="htapiw:getAttachmentsResponse" name="getAttachmentsResponse"/>
+      <bpel:variable messageType="htapiw:deleteAttachments" name="deleteAttachments"/>
+      <bpel:variable messageType="htapiw:deleteAttachmentsResponse" name="deleteAttachmentsResponse"/>
+      <bpel:variable messageType="htapiw:addComment" name="addComment"/>
+      <bpel:variable messageType="htapiw:getComments" name="getComments"/>
+      <bpel:variable messageType="htapiw:getCommentsResponse" name="getCommentsResponse"/>
+      <bpel:variable messageType="htapiw:skip" name="skip"/>
+      <bpel:variable messageType="htapiw:skipResponse" name="skipResponse"/>
+      <bpel:variable messageType="htapiw:forward" name="forward"/>
+      <bpel:variable messageType="htapiw:forwardResponse" name="forwardResponse"/>
+      <bpel:variable messageType="htapiw:delegate" name="delegate"/>
+      <bpel:variable messageType="htapiw:delegateResponse" name="delegateResponse"/>
+      <bpel:variable messageType="htapiw:getRendering" name="getRendering"/>
+      <bpel:variable messageType="htapiw:getRenderingResponse" name="getRenderingResponse"/>
+      <bpel:variable messageType="htapiw:getRenderingTypes" name="getRenderingTypes"/>
+      <bpel:variable messageType="htapiw:getRenderingTypesResponse" name="getRenderingTypesResponse"/>
+      <bpel:variable messageType="htapiw:getTaskInfo" name="getTaskInfo"/>
+      <bpel:variable messageType="htapiw:getTaskInfoResponse" name="getTaskInfoResponse"/>
+      <bpel:variable messageType="htapiw:getTaskDescription" name="getTaskDescription"/>
+      <bpel:variable messageType="htapiw:getTaskDescriptionResponse" name="getTaskDescriptionResponse"/>
+      <bpel:variable messageType="htapiw:setOutput" name="setOutput"/>
+      <bpel:variable messageType="htapiw:setOutputResponse" name="setOutputResponse"/>
+      <bpel:variable messageType="htapiw:deleteOutput" name="deleteOutput"/>
+      <bpel:variable messageType="htapiw:deleteOutputResponse" name="deleteOutputResponse"/>
+      <bpel:variable messageType="htapiw:setFault" name="setFault"/>
+      <bpel:variable messageType="htapiw:setFaultResponse" name="setFaultResponse"/>
+      <bpel:variable messageType="htapiw:deleteFault" name="deleteFault"/>
+      <bpel:variable messageType="htapiw:deleteFaultResponse" name="deleteFaultResponse"/>
+      <bpel:variable messageType="htapiw:getInput" name="getInput"/>
+      <bpel:variable messageType="htapiw:getInputResponse" name="getInputResponse"/>
+      <bpel:variable messageType="htapiw:getOutput" name="getOutput"/>
+      <bpel:variable messageType="htapiw:getOutputResponse" name="getOutputResponse"/>
+      <bpel:variable messageType="htapiw:getFault" name="getFault"/>
+      <bpel:variable messageType="htapiw:getFaultResponse" name="getFaultResponse"/>
+      <bpel:variable messageType="htapiw:getMyTaskAbstracts" name="getMyTaskAbstracts"/>
+      <bpel:variable messageType="htapiw:getMyTasks" name="getMyTasks"/>
+      <bpel:variable messageType="htapiw:activate" name="activate"/>
+      <bpel:variable messageType="htapiw:activateResponse" name="activateResponse"/>
+      <bpel:variable messageType="htapiw:nominate" name="nominate"/>
+      <bpel:variable messageType="htapiw:nominateResponse" name="nominateResponse"/>
+      <bpel:variable messageType="htapiw:setGenericHumanRole" name="setGenericHumanRole"/>
+      <bpel:variable messageType="htapiw:setGenericHumanRoleResponse" name="setGenericHumanRoleResponse"/>
+      <bpel:variable messageType="htapiw:query" name="query"/>
+      <bpel:variable element="id:principalName" name="principalNameInput"/>
+      <bpel:variable element="ns10:service-ref" name="serviceRef"/>
+      <bpel:variable element="tsw:authorizeRequest" name="authorizeRequest"/>
+      <bpel:variable element="tsw:authorizeResponse" name="authorizeResponse"/>
+      <bpel:variable element="tsw:getTaskInstance" name="getTaskInstanceRequest"/>
+      <bpel:variable element="trt:taskInstance" name="getTaskInstanceResponse"/>
+      <bpel:variable messageType="ts:UpdateCommentRequest" name="UpdateCommentRequest"/>
+      <bpel:variable messageType="ts:EmptyMessage" name="EmptyMessage"/>
+      <bpel:variable messageType="ts:DeleteCommentRequest" name="DeleteCommentRequest"/>
+      <bpel:variable element="tsw:deleteAttachmentById" name="DeleteAttachmentByIdRequest"/>
+      <bpel:variable element="tsw:getAttachmentById" name="getAttachmentByIdRequest"/>
+      <bpel:variable element="tsw:getAttachmentByIdResponse" name="getAttachmentByIdResponse"/>
+      <bpel:variable element="tsw:getTasks" name="getTasks"/>
+      <bpel:variable element="tsw:getTasksResponse" name="getTasksResponse"/>
+   </bpel:variables>
+   <bpel:pick createInstance="yes" name="TaskClientPick">
+      <bpel:onMessage operation="getMyTasks" partnerLink="taskClientPL" variable="getMyTasks">
+         <bpel:scope name="getMyTasks">
+            <bpel:variables>
+               <bpel:variable element="store:listTasks" name="listTasks"/>
+               <bpel:variable element="store:listTasksResponse" name="listTasksResponse"/>
+               <bpel:variable messageType="htapiw:getMyTasksResponse" name="getMyTasksResponse"/>
+               <bpel:variable element="id:roleList" name="roleListOutput"/>
+            </bpel:variables>
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="getMyTasks" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="getMyTasks" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="SetPrincipal">
+                  <bpel:copy>
+                     <bpel:from>abx:getProcessInitiator()</bpel:from>
+                     <bpel:to variable="principalNameInput"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="principalNameInput" name="FindRolesByPrincipal-getMyTasks" operation="findRolesByPrincipal" outputVariable="roleListOutput" partnerLink="identityPL"/>
+               <bpel:assign name="PopulateListingQuery">
+                  <bpel:copy>
+                     <bpel:from>&lt;store:listTasks xmlns:htapis="http://www.example.org/WS-HT/api/xsd" xmlns:store="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl"&gt;&#13;
+   &lt;store:principal&gt;{data( $principalNameInput )}&lt;/store:principal&gt;&#13;
+   &lt;store:roleList&gt;&#13;
+   {&#13;
+      for $role in $roleListOutput/id:role&#13;
+         return&#13;
+         &lt;store:role&gt;{data($role)}&lt;/store:role&gt;&#13;
+   }&#13;
+   &lt;/store:roleList&gt;&#13;
+{ $getMyTasks.getMyTasks }&#13;
+&lt;/store:listTasks&gt;</bpel:from>
+                     <bpel:to variable="listTasks"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="listTasks" name="getMyTasks" operation="listTasks" outputVariable="listTasksResponse" partnerLink="storagePL"/>
+               <bpel:assign name="PrepareResponse">
+                  <bpel:copy>
+                     <bpel:from>$listTasksResponse/htapis:getMyTasksResponse</bpel:from>
+                     <bpel:to part="getMyTasksResponse" variable="getMyTasksResponse"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:reply operation="getMyTasks" partnerLink="taskClientPL" variable="getMyTasksResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getMyTaskAbstracts" partnerLink="taskClientPL" variable="getMyTaskAbstracts">
+         <bpel:scope name="getMyTaskAbstracts">
+            <bpel:variables>
+               <bpel:variable messageType="htapiw:getMyTaskAbstractsResponse" name="getMyTaskAbstractsResponse"/>
+               <bpel:variable element="store:listTaskAbstracts" name="listTaskAbstracts"/>
+               <bpel:variable element="store:listTaskAbstractsResponse" name="listTaskAbstractsResponse"/>
+               <bpel:variable element="id:roleList" name="roleListOutput"/>
+            </bpel:variables>
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="getMyTaskAbstracts" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="getMyTaskAbstracts" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="SetPrincipal">
+                  <bpel:copy>
+                     <bpel:from>abx:getProcessInitiator()</bpel:from>
+                     <bpel:to variable="principalNameInput"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="principalNameInput" name="FindRolesByPrincipal-getMyTaskAbstracts" operation="findRolesByPrincipal" outputVariable="roleListOutput" partnerLink="identityPL"/>
+               <bpel:assign name="PopulateListingQuery">
+                  <bpel:copy>
+                     <bpel:from>&lt;store:listTaskAbstracts xmlns:htapis="http://www.example.org/WS-HT/api/xsd" xmlns:store="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl"&gt;&#13;
+   &lt;store:principal&gt;{data( $principalNameInput )}&lt;/store:principal&gt;&#13;
+   &lt;store:roleList&gt;&#13;
+   {&#13;
+      for $role in $roleListOutput/id:role&#13;
+         return&#13;
+         &lt;store:role&gt;{data($role)}&lt;/store:role&gt;&#13;
+   }&#13;
+   &lt;/store:roleList&gt;&#13;
+{ $getMyTaskAbstracts.getMyTaskAbstracts }&#13;
+&lt;/store:listTaskAbstracts&gt;</bpel:from>
+                     <bpel:to variable="listTaskAbstracts"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="listTaskAbstracts" name="getMyTaskAbstracts" operation="listTaskAbstracts" outputVariable="listTaskAbstractsResponse" partnerLink="storagePL"/>
+               <bpel:assign name="PrepareResponse">
+                  <bpel:copy>
+                     <bpel:from>$listTaskAbstractsResponse/htapis:getMyTaskAbstractsResponse</bpel:from>
+                     <bpel:to part="getMyTaskAbstractsResponse" variable="getMyTaskAbstractsResponse"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:reply operation="getMyTaskAbstracts" partnerLink="taskClientPL" variable="getMyTaskAbstractsResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getTasks" partnerLink="aeTaskOperationsPL" variable="getTasks">
+         <bpel:scope name="getTasks">
+            <bpel:variables>
+               <bpel:variable element="store:listTasks" name="listTasks"/>
+               <bpel:variable element="store:listTasksResponse" name="listTasksResponse"/>
+               <bpel:variable element="id:roleList" name="roleListOutput"/>
+            </bpel:variables>
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="getMyTasks" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="getMyTasks" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="SetPrincipal">
+                  <bpel:copy>
+                     <bpel:from>abx:getProcessInitiator()</bpel:from>
+                     <bpel:to variable="principalNameInput"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="principalNameInput" name="FindRolesByPrincipal-getTasks" operation="findRolesByPrincipal" outputVariable="roleListOutput" partnerLink="identityPL"/>
+               <bpel:assign name="PopulateListingQuery">
+                  <bpel:copy>
+                     <bpel:from>&lt;store:listTasks xmlns:htapis="http://www.example.org/WS-HT/api/xsd" &#13;
+xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"&#13;
+xmlns:store="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl"&gt;&#13;
+   &lt;store:principal&gt;{data( $principalNameInput )}&lt;/store:principal&gt;&#13;
+   &lt;store:roleList&gt;&#13;
+   {&#13;
+      for $role in $roleListOutput/id:role&#13;
+         return&#13;
+         &lt;store:role&gt;{data($role)}&lt;/store:role&gt;&#13;
+   }&#13;
+   &lt;/store:roleList&gt;&#13;
+{ $getTasks/htapis:getMyTasks }&#13;
+{ $getTasks/tsw:taskIndexOffset }&#13;
+{ $getTasks/tsw:orderBy }&#13;
+{ $getTasks/tsw:searchBy }&#13;
+&lt;/store:listTasks&gt;</bpel:from>
+                     <bpel:to variable="listTasks"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="listTasks" name="listTasks" operation="listTasks" outputVariable="listTasksResponse" partnerLink="storagePL"/>
+               <bpel:assign name="PrepareResponse">
+                  <bpel:copy>
+                     <bpel:from>&lt;tsw:getTasksResponse&#13;
+xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" &gt;&#13;
+{ $listTasksResponse/tsw:taskTotalCount }&#13;
+{ $listTasksResponse/htapis:getMyTasksResponse }&#13;
+&lt;/tsw:getTasksResponse&gt;</bpel:from>
+                     <bpel:to variable="getTasksResponse"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:reply operation="getTasks" partnerLink="aeTaskOperationsPL" variable="getTasksResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getAttachmentInfos" partnerLink="taskClientPL" variable="getAttachmentInfos">
+         <bpel:scope name="getAttachmentInfos">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="getAttachmentInfos" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="getAttachmentInfos" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="getAttachmentInfos" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="InitPartnerRole">
+                  <bpel:copy>
+                     <bpel:from endpointReference="partnerRole" partnerLink="taskStatePL"/>
+                     <bpel:to variable="serviceRef"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>concat($serviceRef/*/*[local-name(.)='Address'], '-getAttachmentInfos')</bpel:from>
+                     <bpel:to variable="serviceRef">
+                        <bpel:query>*/*[local-name(.)='Address']</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from variable="serviceRef"/>
+                     <bpel:to partnerLink="taskStatePL"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="getAttachmentInfos" name="getAttachmentInfos" operation="getAttachmentInfos" outputVariable="getAttachmentInfosResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="getAttachmentInfos" partnerLink="taskClientPL" variable="getAttachmentInfosResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getComments" partnerLink="taskClientPL" variable="getComments">
+         <bpel:scope name="getComments">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="getComments" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="getComments" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="getComments" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="InitPartnerRole">
+                  <bpel:copy>
+                     <bpel:from endpointReference="partnerRole" partnerLink="taskStatePL"/>
+                     <bpel:to variable="serviceRef"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>concat($serviceRef/*/*[local-name(.)='Address'], '-getComments')</bpel:from>
+                     <bpel:to variable="serviceRef">
+                        <bpel:query>*/*[local-name(.)='Address']</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from variable="serviceRef"/>
+                     <bpel:to partnerLink="taskStatePL"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="getComments" name="getComments" operation="getComments" outputVariable="getCommentsResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="getComments" partnerLink="taskClientPL" variable="getCommentsResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getRendering" partnerLink="taskClientPL" variable="getRendering">
+         <bpel:scope name="getRendering">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="getRendering" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="InitPartnerRole">
+                  <bpel:copy>
+                     <bpel:from endpointReference="partnerRole" partnerLink="taskStatePL"/>
+                     <bpel:to variable="serviceRef"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>concat($serviceRef/*/*[local-name(.)='Address'], '-getRendering')</bpel:from>
+                     <bpel:to variable="serviceRef">
+                        <bpel:query>*/*[local-name(.)='Address']</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from variable="serviceRef"/>
+                     <bpel:to partnerLink="taskStatePL"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="getRendering" name="getRendering" operation="getRendering" outputVariable="getRenderingResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="getRendering" partnerLink="taskClientPL" variable="getRenderingResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getRenderingTypes" partnerLink="taskClientPL" variable="getRenderingTypes">
+         <bpel:scope name="getRenderingTypes">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="getRenderingTypes" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="InitPartnerRole">
+                  <bpel:copy>
+                     <bpel:from endpointReference="partnerRole" partnerLink="taskStatePL"/>
+                     <bpel:to variable="serviceRef"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>concat($serviceRef/*/*[local-name(.)='Address'], '-getRenderingTypes')</bpel:from>
+                     <bpel:to variable="serviceRef">
+                        <bpel:query>*/*[local-name(.)='Address']</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from variable="serviceRef"/>
+                     <bpel:to partnerLink="taskStatePL"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="getRenderingTypes" name="getRenderingTypes" operation="getRenderingTypes" outputVariable="getRenderingTypesResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="getRenderingTypes" partnerLink="taskClientPL" variable="getRenderingTypesResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getTaskDescription" partnerLink="taskClientPL" variable="getTaskDescription">
+         <bpel:scope name="getTaskDescription">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="getTaskDescription" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="InitPartnerRole">
+                  <bpel:copy>
+                     <bpel:from endpointReference="partnerRole" partnerLink="taskStatePL"/>
+                     <bpel:to variable="serviceRef"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>concat($serviceRef/*/*[local-name(.)='Address'], '-getTaskDescription')</bpel:from>
+                     <bpel:to variable="serviceRef">
+                        <bpel:query>*/*[local-name(.)='Address']</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from variable="serviceRef"/>
+                     <bpel:to partnerLink="taskStatePL"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="getTaskDescription" name="getTaskDescription" operation="getTaskDescription" outputVariable="getTaskDescriptionResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="getTaskDescription" partnerLink="taskClientPL" variable="getTaskDescriptionResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getInput" partnerLink="taskClientPL" variable="getInput">
+         <bpel:scope name="getInput">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="getInput" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="getInput" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="getInput" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="InitPartnerRole">
+                  <bpel:copy>
+                     <bpel:from endpointReference="partnerRole" partnerLink="taskStatePL"/>
+                     <bpel:to variable="serviceRef"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>concat($serviceRef/*/*[local-name(.)='Address'], '-getInput')</bpel:from>
+                     <bpel:to variable="serviceRef">
+                        <bpel:query>*/*[local-name(.)='Address']</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from variable="serviceRef"/>
+                     <bpel:to partnerLink="taskStatePL"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="getInput" name="getInput" operation="getInput" outputVariable="getInputResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="getInput" partnerLink="taskClientPL" variable="getInputResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getFault" partnerLink="taskClientPL" variable="getFault">
+         <bpel:scope name="getFault">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="getFault" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="getFault" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="getFault" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalOperationFault" faultName="htapiw:illegalOperationFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalOperationFault" name="ReplyWithIllegalOpFault" operation="getFault" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="InitPartnerRole">
+                  <bpel:copy>
+                     <bpel:from endpointReference="partnerRole" partnerLink="taskStatePL"/>
+                     <bpel:to variable="serviceRef"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>concat($serviceRef/*/*[local-name(.)='Address'], '-getFault')</bpel:from>
+                     <bpel:to variable="serviceRef">
+                        <bpel:query>*/*[local-name(.)='Address']</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from variable="serviceRef"/>
+                     <bpel:to partnerLink="taskStatePL"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="getFault" name="getFault" operation="getFault" outputVariable="getFaultResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="getFault" partnerLink="taskClientPL" variable="getFaultResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getOutput" partnerLink="taskClientPL" variable="getOutput">
+         <bpel:scope name="getOutput">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="getOutput" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="getOutput" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="getOutput" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="InitPartnerRole">
+                  <bpel:copy>
+                     <bpel:from endpointReference="partnerRole" partnerLink="taskStatePL"/>
+                     <bpel:to variable="serviceRef"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>concat($serviceRef/*/*[local-name(.)='Address'], '-getOutput')</bpel:from>
+                     <bpel:to variable="serviceRef">
+                        <bpel:query>*/*[local-name(.)='Address']</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from variable="serviceRef"/>
+                     <bpel:to partnerLink="taskStatePL"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="getOutput" name="getOutput" operation="getOutput" outputVariable="getOutputResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="getOutput" partnerLink="taskClientPL" variable="getOutputResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getAttachments" partnerLink="taskClientPL" variable="getAttachments">
+         <bpel:scope name="getAttachments">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="getAttachments" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="getAttachments" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="getAttachments" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="InitPartnerRole">
+                  <bpel:copy>
+                     <bpel:from endpointReference="partnerRole" partnerLink="taskStatePL"/>
+                     <bpel:to variable="serviceRef"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>concat($serviceRef/*/*[local-name(.)='Address'], '-getAttachments')</bpel:from>
+                     <bpel:to variable="serviceRef">
+                        <bpel:query>*/*[local-name(.)='Address']</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from variable="serviceRef"/>
+                     <bpel:to partnerLink="taskStatePL"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="getAttachments" name="getAttachments" operation="getAttachments" outputVariable="getAttachmentsResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="getAttachments" partnerLink="taskClientPL" variable="getAttachmentsResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getInstance" partnerLink="aeTaskOperationsPL" variable="getTaskInstanceRequest">
+         <bpel:scope name="aeGetTaskInstance">
+            <bpel:faultHandlers>
+               <bpel:catch faultElement="htapis:illegalAccess" faultVariable="fault">
+                  <bpel:reply faultName="ts:illegalAccessFault" operation="getInstance" partnerLink="aeTaskOperationsPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="InitPartnerRole">
+                  <bpel:copy>
+                     <bpel:from endpointReference="partnerRole" partnerLink="aeTaskOperationsPL"/>
+                     <bpel:to variable="serviceRef"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>concat($serviceRef/*/*[local-name(.)='Address'], '-getInstance')</bpel:from>
+                     <bpel:to variable="serviceRef">
+                        <bpel:query>*/*[local-name(.)='Address']</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from variable="serviceRef"/>
+                     <bpel:to partnerLink="aeTaskOperationsPL"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="getTaskInstanceRequest" name="getInstance" operation="getInstance" outputVariable="getTaskInstanceResponse" partnerLink="aeTaskOperationsPL"/>
+               <bpel:reply operation="getInstance" partnerLink="aeTaskOperationsPL" variable="getTaskInstanceResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getAttachmentById" partnerLink="aeTaskOperationsPL" variable="getAttachmentByIdRequest">
+         <bpel:scope name="getAttachmentById">
+            <bpel:faultHandlers>
+               <bpel:catch faultElement="htapis:illegalAccess" faultName="ts:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="ts:illegalAccessFault" operation="getAttachmentById" partnerLink="aeTaskOperationsPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultElement="htapis:illegalArgument" faultName="ts:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="ts:illegalArgumentFault" operation="getAttachmentById" partnerLink="aeTaskOperationsPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="InitPartnerRole">
+                  <bpel:copy>
+                     <bpel:from endpointReference="partnerRole" partnerLink="aeTaskOperationsPL"/>
+                     <bpel:to variable="serviceRef"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>concat($serviceRef/*/*[local-name(.)='Address'], '-getAttachmentById')</bpel:from>
+                     <bpel:to variable="serviceRef">
+                        <bpel:query>*/*[local-name(.)='Address']</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from variable="serviceRef"/>
+                     <bpel:to partnerLink="aeTaskOperationsPL"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="getAttachmentByIdRequest" name="getAttachmentById" operation="getAttachmentById" outputVariable="getAttachmentByIdResponse" partnerLink="aeTaskOperationsPL"/>
+               <bpel:reply operation="getAttachmentById" partnerLink="aeTaskOperationsPL" variable="getAttachmentByIdResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="getTaskInfo" partnerLink="taskClientPL" variable="getTaskInfo">
+         <bpel:scope name="getTaskInfo">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="getTaskInfo" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="InitPartnerRole">
+                  <bpel:copy>
+                     <bpel:from endpointReference="partnerRole" partnerLink="taskStatePL"/>
+                     <bpel:to variable="serviceRef"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>concat($serviceRef/*/*[local-name(.)='Address'], '-getTaskInfo')</bpel:from>
+                     <bpel:to variable="serviceRef">
+                        <bpel:query>*/*[local-name(.)='Address']</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from variable="serviceRef"/>
+                     <bpel:to partnerLink="taskStatePL"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="getTaskInfo" name="getTaskInfo" operation="getTaskInfo" outputVariable="getTaskInfoResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="getTaskInfo" partnerLink="taskClientPL" variable="getTaskInfoResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="deleteAttachmentById" partnerLink="aeTaskOperationsPL" variable="DeleteAttachmentByIdRequest">
+         <bpel:scope name="deleteAttachmentById">
+            <bpel:faultHandlers>
+               <bpel:catch faultElement="htapis:illegalAccess" faultName="ts:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="ts:illegalAccessFault" operation="deleteAttachmentById" partnerLink="aeTaskOperationsPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultElement="htapis:illegalArgument" faultName="ts:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="ts:illegalArgumentFault" operation="deleteAttachmentById" partnerLink="aeTaskOperationsPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultElement="htapis:illegalState" faultName="ts:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="ts:illegalStateFault" operation="deleteAttachmentById" partnerLink="aeTaskOperationsPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="DeleteAttachmentByIdRequest" name="deleteAttachmentById" operation="deleteAttachmentById" partnerLink="aeTaskOperationsPL"/>
+               <bpel:reply operation="deleteAttachmentById" partnerLink="aeTaskOperationsPL"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="addComment" partnerLink="taskClientPL" variable="addComment">
+         <bpel:scope name="addComment">
+            <bpel:variables>
+               <bpel:variable messageType="htapiw:addCommentResponse" name="addCommentResponse"/>
+            </bpel:variables>
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="addComment" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="addComment" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="addComment" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="addComment" name="InvokeAddComment" operation="addComment" outputVariable="addCommentResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="addComment" partnerLink="taskClientPL" variable="addCommentResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="claim" partnerLink="taskClientPL" variable="claim">
+         <bpel:scope name="claimTask">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="claim" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="claim" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="claim" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="claim" name="InvokeClaim" operation="claim" outputVariable="claimResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="claim" partnerLink="taskClientPL" variable="claimResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="stop" partnerLink="taskClientPL" variable="stop">
+         <bpel:scope name="stopTask">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="stop" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="stop" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="stop" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="stop" name="InvokeStop" operation="stop" outputVariable="stopResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="stop" partnerLink="taskClientPL" variable="stopResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="suspend" partnerLink="taskClientPL" variable="suspend">
+         <bpel:scope name="suspendTask">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="suspend" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="suspend" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="suspend" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="suspend" name="InvokeSuspend" operation="suspend" outputVariable="suspendResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="suspend" partnerLink="taskClientPL" variable="suspendResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="resume" partnerLink="taskClientPL" variable="resume">
+         <bpel:scope name="resumeTask">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="resume" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="resume" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="resume" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="resume" name="InvokeResume" operation="resume" outputVariable="resumeResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="resume" partnerLink="taskClientPL" variable="resumeResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="remove" partnerLink="taskClientPL" variable="remove">
+         <bpel:scope name="removeTask">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="remove" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="remove" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="remove" name="InvokeRemove" operation="remove" outputVariable="removeResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="remove" partnerLink="taskClientPL" variable="removeResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="setPriority" partnerLink="taskClientPL" variable="setPriority">
+         <bpel:scope name="setPriority">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="setPriority" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="setPriority" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="setPriority" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="setPriority" name="InvokeSetPriority" operation="setPriority" outputVariable="setPriorityResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="setPriority" partnerLink="taskClientPL" variable="setPriorityResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="deleteAttachments" partnerLink="taskClientPL" variable="deleteAttachments">
+         <bpel:scope name="deleteAttachments">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="deleteAttachments" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="deleteAttachments" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="deleteAttachments" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="deleteAttachments" name="InvokeDeleteAttachments" operation="deleteAttachments" outputVariable="deleteAttachmentsResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="deleteAttachments" partnerLink="taskClientPL" variable="deleteAttachmentsResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="forward" partnerLink="taskClientPL" variable="forward">
+         <bpel:scope name="forward">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="forward" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="forward" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="forward" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="forward" name="InvokeForward" operation="forward" outputVariable="forwardResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="forward" partnerLink="taskClientPL" variable="forwardResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="deleteOutput" partnerLink="taskClientPL" variable="deleteOutput">
+         <bpel:scope name="deleteOutput">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="deleteOutput" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="deleteOutput" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="deleteOutput" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="deleteOutput" name="InvokeDeleteOutput" operation="deleteOutput" outputVariable="deleteOutputResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="deleteOutput" partnerLink="taskClientPL" variable="deleteOutputResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="deleteFault" partnerLink="taskClientPL" variable="deleteFault">
+         <bpel:scope name="deleteFault">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="deleteFault" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="deleteFault" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="deleteFault" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="deleteFault" name="InvokeDeleteFault" operation="deleteFault" outputVariable="deleteFaultResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="deleteFault" partnerLink="taskClientPL" variable="deleteFaultResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="query" partnerLink="taskClientPL" variable="query">
+         <bpel:scope name="query">
+            <bpel:variables>
+               <bpel:variable element="htapis:illegalArgument" name="illegalArgument">
+                  <bpel:from>
+                     <bpel:literal>The optional query operation is not implemented.</bpel:literal>
+                  </bpel:from>
+               </bpel:variable>
+            </bpel:variables>
+            <bpel:reply faultName="htapiw:illegalArgumentFault" operation="query" partnerLink="taskClientPL" variable="illegalArgument"/>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="nominate" partnerLink="taskClientPL" variable="nominate">
+         <bpel:scope name="nominate">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="nominate" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="nominate" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="nominate" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="nominate" name="InvokeNominate" operation="nominate" outputVariable="nominateResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="nominate" partnerLink="taskClientPL" variable="nominateResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="setGenericHumanRole" partnerLink="taskClientPL" variable="setGenericHumanRole">
+         <bpel:scope name="setGenericHumanRole">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="setGenericHumanRole" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="setGenericHumanRole" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="setGenericHumanRole" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="setGenericHumanRole" name="InvokesetGenericHumanRole" operation="setGenericHumanRole" outputVariable="setGenericHumanRoleResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="setGenericHumanRole" partnerLink="taskClientPL" variable="setGenericHumanRoleResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="activate" partnerLink="taskClientPL" variable="activate">
+         <bpel:scope name="activate">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="activate" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="activate" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="activate" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="activate" name="InvokeActivate" operation="activate" outputVariable="activateResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="activate" partnerLink="taskClientPL" variable="activateResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="setFault" partnerLink="taskClientPL" variable="setFault">
+         <bpel:scope name="setFault">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="setFault" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="setFault" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="setFault" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalOperationFault" faultName="htapiw:illegalOperationFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalOperationFault" name="ReplyWithIllegalOpFault" operation="setFault" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="removeXsiType">
+                  <bpel:copy ignoreMissingFromData="yes">
+                     <bpel:from>if (exists( $setFault.setFault//@xsi:type)) then&#13;
+bpel:doXslTransform('project:/org.activebpel.rt.b4p.services/xsl/removeXsiType.xsl', $setFault.setFault )&#13;
+else ()</bpel:from>
+                     <bpel:to part="setFault" variable="setFault"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="setFault" name="setFault" operation="setFault" outputVariable="setFaultResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="setFault" partnerLink="taskClientPL" variable="setFaultResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="setOutput" partnerLink="taskClientPL" variable="setOutput">
+         <bpel:scope name="setOutput">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="setOutput" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="setOutput" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="setOutput" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="removeXsiType">
+                  <bpel:copy ignoreMissingFromData="yes">
+                     <bpel:from>if (exists( $setOutput.setOutput//@xsi:type)) then&#13;
+bpel:doXslTransform('project:/org.activebpel.rt.b4p.services/xsl/removeXsiType.xsl', $setOutput.setOutput )&#13;
+else ()</bpel:from>
+                     <bpel:to part="setOutput" variable="setOutput"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="setOutput" name="setOutput" operation="setOutput" outputVariable="setOutputResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="setOutput" partnerLink="taskClientPL" variable="setOutputResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="delegate" partnerLink="taskClientPL" variable="delegate">
+         <bpel:scope name="delegate">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="delegate" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="delegate" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="delegate" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:recipientNotAllowed" faultName="htapiw:recipientNotAllowed" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:recipientNotAllowed" name="ReplyWithRecipientNotAllowedFault" operation="delegate" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="delegate" name="InvokeDelegate" operation="delegate" outputVariable="delegateResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="delegate" partnerLink="taskClientPL" variable="delegateResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="skip" partnerLink="taskClientPL" variable="skip">
+         <bpel:scope name="skip">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="skip" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="skip" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="skip" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalOperationFault" faultName="htapiw:illegalOperationFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalOperationFault" name="ReplyWithIllegalOpFault" operation="skip" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="skip" name="InvokeSkip" operation="skip" outputVariable="skipResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="skip" partnerLink="taskClientPL" variable="skipResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="addAttachment" partnerLink="taskClientPL" variable="addAttachment">
+         <bpel:scope name="addAttachment">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="addAttachment" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="addAttachment" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="addAttachment" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="addAttachment" name="InvokeAddAttachment" operation="addAttachment" outputVariable="addAttachmentResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="addAttachment" partnerLink="taskClientPL" variable="addAttachmentResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="fail" partnerLink="taskClientPL" variable="fail">
+         <bpel:scope name="failTask">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="fail" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="fail" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="fail" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalOperationFault" faultName="htapiw:illegalOperationFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalOperationFault" name="ReplyWithIllegalOpFault" operation="fail" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="fail" name="InvokeFail" operation="fail" outputVariable="failResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="fail" partnerLink="taskClientPL" variable="failResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="complete" partnerLink="taskClientPL" variable="complete">
+         <bpel:scope name="complete">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="complete" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="complete" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="complete" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:assign name="removeXsiType">
+                  <bpel:copy ignoreMissingFromData="yes">
+                     <bpel:from>if (exists( $complete.complete//@xsi:type)) then&#13;
+bpel:doXslTransform('project:/org.activebpel.rt.b4p.services/xsl/removeXsiType.xsl', $complete.complete )&#13;
+else ()</bpel:from>
+                     <bpel:to part="complete" variable="complete"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="complete" name="complete" operation="complete" outputVariable="completeResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="complete" partnerLink="taskClientPL" variable="completeResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="suspendUntil" partnerLink="taskClientPL" variable="suspendUntil">
+         <bpel:scope name="suspendUntil">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="suspendUntil" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="suspendUntil" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="suspendUntil" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="suspendUntil" name="InvokeSuspendUntil" operation="suspendUntil" outputVariable="suspendUntilResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="suspendUntil" partnerLink="taskClientPL" variable="suspendUntilResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="release" partnerLink="taskClientPL" variable="release">
+         <bpel:scope name="releaseTask">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="release" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="release" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="release" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="release" name="InvokeRelease" operation="release" outputVariable="releaseResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="release" partnerLink="taskClientPL" variable="releaseResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="start" partnerLink="taskClientPL" variable="start">
+         <bpel:scope name="startTask">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="start" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="start" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="start" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="start" name="InvokeStart" operation="start" outputVariable="startResponse" partnerLink="taskStatePL"/>
+               <bpel:reply operation="start" partnerLink="taskClientPL" variable="startResponse"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="updateComment" partnerLink="aeTaskOperationsPL" variable="UpdateCommentRequest">
+         <bpel:scope name="updateComment">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="start" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="start" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="start" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="UpdateCommentRequest" name="InvokeUpdate" operation="updateComment" outputVariable="EmptyMessage" partnerLink="aeTaskOperationsPL"/>
+               <bpel:reply operation="updateComment" partnerLink="aeTaskOperationsPL" variable="EmptyMessage"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="deleteComment" partnerLink="aeTaskOperationsPL" variable="DeleteCommentRequest">
+         <bpel:scope name="DeleteComment">
+            <bpel:faultHandlers>
+               <bpel:catch faultMessageType="htapiw:illegalAccessFault" faultName="htapiw:illegalAccessFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalAccessFault" name="ReplyWithIllegalAccessFault" operation="start" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalArgumentFault" faultName="htapiw:illegalArgumentFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalArgumentFault" name="ReplyWithIllegalArgFault" operation="start" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+               <bpel:catch faultMessageType="htapiw:illegalStateFault" faultName="htapiw:illegalStateFault" faultVariable="fault">
+                  <bpel:reply faultName="htapiw:illegalStateFault" name="ReplyWithIllegalStateFault" operation="start" partnerLink="taskClientPL" variable="fault"/>
+               </bpel:catch>
+            </bpel:faultHandlers>
+            <bpel:sequence>
+               <bpel:invoke inputVariable="DeleteCommentRequest" name="InvokeDelete" operation="deleteComment" outputVariable="EmptyMessage" partnerLink="aeTaskOperationsPL"/>
+               <bpel:reply operation="deleteComment" partnerLink="aeTaskOperationsPL" variable="EmptyMessage"/>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:onMessage>
+      <bpel:onMessage operation="authorize" partnerLink="aeTaskOperationsPL" variable="authorizeRequest">
+         <bpel:sequence>
+            <bpel:assign name="initAuthorizeResponse">
+               <bpel:copy>
+                  <bpel:from>
+                     <bpel:literal>
+                        <empty/>
+                     </bpel:literal>
+                  </bpel:from>
+                  <bpel:to variable="authorizeResponse"/>
+               </bpel:copy>
+            </bpel:assign>
+            <bpel:reply operation="authorize" partnerLink="aeTaskOperationsPL" variable="authorizeResponse"/>
+         </bpel:sequence>
+      </bpel:onMessage>
+   </bpel:pick>
+</bpel:process>

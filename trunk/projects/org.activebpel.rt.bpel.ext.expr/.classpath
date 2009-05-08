@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" sourcepath="AEDEV/external/rhino/js-1.6R1-src.jar" kind="var" path="AEDEV/lib/js-1.6R1.jar"/>
+	<classpathentry exported="true" sourcepath="AEDEV/external/saxon/saxon_src.zip" kind="var" path="AEDEV/lib/saxon8.jar"/>
+	<classpathentry exported="true" sourcepath="AEDEV/external/saxon/saxon_src.zip" kind="var" path="AEDEV/lib/saxon8-dom.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

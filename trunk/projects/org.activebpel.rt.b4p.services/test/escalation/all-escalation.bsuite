@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="escalation">
+   <abs:bUnitRef location="bunits/escalation_01_nodeadlines.bunit"/>
+   <abs:bUnitRef location="bunits/escalation_10_1deadline_0esc.bunit"/>
+   <abs:bUnitRef location="bunits/escalation_11_1deadline_1esc-true.bunit"/>
+   <abs:bUnitRef location="bunits/escalation_12_1deadline_1esc-false.bunit"/>
+   <abs:bUnitRef location="bunits/escalation_13_1deadline_2esc-2true.bunit"/>
+   <abs:bUnitRef location="bunits/escalation_14_1deadline_2esc-1true.bunit"/>
+   <abs:bUnitRef location="bunits/escalation_15_1deadline_1esc-reassign.bunit"/>
+   <abs:bUnitRef location="bunits/escalation_16_1deadline_2esc-notify-reassign.bunit"/>
+   <abs:bUnitRef location="bunits/escalation_17_1deadline_1esc-aecustom.bunit"/>
+   <abs:bUnitRef location="bunits/escalation_18_1deadline_3esc-notify-reassign-aecustom.bunit"/>
+   <abs:bUnitRef location="bunits/escalation_19_2deadline_3esc-notify-reassign-aecustom.bunit"/>
+   <abs:bUnitRef location="bunits/escalation_20_1deadline_2esc-2reassign.bunit"/>
+   <abs:bUnitRef location="bunits/escalation_21_2deadline_2esc-2reassign.bunit"/>
+   <abs:bUnitRef location="bunits/escalation_22_1deadline_1esc-true-toParts.bunit"/>
+</abs:bSuite>

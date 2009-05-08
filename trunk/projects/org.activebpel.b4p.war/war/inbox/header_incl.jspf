@@ -1,0 +1,9 @@
+		<div id="header">
+			<div id="headermenucontainer">
+			   <span id="aeprogressmessage"><img src="../images/busywait.gif" /><span></span></span>
+				<span><ae:GetResource name="signed_in_as" /> <em><jsp:getProperty name="aeWorkFlowUserSession" property="principalName" /></em></span>&nbsp;|&nbsp;
+				<span><a href="../logout.jsp"><ae:GetResource name="sign_off" /></a></span>&nbsp;|&nbsp;				
+				<span><a href="../help" target="aeworkflowhelp" ><ae:GetResource name="help" /></a></span>
+			</div>
+			<img src="../images/logo.gif" style="border:0px" />			
+		</div><!-- header -->

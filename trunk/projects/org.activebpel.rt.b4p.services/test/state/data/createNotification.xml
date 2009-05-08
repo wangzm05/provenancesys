@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsw:createTaskRequest xmlns:htapi="http://www.example.org/WS-HT/api"
+	xmlns:htd="http://www.example.org/WS-HT"
+	xmlns:htp="http://www.example.org/WS-HT/protocol"
+	xmlns:sref="http://docs.oasis-open.org/wsbpel/2.0/serviceref"
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+	xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd">
+	<htd:notification name="N1">
+		<htd:interface operation="ncname" portType="qname" />
+		<htd:priority>'1'</htd:priority>
+		<htd:peopleAssignments>
+			<htd:recipients>
+				<htd:from logicalPeopleGroup="qname" />
+			</htd:recipients>
+			<htd:businessAdministrators>
+				<htd:from logicalPeopleGroup="qname" />
+			</htd:businessAdministrators>
+		</htd:peopleAssignments>
+		<htd:presentationElements>
+			<htd:name>Notification 1</htd:name>
+			<htd:subject>Subject</htd:subject>
+			<htd:description>Description</htd:description>
+		</htd:presentationElements>
+	</htd:notification>
+	<trt:initialState>
+		<trt:input>
+			<trt:part name="inputPart1">string data</trt:part>
+		</trt:input>
+		<trt:createdBy>anonymous</trt:createdBy>
+		<htp:humanTaskContext>
+			<htp:priority>1</htp:priority>
+			<htp:peopleAssignments>
+				<htp:recipients>
+					<htd:organizationalEntity>
+						<htd:users>
+							<htd:user>user1</htd:user>
+							<htd:user>user2</htd:user>
+							<htd:user>user3</htd:user>
+						</htd:users>
+					</htd:organizationalEntity>
+				</htp:recipients>
+				<htp:businessAdministrators>
+					<htd:organizationalEntity>
+						<htd:users>
+							<htd:user>admin</htd:user>
+						</htd:users>
+					</htd:organizationalEntity>
+				</htp:businessAdministrators>
+			</htp:peopleAssignments>
+		</htp:humanTaskContext>
+		<trt:processVariables />
+	</trt:initialState>
+	<trt:interfaceMetadata>
+		<trt:input>
+			<trt:part name="inputPart1" />
+		</trt:input>
+	</trt:interfaceMetadata>
+</tsw:createTaskRequest>

@@ -1,0 +1,45 @@
+<aerule:rules xmlns:aerule="urn:activebpel:wsresource:validation:rules" 
+   targetNamespace="http://www.example.org/WS-HT">
+   
+   <!--<aerule:rule>
+      <aerule:code>HT_TASK_R1</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>NCName must be valid</aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.validation.rules.AeTaskDefRule1Validator</aerule:validator>
+   </aerule:rule>-->
+    <aerule:rule>
+      <aerule:code>HT_TASK_R2</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>Task name is unique within the collection.</aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.validation.rules.AeTaskDefRule2Validator</aerule:validator>
+    </aerule:rule>
+    <aerule:rule>
+       <aerule:code>HT_FROM_R19</aerule:code>
+       <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+       <aerule:description>Referenced logicalPeopleGroup is resolved.</aerule:description>
+       <aerule:validator>org.activebpel.rt.ht.validation.rules.AeFromDefRule19Validator</aerule:validator>
+    </aerule:rule>
+    <aerule:rule>
+       <aerule:code>HT_ESCALATION_R16</aerule:code>
+       <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+       <aerule:description>
+          multiple reassignments within same escalation w/o conditions should be warning, only first will fire
+       </aerule:description>
+       <aerule:validator>org.activebpel.rt.ht.validation.rules.AeEscalationDefRule16Validator</aerule:validator>
+    </aerule:rule>
+    <!-- 
+    <aerule:rule>
+       <aerule:code>HT_SUBJECT_R41</aerule:code>
+       <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+       <aerule:description>any parameters must resolve to the parameter bindings</aerule:description>
+       <aerule:validator>org.activebpel.rt.ht.validation.rules.AeSubjectDefRule41Validator</aerule:validator>
+    </aerule:rule>
+    <aerule:rule>
+      <aerule:code>HT_TASK_R3</aerule:code>
+      <aerule:defaultSeverity>ERROR</aerule:defaultSeverity>
+      <aerule:description>must have interface, presentation elements</aerule:description>
+      <aerule:validator>org.activebpel.rt.ht.validation.rules.AeTaskDefRule3Validator</aerule:validator>
+   </aerule:rule> 
+   -->
+   
+</aerule:rules>

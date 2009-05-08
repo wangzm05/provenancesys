@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns:cancelDeadlinesData xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd">
+   <trt:identifier xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">anyURI</trt:identifier>
+   <ns:type>start</ns:type>
+</ns:cancelDeadlinesData>

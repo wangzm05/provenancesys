@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abu:bpelUnit
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:aeptstw="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"
+	xmlns:aeptstx="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+	xmlns:aeid="http://schemas.active-endpoints.com/identity/2007/01/identity.xsd"
+	xmlns:aeidw="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl"
+	xmlns:htd="http://www.example.org/WS-HT"
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:xi="http://www.w3.org/2001/XInclude" 
+   >
+	<abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml" />
+	<abu:bpels>
+		<abu:bpel location="../../../bpel/aeb4p-task-remove-owner.bpel" />
+	</abu:bpels>
+	<abu:wsdls>
+		<abu:wsdl location="../../../wsdl/aeb4p-task-state.wsdl" />
+		<abu:wsdl location="../../../../org.activebpel.rt.identity/support/wsdl/identity.wsdl" />
+	</abu:wsdls>
+	<abu:invokes>
+		<abu:invoke count="1" name="AssertPotentialOwner">
+			<abu:defaultInvoke>
+				<abu:asserts>
+					<abu:assertEquals part="assertion">
+						<aeidw:principalQueryAssertion>
+							<aeidw:principalName>owner1</aeidw:principalName>
+							<aeid:identityQuery>
+								<aeid:include>
+									<aeid:user>owner1</aeid:user>
+									<aeid:user>owner2</aeid:user>
+								</aeid:include>
+								<aeid:exclude>
+									<aeid:user>owner2</aeid:user>
+								</aeid:exclude>
+							</aeid:identityQuery>
+							</aeidw:principalQueryAssertion>
+					</abu:assertEquals>
+				</abu:asserts>
+				<abu:simulatedResponse>
+					<abu:message type="aeidw:emptyMessage" />
+				</abu:simulatedResponse>
+			</abu:defaultInvoke>
+		</abu:invoke>
+		<abu:invoke count="1" name="QueryPotentialOwnersCount">
+			<abu:defaultInvoke>
+				<abu:asserts>
+					<abu:assertEquals part="countIdentitiesRequest" href="data/countIdentitiesRequest.xml"/>
+				</abu:asserts>
+				<abu:simulatedResponse>
+					<abu:message type="aeidw:countIdentitiesOutput">
+						<abu:parts>
+							<abu:part name="count">
+								<aeidw:identitiesCount>100</aeidw:identitiesCount>
+							</abu:part>
+						</abu:parts>
+					</abu:message>
+				</abu:simulatedResponse>
+			</abu:defaultInvoke>
+		</abu:invoke>
+	</abu:invokes>
+	<abu:commands>
+		<abu:sendMessage operation="RemoveOwner" partnerLink="removeOwnerPL">
+			<abu:message type="aeptstw:RemoveOwnerRequest">
+				<abu:parts>
+					<abu:part name="removeOwnerRequest" href="data/removeRequest.xml"/>
+				</abu:parts>
+			</abu:message>
+			<abu:asserts>
+				<abu:assertEquals part="removeOwnerResponse">
+					<aeptstx:removeOwnerResponse>
+						<aeptstx:ownersRemovalComplete>false</aeptstx:ownersRemovalComplete>
+						<aeptstx:excludedOwners>
+							<htd:users>
+								<htd:user>owner2</htd:user>
+								<htd:user>owner1</htd:user>
+							</htd:users>
+						</aeptstx:excludedOwners>
+					</aeptstx:removeOwnerResponse>
+				</abu:assertEquals>
+			</abu:asserts>
+		</abu:sendMessage>
+	</abu:commands>
+</abu:bpelUnit>

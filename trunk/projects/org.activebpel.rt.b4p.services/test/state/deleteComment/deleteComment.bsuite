@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="delete comment">
+   <abs:bUnitRef location="deleteComment.bunit"/>
+   <abs:bUnitRef location="deleteComment-admin.bunit"/>
+   <abs:bUnitRef location="deleteComment-illegalAccess.bunit"/>
+   <abs:bUnitRef location="deleteComment-illegalState.bunit"/>
+   <abs:bUnitRef location="notification-deleteComment.bunit"/>
+   <abs:bUnitRef location="deleteComment-stakeholder.bunit"/>
+</abs:bSuite>

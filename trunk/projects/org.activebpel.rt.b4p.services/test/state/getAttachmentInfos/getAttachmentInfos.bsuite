@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="getAttachmentInfos">
+   <abs:bUnitRef location="getAttachmentInfos-none.bunit"/>
+   <abs:bUnitRef location="getAttachmentInfos-one.bunit"/>
+</abs:bSuite>

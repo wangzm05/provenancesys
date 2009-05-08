@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="../" default="activebpel.all" name="Buildfile for deploying Active Endpoints ActiveBpel distribution">
+
+   <!-- ==================================================================== -->
+   <!-- Global Properties                                                    -->
+   <!-- Need to be set here, so they can be utilized by import build files   -->
+   <!-- ==================================================================== -->
+   <import file="common.xml"/>
+   <import file="workflow.xml"/>
+   <property environment="env"/>
+   
+   <property name="appserver" value="tomcat"/>
+   
+   <!-- set catalina home to environment or set a default -->
+   <condition property="catalina.home" value="${env.CATALINA_HOME}">
+      <isset property="env.CATALINA_HOME"/>
+   </condition>
+
+   <!-- TOMCAT Common PROPERTIES -->
+   <property name="catalina.home" value="${root}jakarta-tomcat-5.0.25"/>
+   <property name="catalina.deploy.dir" value="${catalina.home}/bpr"/>
+   <property name="catalina.class.dir" value="${catalina.home}/shared/classes"/>
+   <property name="catalina.lib.dir" value="${catalina.home}/shared/lib"/>
+   
+   <property name="activebpel.archive.dist" value="${ae.dist}/activebpel"/>
+   
+
+   <!-- Tamino Schema install PROPERTIES -->
+   <property name="dbdomain" value=""/>
+   <property name="dbuser" value=""/>
+   <property name="dbpass" value=""/>
+   <property name="dburl" value="http://localhost/tamino"/>
+   <property name="dbdatabase" value="ActiveBPELDB"/>
+   
+   
+   <!-- ==================================================================== -->
+   <!-- Patternset Definitions                                                    -->
+   <!-- ==================================================================== -->
+   <patternset id="activebpel.3rdparty.jars">
+        <patternset refid="awf.3rdparty.jars"/>
+   </patternset>
+
+   <patternset id="tomcat.activebpel.jars">    
+        <patternset refid="activebpel.jars"/>
+   </patternset>
+
+   
+   <!-- =========================================== -->
+   <!-- Compile ActiveBpel Jar Files                -->
+   <!-- =========================================== -->      
+   <target name="compile.activebpel">
+   
+        <build.project project="org.activebpel.wsio"/>
+        <build.project project="org.activebpel.rt"/>
+        <build.project project="org.activebpel.rt.bpel"/>
+        <build.project project="org.activebpel.rt.bpel.ext.expr"/>
+        <build.project project="org.activebpel.rt.bpel.ext.expr.bsf"/>
+        <build.project project="org.activebpel.rt.bpel.server"/>
+        <build.project project="org.activebpel.rt.xmldb"/>
+        <build.project project="org.activebpel.rt.tamino"/>
+        <build.project project="org.activebpel.rt.exist"/>
+        <build.project project="org.activebpel.rt.axis"/>
+        <build.project project="ddl.org.activebpel"/>
+        <build.project project="ddl.org.activebpel.tasks"/>
+        <build.project project="org.activebpel.rt.wsresource"/>
+        <build.project project="org.activebpel.rt.ht"/>
+        <build.project project="org.activebpel.rt.identity"/>
+        <build.project project="org.activebpel.rt.b4p"/>
+        <build.project project="org.activebpel.rt.b4p.services"/>
+        <build.project project="org.activebpel.rt.b4p.server"/>
+        <build.project project="org.activebpel.rt.http"/>
+        <build.project project="org.activebpel.rt.axis.bpel.admin"/>
+        <build.project project="org.activebpel.rt.axis.bpel"/>
+        <build.project project="org.activebpel.rt.axis.bpel.web"/>
+        <build.project project="org.activebpel.rt.war" target="war"/>
+        <build.project project="org.activebpel.rt.bpeladmin.war" target="war"/>
+        <build.project project="org.activebpel.rt.bpeladmin.help.war" target="war"/>
+        <build.project project="org.activebpel.b4p.war" target="war"/>
+        
+   </target>
+
+   <!-- =========================================== -->
+   <!-- Deploy ActiveBpel to Tomcat                 -->
+   <!-- =========================================== -->
+   <target depends="config.activebpel" description="Builds all server jars, wars and bprs and updates the tomcat installation" name="deploy.activebpel">
+      <echo message="Copying files to tomcat directory structure..."/>
+      <copy overwrite="yes" todir="${catalina.lib.dir}">
+         <fileset casesensitive="yes" dir="${ae.dist}">
+            <patternset refid="tomcat.activebpel.jars"/>
+         </fileset>
+      </copy>
+      <copy overwrite="yes" toDir="${catalina.lib.dir}">
+         <fileset dir="${ae.lib}">
+            <patternset refid="activebpel.3rdparty.jars"/>
+         </fileset>
+      </copy>
+      <copy overwrite="yes" todir="${catalina.class.dir}">
+         <fileset casesensitive="yes" dir="${ae.projects}/org.activebpel.rt.axis.bpel/support/shared/classes">
+            <include name="*.wsdd"/>
+            <include name="*.cmd"/>
+            <include name="*.sh"/>
+            <include name="*.keystore"/>
+         </fileset>
+      </copy>
+      <delete dir="${catalina.home}/webapps/BpelAdmin" quiet="true"/>
+      <delete dir="${catalina.home}/webapps/active-bpel" quiet="true"/>
+      <delete dir="${catalina.home}/webapps/aetask" quiet="true"/>
+      
+      <copy overwrite="yes" todir="${catalina.home}/webapps">
+         <fileset casesensitive="yes" dir="${ae.dist}/activebpel">
+            <include name="BpelAdmin.war"/>
+            <include name="BpelAdminHelp.war"/>
+            <include name="active-bpel.war"/>
+            <include name="aetask.war"/>
+         </fileset>
+      </copy>
+
+      <copy file="${ae.dist}/AeEngineAdmin.wsr" overwrite="yes" tofile="${catalina.deploy.dir}/AeEngineAdmin.wsr"/>
+      <delete file="${catalina.home}/conf/Catalina/localhost/active-bpel.xml" quiet="true"/>
+      
+      <!-- Ensure tomcat build gets in-memory config -->
+      <delete file="${catalina.deploy.dir}/aeEngineConfig.xml" quiet="true"/>
+      <create.engineconfig dest="${catalina.deploy.dir}/aeEngineConfig.xml" source="${ae.projects}/org.activebpel.rt.axis.bpel.web/support/config/aeEngineConfig-ActiveBPEL.xml" stylesheet="${ae.projects}/org.activebpel.rt.axis.bpel.web/support/config/aeEngineConfig-InMemory.xsl"/>
+
+   </target>
+   
+   <!-- =========================================== -->
+   <!-- Creates the Active-bpel Active-bpel.war     -->
+   <!-- =========================================== -->
+   <target name="war.activebpel">
+        <!-- stage the active-bpel.war activebpel version -->
+         <delete dir="${ae.dist}/activebpel/active-bpel-war" quiet="true"/>
+         <mkdir dir="${ae.dist}/activebpel/active-bpel-war"/>
+         <copy todir="${ae.dist}/activebpel/active-bpel-war">
+             <fileset dir="${ae.projects}/org.activebpel.rt.axis.bpel.web/support/active-bpel.war"/>
+         </copy>
+         <create.engineconfig dest="${ae.dist}/activebpel/active-bpel-war/WEB-INF/classes/aeEngineConfig.xml" source="${ae.projects}/org.activebpel.rt.axis.bpel.web/support/config/aeEngineConfig-ActiveBPEL.xml" stylesheet="${ae.projects}/org.activebpel.rt.axis.bpel.web/support/config/aeEngineConfig-InMemory.xsl"/>
+
+          <!-- create the active-bpel.war -->
+          <war destfile="${ae.dist}/activebpel/active-bpel.war" webxml="${ae.dist}/activebpel/active-bpel-war/WEB-INF/web.xml">
+             <fileset dir="${ae.dist}/activebpel/active-bpel-war">
+                <exclude name="**/web.xml"/>
+             </fileset>
+         </war>
+
+         <delete dir="${ae.dist}/activebpel/active-bpel-war"/>
+
+   </target>
+
+   <!-- =========================================== -->
+   <!-- Creates the Engine Config files             -->
+   <!-- =========================================== -->
+   <target name="config.activebpel">
+      <mkdir dir="${ae.dist}/conf"/>
+      <create.engineconfig dest="${ae.dist}/conf/aeEngineConfig-InMemory.xml" source="${ae.projects}/org.activebpel.rt.axis.bpel.web/support/config/aeEngineConfig-ActiveBPEL.xml" stylesheet="${ae.projects}/org.activebpel.rt.axis.bpel.web/support/config/aeEngineConfig-InMemory.xsl"/>
+      <create.engineconfig dest="${ae.dist}/conf/aeEngineConfig-Persistent.xml" source="${ae.projects}/org.activebpel.rt.axis.bpel.web/support/config/aeEngineConfig-ActiveBPEL.xml" stylesheet="${ae.projects}/org.activebpel.rt.axis.bpel.web/support/config/aeEngineConfig-Persistent.xsl"/>
+      
+      <copy file="${ae.dist}/conf/aeEngineConfig-InMemory.xml" tofile="${ae.dist}/conf/aeEngineConfig.xml"/>
+
+      <update.engineconfig dest="${ae.dist}/conf/aeEngineConfig-Persistent.xml" propfile="${ae.projects}/ddl.org.activebpel/src/org/activebpel/ddl/version.properties" source="${ae.dist}/conf/aeEngineConfig-Persistent.xml"/>
+      
+   </target>
+
+   <!-- =========================================== -->
+   <!-- Creates the ActiveBpel DDL                  -->
+   <!-- =========================================== -->
+   <target depends="common.init" name="ddl.activebpel.engine">
+      <update.ddl dest="${ae.dist}/sql/activebpel/ddl/ActiveBPEL-DB2.sql" propfile="${basedir}/ddl.org.activebpel/src/org/activebpel/ddl/version.properties" source="${basedir}/ddl.org.activebpel/ddl/ActiveBPEL-DB2.sql"/>
+      
+      <update.ddl dest="${ae.dist}/sql/activebpel/ddl/ActiveBPEL-MySQL.sql" propfile="${basedir}/ddl.org.activebpel/src/org/activebpel/ddl/version.properties" source="${basedir}/ddl.org.activebpel/ddl/ActiveBPEL-MySQL.sql"/>
+      <update.ddl dest="${ae.dist}/sql/activebpel/ddl/ActiveBPEL-Oracle.sql" propfile="${basedir}/ddl.org.activebpel/src/org/activebpel/ddl/version.properties" source="${basedir}/ddl.org.activebpel/ddl/ActiveBPEL-Oracle.sql"/>
+      <update.ddl dest="${ae.dist}/sql/activebpel/ddl/ActiveBPEL-SQLServer.sql" propfile="${basedir}/ddl.org.activebpel/src/org/activebpel/ddl/version.properties" source="${basedir}/ddl.org.activebpel/ddl/ActiveBPEL-SQLServer.sql"/>
+      
+
+      
+      
+   </target>
+   
+   
+   <!-- =========================================== -->
+   <!-- Create ActiveBPEL Workflow database schema  -->
+   <!-- =========================================== -->
+   <target name="ddl.activebpel.workflow">
+        <update.workflow.ddl base.ddl="${ae.dist}/sql/activebpel/ddl/ActiveBPEL-DB2.sql" task.source.ddl="${basedir}/ddl.org.activebpel.tasks/ddl/ActiveBPEL_Tasks-DB2.sql"/>
+        
+        <update.workflow.ddl base.ddl="${ae.dist}/sql/activebpel/ddl/ActiveBPEL-MySQL.sql" task.source.ddl="${basedir}/ddl.org.activebpel.tasks/ddl/ActiveBPEL_Tasks-MySQL.sql"/>
+        <update.workflow.ddl base.ddl="${ae.dist}/sql/activebpel/ddl/ActiveBPEL-Oracle.sql" task.source.ddl="${basedir}/ddl.org.activebpel.tasks/ddl/ActiveBPEL_Tasks-Oracle.sql"/>
+        <update.workflow.ddl base.ddl="${ae.dist}/sql/activebpel/ddl/ActiveBPEL-SQLServer.sql" task.source.ddl="${basedir}/ddl.org.activebpel.tasks/ddl/ActiveBPEL_Tasks-SQLServer.sql"/>
+        
+    </target>  
+
+   <!-- =========================================== -->
+   <!-- Create ActiveBPEL            Tamino schema  -->
+   <!-- =========================================== -->
+       
+
+   <!-- =========================================== -->
+   <!-- Install ActiveBPEL Tamino schema            -->
+   <!-- =========================================== -->
+   
+   
+   
+   <!-- =========================================== -->
+   <!-- Updates help war                            -->
+   <!-- =========================================== -->
+   <target if="ac.pdf.exists" name="update.help.war">
+
+      <zip destfile="${ae.dist}/activebpel/BpelAdminHelp.war" update="true">
+         <zipfileset dir="../doc" includes="AdministrationConsole.pdf" prefix="doc"/>
+      </zip>
+
+   </target>
+
+
+   <!-- =========================================== -->
+   <!-- Copies built files to dist and cleans       -->
+   <!-- =========================================== -->
+   <target name="activebpel.dist">
+
+      <mkdir dir="${activebpel.archive.dist}"/>
+      <move toDir="${activebpel.archive.dist}">
+         <fileset dir="${ae.dist}" includes="aetask.war, BpelAdmin.war, BpelAdminHelp.war"/>
+      </move>  
+
+      <available file="../doc/AdministrationConsole.pdf" property="ac.pdf.exists"/>
+      <antcall target="update.help.war"/>
+
+   </target>   
+   
+    <!-- =========================================== -->
+    <!-- JAVADOC                                     -->
+    <!-- =========================================== -->
+    <target name="javadoc">
+        <generate.javadoc destdir="../doc/javadoc/activebpel" doc.title="ActiveBpel API" overview="../doc/javadoc/activebpel/overview/overview.html" window.title="ActiveBpel API"/>
+    </target>
+
+   <target depends="ddl.activebpel.engine,ddl.activebpel.workflow" name="ddl.activebpel"/>    
+
+   <!-- =========================================== -->
+   <!-- Default Target                              -->
+   <!-- =========================================== -->
+   <target depends="compile.activebpel, war.activebpel, war.workflowwar, config.activebpel, activebpel.dist, ddl.activebpel" name="activebpel.all"/>
+
+   <!-- =========================================== -->
+   <!-- Dev Default Target                          -->
+   <!-- =========================================== -->
+   <target depends="activebpel.all, deploy.activebpel" name="activebpel.dev.all"/>
+
+</project>

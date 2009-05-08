@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="setOutput">
+   <abs:bUnitRef location="setOutput.bunit"/>
+   <abs:bUnitRef location="setOutput-illegalAccess.bunit"/>
+   <abs:bUnitRef location="setOutput-illegalArgument.bunit"/>
+   <abs:bUnitRef location="setOutput-illegalState.bunit"/>
+   <abs:bUnitRef location="setOutput-noPart.bunit"/>
+</abs:bSuite>

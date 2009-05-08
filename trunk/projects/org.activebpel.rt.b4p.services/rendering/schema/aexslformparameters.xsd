@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<xs:schema
+   targetNamespace="http://schemas.active-endpoints.com/humanworkflow/2007/07/renderxsl/formparams"
+   xmlns:tns="http://schemas.active-endpoints.com/humanworkflow/2007/07/renderxsl/formparams"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   elementFormDefault="qualified">
+
+   <!-- Simple enumeration type for parameter types. -->
+   <xs:simpleType name="tParameterValueType">
+      <xs:annotation>
+         <xs:documentation>
+            Identifies the type of content contained in a form parameter.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+      	<!--  content is simple text -->
+         <xs:enumeration value="text" />
+         <!--  content is a xml tree -->
+         <xs:enumeration value="xml" />
+      </xs:restriction>
+   </xs:simpleType>
+
+   <!-- =================================================== -->
+   <!-- Complex type for a form parameter                   -->
+   <!-- =================================================== -->
+   <xs:complexType name="tFormParameter">
+      <xs:annotation>
+         <xs:documentation>
+            Contains form input data which is either a simple type
+            or complex type. The type is identified by the 'type' attribute.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <!-- Do not validate contents -->
+         <xs:any processContents="skip"/>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="type" type="tns:tParameterValueType" use="required"/>
+   </xs:complexType>
+   
+   <!-- ======================================================= -->
+   <!-- Complex type for containing list of parameter elements  -->
+   <!-- ======================================================= -->   
+   <xs:complexType name="tFormParameters">
+      <xs:annotation>
+         <xs:documentation>
+            Contains list of form data parameters.
+         </xs:documentation>
+      </xs:annotation>      
+      <xs:sequence>
+         <!--  header element param contains request meta data such as http request header params -->
+         <xs:element name="header"    type="tns:tFormParameter" minOccurs="0" maxOccurs="unbounded" />
+         <!--  parameter element contains actual form data submitted by the user.  -->
+         <xs:element name="parameter" type="tns:tFormParameter" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+      <xs:attribute name="principalName" type="xs:string" use="required" />
+      <xs:attribute name="taskId"       type="xs:string" use="required" />
+      <!--  Request methods. E.g. http GET or POST  -->
+      <xs:attribute name="method" type="xs:string"     use="optional"/>
+      <!--  Request user-agent string  -->
+      <xs:attribute name="user-agent" type="xs:string" use="optional" />
+      <!--  Request path info. E.g. servler extra path info  -->
+      <xs:attribute name="path-info" type="xs:string"  use="optional"/>
+   </xs:complexType>   
+
+	<!--  Define element impl based on tns:tFormParameters -->   
+   <xs:element name="parameters" type="tns:tFormParameters"/>
+</xs:schema>

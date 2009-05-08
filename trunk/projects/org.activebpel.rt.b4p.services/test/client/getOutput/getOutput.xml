@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<htapis:getOutput xmlns:htapis="http://www.example.org/WS-HT/api/xsd">
+   <htapis:identifier>anyURI</htapis:identifier>
+   <htapis:part>ncname</htapis:part>
+</htapis:getOutput>

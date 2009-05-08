@@ -1,0 +1,16 @@
+<project name="Auxiliary build file for the ActiveBPEL for People" default="main">
+
+   <!-- =========================================================================== -->
+   <!-- Build the bpr which contains the processes for managing human tasks         -->
+   <!-- =========================================================================== -->
+   <target name="main" if="project">
+      <echo message="Creating aeb4ptasks.bpr..."/>
+      <delete file="aeb4ptasks.bpr" quiet="true"/>
+      <ant antfile="aeb4ptasks.bprd"/>
+      <echo message="Jarring: ${projectsroot}/${project}/aeb4ptasks.bpr"/>
+      <jar update="true" destfile="${ae.dist}/ae_rt_b4p.jar" basedir="${projectsroot}/${project}">
+          <include name="aeb4ptasks.bpr"/>
+      </jar>
+      <echo message="done Jarring aeb4ptasks.bpr"/>   	
+   </target>
+</project>

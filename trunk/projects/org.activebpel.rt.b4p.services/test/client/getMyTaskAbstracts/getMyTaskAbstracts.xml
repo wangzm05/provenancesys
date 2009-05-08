@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<htapis:getMyTaskAbstracts xmlns:htapis="http://www.example.org/WS-HT/api/xsd">
+   <htapis:taskType>string</htapis:taskType>
+   <htapis:genericHumanRole>string</htapis:genericHumanRole>
+   <htapis:workQueue>string</htapis:workQueue>
+   <htapis:status>CREATED</htapis:status>
+   <htapis:whereClause>string</htapis:whereClause>
+   <htapis:createdOnClause>string</htapis:createdOnClause>
+   <htapis:maxTasks>1</htapis:maxTasks>
+</htapis:getMyTaskAbstracts>

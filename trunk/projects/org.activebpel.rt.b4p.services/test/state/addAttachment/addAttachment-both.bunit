@@ -1,0 +1,123 @@
+<abu:bpelUnit 
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:abx="http://www.activebpel.org/bpel/extension"
+	xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+	xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl"
+	xmlns:htapi="http://www.example.org/WS-HT/api"
+	xmlns:htd="http://www.example.org/WS-HT"
+	xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+	xmlns:ts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"
+	xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+   >
+	<abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml" />
+	<xi:include href="../includes/bpels.xml" />
+	<xi:include href="../includes/wsdls.xml" />
+	<abu:invokes>
+		<abu:invoke name="StoreTask">
+			<abu:defaultInvoke />
+		</abu:invoke>
+		<abu:invoke name="UpdateTask" count="2">
+			<abu:defaultInvoke />
+		</abu:invoke>
+		<abu:invoke name="AssertAdmin-addAttachment" count="2"> 
+			<xi:include href="../includes/identityServiceInvoke.xml" />
+		</abu:invoke>
+		<abu:invoke name="AssertPotentialOwnerOrAdmin-getAttachments"> 
+			<xi:include href="../includes/identityServiceInvoke.xml" />
+		</abu:invoke>
+	</abu:invokes>
+
+	<abu:commands>
+		<abu:sendMessage operation="create" partnerLink="internal">
+			<abu:message type="ts:CreateTaskRequest">
+				<abu:parts>
+					<abu:part href="../data/createTask-ready.xml" name="createTaskRequest" />
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+		<abu:sendMessage operation="addAttachment" partnerLink="taskOperations">
+			<abu:headers>
+				<abx:principal>admin</abx:principal>
+			</abu:headers>
+			<abu:message type="htapiw:addAttachment">
+				<abu:parts>
+					<abu:part name="addAttachment">
+						<htdt:addAttachment>
+							<htdt:identifier>urn:b4p:1</htdt:identifier>
+							<htdt:name>myAttachment</htdt:name>
+							<htdt:accessType>MIME</htdt:accessType>
+							<htdt:contentType>text/plain</htdt:contentType>
+							<htdt:attachment/>
+						</htdt:addAttachment>
+					</abu:part>
+				</abu:parts>
+				<abu:attachments>
+					<abu:attachment type="inline">
+						<abu:content encode="base64">The quick brown fox jumped over the lazy dogs tail</abu:content>
+						<abu:attributes>
+							<abu:attribute name="Content-Type" value="text/plain" />
+							<abu:attribute name="Content-Id" value="attachment-1" />
+							<abu:attribute name="Content-Location" value="myAttachment" />
+						</abu:attributes>
+					</abu:attachment>
+				</abu:attachments>
+			</abu:message>
+		</abu:sendMessage>
+		<abu:sendMessage operation="addAttachment" partnerLink="taskOperations">
+			<abu:headers>
+				<abx:principal>admin</abx:principal>
+			</abu:headers>
+			<abu:message type="htapiw:addAttachment">
+				<abu:parts>
+					<abu:part name="addAttachment">
+						<htdt:addAttachment>
+							<htdt:identifier>urn:b4p:1</htdt:identifier>
+							<htdt:name>myAttachment</htdt:name>
+							<htdt:accessType>URL</htdt:accessType>
+							<htdt:contentType>image/jpg</htdt:contentType>
+							<htdt:attachment>http://example.com/URL-attachment/foo.jpg</htdt:attachment>
+						</htdt:addAttachment>
+					</abu:part>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+		<abu:sendMessage delay="125" operation="getAttachments" partnerLink="taskOperations-getAttachments">
+			<abu:headers>
+				<abx:principal>admin</abx:principal>
+			</abu:headers>
+			<abu:message type="htapiw:getAttachments">
+				<abu:parts>
+					<abu:part name="getAttachments">
+						<htdt:getAttachments>
+							<htdt:identifier>urn:b4p:1</htdt:identifier>
+							<htdt:attachmentName>myAttachment</htdt:attachmentName>
+						</htdt:getAttachments>
+					</abu:part>
+				</abu:parts>
+			</abu:message>
+			<abu:asserts>
+				<abu:assertEquals part="getAttachmentsResponse" query="count(//htapi:name)">2.0</abu:assertEquals>
+				<abu:assertEquals part="getAttachmentsResponse" query="htdt:attachment[1]//htapi:name">myAttachment</abu:assertEquals>
+				<abu:assertEquals part="getAttachmentsResponse" query="htdt:attachment[1]//htapi:accessType">MIME</abu:assertEquals>
+				<abu:assertEquals part="getAttachmentsResponse" query="htdt:attachment[1]//htapi:value = ''">true</abu:assertEquals>
+				<abu:assertEquals part="getAttachmentsResponse" query="htdt:attachment[1]//htapi:contentType">text/plain</abu:assertEquals>
+
+				<abu:assertEquals part="getAttachmentsResponse" query="htdt:attachment[2]//htapi:name">myAttachment</abu:assertEquals>
+				<abu:assertEquals part="getAttachmentsResponse" query="htdt:attachment[2]//htapi:accessType">URL</abu:assertEquals>
+				<abu:assertEquals part="getAttachmentsResponse" query="htdt:attachment[2]//htapi:value">http://example.com/URL-attachment/foo.jpg</abu:assertEquals>
+				<abu:assertEquals part="getAttachmentsResponse" query="htdt:attachment[2]//htapi:contentType">image/jpg</abu:assertEquals>
+				<abu:assertAttachmentCount>2</abu:assertAttachmentCount>
+				<abu:assertAttachment itemNumber="1">
+					<abu:content decode="base64">The quick brown fox jumped over the lazy dogs tail</abu:content>
+				</abu:assertAttachment>
+				<abu:assertAttachment itemNumber="2">
+					<abu:content>http://example.com/URL-attachment/foo.jpg</abu:content>
+				</abu:assertAttachment>
+			</abu:asserts>
+		</abu:sendMessage>
+	</abu:commands>
+</abu:bpelUnit>

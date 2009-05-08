@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsw:createTaskResponse 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:tew="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd" 
+   xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">
+
+   <trt:identifier>urn:b4p:1</trt:identifier>
+   <tew:listenerId>1</tew:listenerId>
+   <tsw:state>READY</tsw:state>
+   <trt:taskInstance 
+         xmlns:htd="http://www.example.org/WS-HT" 
+         xmlns:compareXML="urn:active-endpoints:AeCompareXML:directive" 
+         compareXML:skipContents="true">
+      <trt:identifier>anyURI</trt:identifier>
+      <trt:name>string</trt:name>
+      <trt:targetNamespace>string</trt:targetNamespace>
+      <trt:taskType>string</trt:taskType>
+      <trt:presentation />
+      <trt:context>
+         <trt:status>CREATED</trt:status>
+         <trt:createdOn>2008-02-06T13:12:58.832Z</trt:createdOn>
+      </trt:context>
+      <trt:operational>
+         <trt:input />
+         <trt:output />
+      </trt:operational>
+   </trt:taskInstance>
+</tsw:createTaskResponse>

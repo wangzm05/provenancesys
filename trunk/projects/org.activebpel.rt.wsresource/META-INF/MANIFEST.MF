@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Vendor: %providerName
+Bundle-Name: Web Service Resource Plug-in
+Bundle-SymbolicName: org.activebpel.rt.wsresource;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Localization: plugin
+Require-Bundle: org.activebpel.rt,
+ org.activebpel.rt.bpel
+Export-Package: org.activebpel.rt.wsresource,
+ org.activebpel.rt.wsresource.validation,
+ org.activebpel.rt.wsresource.validation.rules
+Bundle-ClassPath: classes
+Import-Package: javax.wsdl,
+ org.activebpel.rt,
+ org.activebpel.rt.expr.def,
+ org.activebpel.rt.util,
+ org.activebpel.rt.wsdl,
+ org.activebpel.rt.wsdl.def,
+ org.activebpel.rt.wsdl.def.castor,
+ org.activebpel.rt.xml,
+ org.activebpel.rt.xml.def,
+ org.exolab.castor.xml.schema,
+ org.exolab.castor.xml.schema.reader

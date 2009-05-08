@@ -1,0 +1,8 @@
+<abu:wsdls xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd">
+	<abu:wsdl location="../../../wsdl/aeb4p-task-state.wsdl" />
+	<abu:wsdl location="../../../wsdl/aeb4p-task-common.wsdl" />
+	<abu:wsdl location="../../../wsdl/aeb4p-task-storage.wsdl" />
+	<abu:wsdl location="../../../wsdl/aeb4p-task-events.wsdl" />
+	<abu:wsdl location="../../../../org.activebpel.rt.identity/support/wsdl/identity.wsdl" />
+	<abu:wsdl location="../../../../org.activebpel.rt.ht/support/wsdl/ws-humantask-api.wsdl" />
+</abu:wsdls>

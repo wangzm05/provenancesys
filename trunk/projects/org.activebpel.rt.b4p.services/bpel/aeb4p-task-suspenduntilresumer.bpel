@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BPEL Process Definition
+Edited using ActiveBPEL(r) Designer Version 4.1.2 (http://www.active-endpoints.com)
+-->
+<bpel:process xmlns:abx="http://www.activebpel.org/bpel/extension" xmlns:aetcmn="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl" xmlns:aetrtxd="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:aetst="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl" xmlns:aetstxd="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:xsd="http://www.w3.org/2001/XMLSchema" expressionLanguage="urn:active-endpoints:expression-language:xquery1.0" name="aeb4p-task-suspenduntilresumer" suppressJoinFailure="yes" targetNamespace="http://www.activebpel.org/b4p/2007/10/wshumantask">
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-state.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-common.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl"/>
+   <bpel:partnerLinks>
+      <bpel:partnerLink myRole="process" name="wakeupPL" partnerLinkType="aetst:wakeupPLT"/>
+      <bpel:partnerLink name="internalTaskServicePLT" partnerLinkType="aetst:aeInternalTaskOperationsPLT" partnerRole="process"/>
+   </bpel:partnerLinks>
+   <bpel:variables>
+      <bpel:variable messageType="aetst:ScheduleWakeupRequest" name="ScheduleWakeupRequest"/>
+      <bpel:variable messageType="aetst:ScheduleWakeupResponse" name="ScheduleWakeupResponse"/>
+      <bpel:variable messageType="aetst:ResumeTaskRequest" name="ResumeTaskRequest"/>
+      <bpel:variable messageType="aetst:CancelWakeupRequest" name="CancelWakeupRequest"/>
+   </bpel:variables>
+   <bpel:correlationSets>
+      <bpel:correlationSet name="CS1" properties="aetcmn:peopleActivityPid"/>
+   </bpel:correlationSets>
+   <bpel:sequence>
+      <bpel:receive createInstance="yes" name="ReceiveSuspendRequest" operation="scheduleWakeup" partnerLink="wakeupPL" portType="aetst:SuspendUntilResumer" variable="ScheduleWakeupRequest"/>
+      <bpel:assign name="AssignPidToReply">
+         <bpel:copy>
+            <bpel:from>abx:getProcessId()</bpel:from>
+            <bpel:to part="scheduleWakeupResponse" variable="ScheduleWakeupResponse"/>
+         </bpel:copy>
+      </bpel:assign>
+      <bpel:reply name="ReplyWithPid" operation="scheduleWakeup" partnerLink="wakeupPL" portType="aetst:SuspendUntilResumer" variable="ScheduleWakeupResponse">
+         <bpel:correlations>
+            <bpel:correlation initiate="yes" set="CS1"/>
+         </bpel:correlations>
+      </bpel:reply>
+      <bpel:pick name="WaitForCancelOrTimeOut">
+         <bpel:onMessage operation="cancelWakeup" partnerLink="wakeupPL" variable="CancelWakeupRequest">
+            <bpel:correlations>
+               <bpel:correlation initiate="no" set="CS1"/>
+            </bpel:correlations>
+            <bpel:empty name="Canceled"/>
+         </bpel:onMessage>
+         <bpel:onAlarm>
+            <bpel:until>$ScheduleWakeupRequest.scheduleWakeupRequest/aetstxd:alarm</bpel:until>
+            <bpel:sequence>
+               <bpel:assign name="AssignResumeInfo">
+                  <bpel:copy>
+                     <bpel:from>
+                        <bpel:literal>
+                           <aetstxd:resume>
+   <aetrtxd:identifier/>
+   <aetstxd:resumerId/>
+</aetstxd:resume>
+                        </bpel:literal>
+                     </bpel:from>
+                     <bpel:to part="resume" variable="ResumeTaskRequest"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from part="scheduleWakeupRequest" variable="ScheduleWakeupRequest">
+                        <bpel:query>aetrtxd:identifier</bpel:query>
+                     </bpel:from>
+                     <bpel:to part="resume" variable="ResumeTaskRequest">
+                        <bpel:query>aetrtxd:identifier</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>abx:getProcessId()</bpel:from>
+                     <bpel:to part="resume" variable="ResumeTaskRequest">
+                        <bpel:query>aetstxd:resumerId</bpel:query>
+                     </bpel:to>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="ResumeTaskRequest" name="ResumeTask" operation="resume" partnerLink="internalTaskServicePLT"/>
+            </bpel:sequence>
+         </bpel:onAlarm>
+      </bpel:pick>
+   </bpel:sequence>
+</bpel:process>

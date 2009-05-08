@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<htapis:getFaultResponse xmlns:htapis="http://www.example.org/WS-HT/api/xsd">
+   <htapis:faultName>ncname</htapis:faultName>
+   <htapis:faultData>anyType</htapis:faultData>
+</htapis:getFaultResponse>

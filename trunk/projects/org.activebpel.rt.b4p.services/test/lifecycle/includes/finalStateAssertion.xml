@@ -1,0 +1,1 @@
+<abu:assertProcessState delay="250" processId="1" processState="complete" xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"/>

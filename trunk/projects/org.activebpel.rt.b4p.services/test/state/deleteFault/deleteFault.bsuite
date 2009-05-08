@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="deleteFault">
+   <abs:bUnitRef location="deleteFault.bunit"/>
+   <abs:bUnitRef location="deleteFault-illegalAccess.bunit"/>
+   <abs:bUnitRef location="deleteFault-illegalState.bunit"/>
+</abs:bSuite>

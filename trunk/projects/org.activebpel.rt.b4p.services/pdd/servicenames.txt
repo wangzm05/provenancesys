@@ -1,0 +1,72 @@
+List of Services:
+
+=========================
+EXTERNAL (in aeb4p-task-client)
+These services must be secured with aeflowuser role
+=========================
+1. AeB4PTaskClient-aeTaskOperations:
+   - authorize()
+   - getInstance()
+   - updateComment()
+   - deletetComment()
+   
+2. AeB4PTaskClient-taskOperations
+   - WS-HT task client operation
+
+
+INTERNAL
+============================
+
+AeB4PState-taskOperations (implements ht:taskOperations PT)
+---------------------
+MyRole in: aeb4p-task-state (external PL)
+PartnerRole in: aeb4p-task-client(aeTaskExternalPL PL)
+
+AeB4PState-aeTaskOperations (implements aestate:aeTaskOperations PT)
+---------------------
+MyRole in: aeb4p-task-state (aeTaskOperationsPL PL)
+PartnerRole in: 
+
+AeB4PState-aeInternalTaskOperations (implements AeInternalTaskOperations PLT)
+---------------------
+MyRole in: aeb4p-task-state (internal PL)
+PartnerRole in: aeb4p-task-state (invoke self), aeb4p-task-lifecycle(internalTaskServicePLT)
+                aeb4p-task-suspenduntilresumer(internalTaskServicePLT),
+                aeb4p-task-esclation (internalTaskServicePLT),
+                
+
+AeB4PSuspendUntilResumer (implements aestate:SuspendUntilResumer PT)
+-----------------------------------
+MyRole in: aeb4p-task-suspenduntilresume (wakeup PL)
+PartnerRole in: aeb4p-task-state (wakeup PL)
+
+AeB4PEscalation (implements aeesc:IAeTaskEscalationService PT):
+--------------------------
+MyRole in: ae-task-escalation
+PartnerRole in:  aeb4p-task-lifecycle(taskEscalationServicePLT)
+
+AeB4PLifecycle (implements aetlc:IAeTaskLifecycleService PT):
+---------------------------
+MyRole in: aeb4p-task-lifecycle(taskLifecyclePLT)
+PartnerRole in: People Activities
+
+AeB4PNotificationLifecycle (implements taskNotificationsPLT):
+---------------------------
+MyRole in: aeb4p-notification-lifecycle
+PartnerRole in: People Activities,  aeb4p-task-escalation (taskNotificationPLT)
+
+
+AeB4PRemoveOwner:
+------------------------------
+MyRole in: aeb4p-task-remove-owner
+PartnerRole in:
+
+AeB4PLifecycle-stateChangeListener (implements aeevts:IAeTaskStateChangeListener)
+-------------------------------------
+MyRole in: aeb4p-task-lifecycle (stateChangeListenerPLT, external)
+PartnerRole in: aeb4p-task-state (stateChangeListenerPLT, dynamic)
+
+AeB4PState-stateChangeRegistry (implements aeevts:IAeTaskStateChangeRegistry)
+-------------------------------------
+MyRole in: aeb4p-task-state (taskStateChangeListner)
+PartnerRole in: aeb4p-task-lifecycle (taskStateChangeRegistryPLT, process)

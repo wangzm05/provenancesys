@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt.war"/>
+	<classpathentry kind="var" path="AEDEV/lib/servlet-api.jar"/>
+	<classpathentry kind="var" path="AEDEV/lib/activation.jar"/>
+	<classpathentry kind="var" path="AEDEV/lib/axis.jar" sourcepath="AEDEV/external/axis/axis-src-1_4.zip"/>
+	<classpathentry kind="var" path="AEDEV/lib/commons-fileupload-1.0.jar"/>
+	<classpathentry kind="var" path="AEDEV/lib/jaxrpc.jar" sourcepath="AEDEV/external/axis/axis-src-1_4.zip"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt.ht"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

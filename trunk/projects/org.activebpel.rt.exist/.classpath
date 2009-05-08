@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry exported="true" kind="var" path="AEDEV/lib/exist/exist.jar" sourcepath="/AEDEV/external/exist/exist-src.zip"/>
+	<classpathentry exported="true" kind="var" path="AEDEV/lib/exist/xmldb.jar" sourcepath="/AEDEV/external/exist/exist-src.zip"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/wangzhiming/桌面/毕设/software/activebpel-5.0.2/lib/log4j.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

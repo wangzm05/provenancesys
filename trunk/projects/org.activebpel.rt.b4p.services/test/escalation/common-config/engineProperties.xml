@@ -1,0 +1,18 @@
+<abu:engineProperties xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd">
+	<abu:engineProperty path="Logging" value="urn:ae:execution" />
+	<abu:engineProperty path="ProcessLogger/Class"
+		value="com.activee.rt.bunit.impl.AeConsoleProcessLogger" />
+
+	<abu:engineProperty path="FunctionContexts/b4pFunctions/Class"
+		value="org.activebpel.rt.b4p.server.function.AeB4PInternalCustomFunctionContext" />
+	<abu:engineProperty path="FunctionContexts/b4pFunctions/Classpath"
+		value="C:/AeDevelopment/dist/ae_rt_b4psvr.jar" />
+	<abu:engineProperty path="FunctionContexts/b4pFunctions/Namespace"
+		value="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" />
+
+		<abu:engineProperty path="CustomManagers/IdentityServiceManager/Class" value="org.activebpel.rt.identity.AeIdentityServiceManager"/>
+		<abu:engineProperty path="CustomManagers/IdentityServiceManager/enabled" value="true"/>
+		<abu:engineProperty path="CustomManagers/IdentityServiceManager/IdentitySearch/Class" value="org.activebpel.rt.identity.search.AeIdentitySearch"/>
+		<abu:engineProperty path="CustomManagers/IdentityServiceManager/IdentitySearch/Provider/Class" value="org.activebpel.rt.identity.provider.tomcat.AeTomcatUsersIdentityProvider"/>
+    	<abu:engineProperty path="CustomManagers/IdentityServiceManager/IdentitySearch/Provider/filename" value="C:/AeDevelopment/projects/org.activebpel.rt.b4p.services/test/tomcat-users.xml"/>
+</abu:engineProperties>

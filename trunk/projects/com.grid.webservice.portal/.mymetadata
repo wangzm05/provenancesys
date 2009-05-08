@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="com.grid.webservice.portal"
+  id="myeclipse.1239104804953"
+  context-root="/com.grid.webservice.portal"
+  j2ee-spec="5.0"
+  archive="com.grid.webservice.portal.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
