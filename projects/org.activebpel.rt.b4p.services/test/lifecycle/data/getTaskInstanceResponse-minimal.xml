@@ -1,0 +1,46 @@
+<ns:taskInstance xmlns:xs="http://www.w3.org/2001/XMLSchema"  xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:ns1="http://www.example.org/WS-HT" xmlns:ns2="http://www.example.org/WS-HT/api" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+   <trt:identifier xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">1</trt:identifier>
+   <ns:name>T1</ns:name>
+   <ns:targetNamespace>tns</ns:targetNamespace>
+   <ns:taskType>TASK</ns:taskType>
+   <ns:presentation>
+   	<ns:name>name</ns:name>
+   	<ns:subject>subject</ns:subject>
+   	</ns:presentation>
+   <ns:context>
+      <ns:status>CREATED</ns:status>
+      <ns:priority>1</ns:priority>
+       <ns:taskInitiator>bpeluser</ns:taskInitiator>
+       <ns:taskStakeholders>
+          <ns1:users>
+             <ns1:user>bpeluserStakeHolder1</ns1:user>
+             <ns1:user>bpeluserStakeHolder2</ns1:user>
+          </ns1:users>
+       </ns:taskStakeholders>
+       <ns:potentialOwners>
+          <ns1:users>
+             <ns1:user>bpeluserPO1</ns1:user>
+             <ns1:user>bpeluserPO2</ns1:user>
+          </ns1:users>
+       </ns:potentialOwners>
+       <ns:businessAdministrators>
+          <ns1:users>
+             <ns1:user>bpeluserAdmin1</ns1:user>
+          </ns1:users>
+       </ns:businessAdministrators>
+       <ns:actualOwner>bpeluserOwner</ns:actualOwner>      
+		 <ns:createdOn>2007-11-29T19:11:58.453Z</ns:createdOn>
+		 <ns:createdBy>anonymous</ns:createdBy>
+		 <ns:activationTime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+		 <ns:lastModifiedTime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+		 <ns:lastModifiedBy xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+		 <ns:completionTime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+		 <ns:lastEscalatedTime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   </ns:context>
+   <ns:operational> 
+      <ns:input>
+         <ns:part name="ncname"></ns:part>
+      </ns:input>
+      <ns:output><ns:part name="result">RESULT</ns:part></ns:output>
+   </ns:operational>
+</ns:taskInstance>

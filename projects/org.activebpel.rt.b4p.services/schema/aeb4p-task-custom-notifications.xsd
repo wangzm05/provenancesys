@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<xs:schema
+   targetNamespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-custom-notification.xsd"
+   xmlns:aeb4pcnt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-custom-notification.xsd"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:htd="http://www.example.org/WS-HT"
+   elementFormDefault="qualified">
+
+   <xs:import namespace="http://www.w3.org/2001/XMLSchema" />
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+
+   <xs:import namespace="http://www.example.org/WS-HT"
+      schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask.xsd" />
+
+   <xs:element name="genericEscalation">
+      <xs:complexType>
+         <xs:annotation>
+            <xs:documentation>
+               Describes a generic escalation type that can be used to contain htd:escalation content or a
+               custom escalation type. This complex type is used by the escalation bpel process.
+            </xs:documentation>
+         </xs:annotation>
+         <xs:sequence>
+            <xs:any minOccurs="0" processContents="skip" namespace="##any" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+
+   <xs:element name="genericEscalationList">
+      <xs:complexType>
+         <xs:annotation>
+            <xs:documentation>List of generic escalations.</xs:documentation>
+         </xs:annotation>
+         <xs:sequence>
+            <xs:element ref="aeb4pcnt:genericEscalation" minOccurs="0" maxOccurs="unbounded" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+
+   <xs:element name="escalationProcess">
+      <xs:complexType>
+         <xs:annotation>
+            <xs:documentation>
+               Custom escalation process element is similar to htd:escalation, but allows one to use custom
+               notification BPEL processes.
+            </xs:documentation>
+         </xs:annotation>
+         <xs:sequence>
+            <xs:element name="condition" type="htd:tBoolean-expr" />
+            <xs:element name="processData" type="htd:tExpression" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+
+</xs:schema>

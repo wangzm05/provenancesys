@@ -1,0 +1,4 @@
+Animated wait/busy gif file busywait.gif (originalname wait24.trans.gif).
+Author: Andrew B. Davidson
+Source: http://www.andrewdavidson.com/articles/spinning-wait-icons/
+License: CC http://creativecommons.org/licenses/by-nc-sa/2.5/

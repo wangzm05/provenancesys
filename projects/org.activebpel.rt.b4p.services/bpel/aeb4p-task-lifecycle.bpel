@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpel:process xmlns:abx="http://www.activebpel.org/bpel/extension" xmlns:aeadmin="http://docs.active-endpoints/wsdl/activebpeladmin/2007/01/activebpeladmin.wsdl" xmlns:b4pcomm="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl" xmlns:b4pesc="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-escalations.wsdl" xmlns:b4pesct="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd" xmlns:b4pevt="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-events.wsdl" xmlns:b4pevtt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd" xmlns:b4plc="http://www.activebpel.org/b4p/2007/10/wshumantask/taskLifecycle.wsdl" xmlns:b4plct="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd" xmlns:b4ptrt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:b4pts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl" xmlns:b4ptst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:htapi="http://www.example.org/WS-HT/api" xmlns:htd="http://www.example.org/WS-HT" xmlns:sref="http://docs.oasis-open.org/wsbpel/2.0/serviceref" xmlns:xsd="http://www.w3.org/2001/XMLSchema" expressionLanguage="urn:active-endpoints:expression-language:xquery1.0" name="aeb4p-task-lifecycle" suppressJoinFailure="yes" targetNamespace="http://www.activebpel.org/b4p/2007/10/wshumantask">
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-lifecycle.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/taskLifecycle.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-events.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-events.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-state.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-escalations.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-escalations.wsdl"/>
+   <bpel:import importType="http://www.w3.org/2001/XMLSchema" location="../../org.activebpel.rt.ht/support/schema/ws-humantask-api.xsd" namespace="http://www.example.org/WS-HT/api"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-events.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-events.wsdl"/>
+   <bpel:import importType="http://www.w3.org/2001/XMLSchema" location="../schema/aeb4p-task-state-wsdl.xsd" namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-common.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../../org.activebpel.rt.bpel.server/support/ActiveBpelAdmin.wsdl" namespace="http://docs.active-endpoints/wsdl/activebpeladmin/2007/01/activebpeladmin.wsdl"/>
+   <bpel:partnerLinks>
+      <bpel:partnerLink myRole="process" name="taskLifecyclePLT" partnerLinkType="b4plc:taskLifecyclePLT"/>
+      <bpel:partnerLink myRole="listener" name="taskStateChangeListenerPLT" partnerLinkType="b4pevt:taskStateChangeListenerPLT"/>
+      <bpel:partnerLink name="internalTaskServicePLT" partnerLinkType="b4pts:aeInternalTaskOperationsPLT" partnerRole="process"/>
+      <bpel:partnerLink name="taskEscalationServicePLT" partnerLinkType="b4pesc:taskEscalationServicePLT" partnerRole="process"/>
+      <bpel:partnerLink name="taskStateChangeRegistryPLT" partnerLinkType="b4pevt:taskStateChangeRegistryPLT" partnerRole="process"/>
+      <bpel:partnerLink name="activeBpelAdmin" partnerLinkType="b4plc:activeBpelAdmin" partnerRole="simple"/>
+      <bpel:partnerLink name="cancelEscalationPL" partnerLinkType="b4pesc:taskEscalationServicePLT" partnerRole="process"/>
+   </bpel:partnerLinks>
+   <bpel:variables>
+      <bpel:variable messageType="b4plc:processTaskRequestMessage" name="processTaskRequestMessage"/>
+      <bpel:variable messageType="b4plc:processTaskResponseMessage" name="processTaskResponseMessage"/>
+      <bpel:variable messageType="b4pevt:TaskStateChangeMessage" name="taskStateChangeMessage"/>
+      <bpel:variable name="gKeepLooping" type="xsd:boolean"/>
+      <bpel:variable name="gTaskState" type="htapi:tStatus"/>
+      <bpel:variable name="gIterationCount" type="xsd:int">
+         <bpel:from>
+            <bpel:literal>0</bpel:literal>
+         </bpel:from>
+      </bpel:variable>
+      <bpel:variable messageType="b4pesc:StartDeadlinesResponse" name="gCreateCompletionDeadlinesResponse"/>
+      <bpel:variable messageType="b4pesc:StartDeadlinesRequest" name="gCreateCompletionDeadlineRequest"/>
+      <bpel:variable messageType="b4pesc:StartDeadlinesResponse" name="gCreateStartDeadlineResponse"/>
+      <bpel:variable messageType="b4pesc:StartDeadlinesRequest" name="gCreateStartDeadlineRequest"/>
+      <bpel:variable element="b4ptrt:identifier" name="gTaskId"/>
+      <bpel:variable name="gCreationDateTime" type="xsd:dateTime"/>
+      <bpel:variable messageType="b4pevt:RemoveTaskStateChangeListenerMessage" name="gRemoveTaskStateChangeListenerMessage"/>
+      <bpel:variable messageType="b4pts:GetTaskInstanceResponse" name="gGetTaskInstanceResponse"/>
+      <bpel:variable messageType="b4pesc:DeadlineOpRequest" name="gStartDeadlineOpRequest"/>
+      <bpel:variable messageType="b4pesc:DeadlineOpRequest" name="gCompletionDeadlineOpRequest"/>
+      <bpel:variable messageType="aeadmin:suspendProcessRequest" name="gSuspendStartDeadlinesProcessRequest"/>
+      <bpel:variable messageType="aeadmin:resumeProcessRequest" name="gResumeStartDeadlinesProcessRequest"/>
+      <bpel:variable messageType="aeadmin:suspendProcessRequest" name="gSuspendComplDeadlinesProcessRequest"/>
+      <bpel:variable messageType="aeadmin:resumeProcessRequest" name="gResumeComplDeadlinesProcessRequest"/>
+      <bpel:variable element="b4ptrt:taskInstance" name="gTaskInstance"/>
+   </bpel:variables>
+   <bpel:correlationSets>
+      <bpel:correlationSet name="CS_startDeadlines" properties="b4pesc:deadlineType b4pesc:identifier"/>
+      <bpel:correlationSet name="CS_completionDeadline" properties="b4pesc:deadlineType b4pesc:identifier"/>
+      <bpel:correlationSet name="CS_taskState" properties="b4pcomm:listenerId b4pcomm:identifier"/>
+      <bpel:correlationSet name="CS_cancel" properties="b4pcomm:peopleActivityPid b4pcomm:peopleActivityId"/>
+   </bpel:correlationSets>
+   <bpel:scope>
+      <bpel:faultHandlers>
+         <bpel:catchAll>
+            <bpel:scope>
+               <bpel:variables>
+                  <bpel:variable element="b4plct:nonRecoverableError" name="nonRecoverableError"/>
+                  <bpel:variable element="b4ptst:cancel" name="cancelTask"/>
+               </bpel:variables>
+               <bpel:sequence>
+                  <bpel:assign>
+                     <bpel:copy>
+                        <bpel:from>
+                           <bpel:literal>Non recoverable error executing People Activity</bpel:literal>
+                        </bpel:from>
+                        <bpel:to variable="nonRecoverableError"/>
+                     </bpel:copy>
+                  </bpel:assign>
+                  <bpel:reply faultName="b4plc:nonRecoverableError" name="ReplyToPA" operation="processTask" partnerLink="taskLifecyclePLT" portType="b4plc:IAeTaskLifecycleService" variable="nonRecoverableError"/>
+                  <bpel:assign name="PrepCancelTask">
+                     <bpel:copy>
+                        <bpel:from variable="gTaskId"/>
+                        <bpel:to variable="cancelTask"/>
+                     </bpel:copy>
+                  </bpel:assign>
+                  <bpel:invoke inputVariable="cancelTask" name="cancelTaskState" operation="cancel" partnerLink="internalTaskServicePLT"/>
+                  <bpel:exit/>
+               </bpel:sequence>
+            </bpel:scope>
+         </bpel:catchAll>
+      </bpel:faultHandlers>
+      <bpel:sequence>
+         <bpel:receive createInstance="yes" operation="processTask" partnerLink="taskLifecyclePLT" portType="b4plc:IAeTaskLifecycleService" variable="processTaskRequestMessage">
+            <bpel:correlations>
+               <bpel:correlation initiate="yes" set="CS_cancel"/>
+            </bpel:correlations>
+         </bpel:receive>
+         <bpel:scope name="CreateTaskState">
+            <bpel:variables>
+               <bpel:variable messageType="b4pts:CreateTaskRequest" name="createTaskRequest"/>
+               <bpel:variable messageType="b4pts:CreateTaskResponse" name="createTaskResponse"/>
+               <bpel:variable element="sref:service-ref" name="taskStateChangeListenerServiceRef"/>
+               <bpel:variable name="ignoredAttachmentCopyResult" type="xsd:string"/>
+            </bpel:variables>
+            <bpel:sequence>
+               <bpel:assign name="InitRequest">
+                  <bpel:copy>
+                     <bpel:from endpointReference="myRole" partnerLink="taskStateChangeListenerPLT"/>
+                     <bpel:to variable="taskStateChangeListenerServiceRef"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>&lt;aets:createTaskRequest xmlns:aets="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"&gt;&#13;
+   { $processTaskRequestMessage.processTaskRequest/htd:task }&#13;
+   { $processTaskRequestMessage.processTaskRequest/b4ptrt:initialState}&#13;
+   { $processTaskRequestMessage.processTaskRequest/b4ptrt:interfaceMetadata }&#13;
+   { $taskStateChangeListenerServiceRef }&#13;
+&lt;/aets:createTaskRequest&gt;</bpel:from>
+                     <bpel:to part="createTaskRequest" variable="createTaskRequest"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>abx:copyAllAttachments( 'processTaskRequestMessage', 'createTaskRequest')</bpel:from>
+                     <bpel:to variable="ignoredAttachmentCopyResult"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="createTaskRequest" name="CreateTaskState" operation="create" outputVariable="createTaskResponse" partnerLink="internalTaskServicePLT">
+                  <bpel:correlations>
+                     <bpel:correlation initiate="yes" pattern="response" set="CS_taskState"/>
+                  </bpel:correlations>
+               </bpel:invoke>
+               <bpel:assign name="AssignResp">
+                  <bpel:copy>
+                     <bpel:from part="createTaskResponse" variable="createTaskResponse">
+                        <bpel:query>b4ptrt:identifier</bpel:query>
+                     </bpel:from>
+                     <bpel:to variable="gTaskId"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from part="createTaskResponse" variable="createTaskResponse">
+                        <bpel:query>b4ptst:state/text()</bpel:query>
+                     </bpel:from>
+                     <bpel:to variable="gTaskState"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>&lt;b4pevtt:removeListenerData xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd"&gt;&#13;
+  &lt;b4ptrt:identifier&gt;{ $createTaskResponse.createTaskResponse/b4ptrt:identifier/text() }&lt;/b4ptrt:identifier&gt;&#13;
+  &lt;b4pevtt:listenerId&gt;{ $createTaskResponse.createTaskResponse/b4pevtt:listenerId/text() }&lt;/b4pevtt:listenerId&gt;&#13;
+&lt;/b4pevtt:removeListenerData&gt;</bpel:from>
+                     <bpel:to part="removeListenerData" variable="gRemoveTaskStateChangeListenerMessage"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>&lt;ns:deadlineOpData xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"&gt;&#13;
+   &lt;b4ptrt:identifier&gt;{ $gTaskId/text() }&lt;/b4ptrt:identifier&gt;&#13;
+   &lt;ns:type&gt;start&lt;/ns:type&gt;&#13;
+&lt;/ns:deadlineOpData&gt;</bpel:from>
+                     <bpel:to part="deadlineOpData" variable="gStartDeadlineOpRequest"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>&lt;ns:deadlineOpData xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"&gt;&#13;
+   &lt;b4ptrt:identifier&gt;{ $gTaskId/text() }&lt;/b4ptrt:identifier&gt;&#13;
+   &lt;ns:type&gt;completion&lt;/ns:type&gt;&#13;
+&lt;/ns:deadlineOpData&gt;</bpel:from>
+                     <bpel:to part="deadlineOpData" variable="gCompletionDeadlineOpRequest"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from part="createTaskResponse" variable="createTaskResponse">
+                        <bpel:query>b4ptrt:taskInstance</bpel:query>
+                     </bpel:from>
+                     <bpel:to variable="gTaskInstance"/>
+                  </bpel:copy>
+               </bpel:assign>
+            </bpel:sequence>
+         </bpel:scope>
+         <bpel:assign name="Initialize">
+            <bpel:copy>
+               <bpel:from>0</bpel:from>
+               <bpel:to variable="gIterationCount"/>
+            </bpel:copy>
+            <bpel:copy>
+               <bpel:from>true()</bpel:from>
+               <bpel:to variable="gKeepLooping"/>
+            </bpel:copy>
+            <bpel:copy>
+               <bpel:from>current-dateTime()</bpel:from>
+               <bpel:to variable="gCreationDateTime"/>
+            </bpel:copy>
+            <bpel:copy>
+               <bpel:from endpointReference="partnerRole" partnerLink="taskEscalationServicePLT"/>
+               <bpel:to partnerLink="cancelEscalationPL"/>
+            </bpel:copy>
+         </bpel:assign>
+         <bpel:if name="IfCreateStartDeadlines">
+            <bpel:condition>exists( $processTaskRequestMessage.processTaskRequest/htd:task/htd:deadlines/htd:startDeadline )</bpel:condition>
+            <bpel:sequence>
+               <bpel:assign name="InitReq">
+                  <bpel:copy>
+                     <bpel:from>&lt;aeet:createDeadlinesData xmlns:aeet="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"&gt;&#13;
+ &lt;b4ptrt:identifier&gt;{ $gTaskId/text() }&lt;/b4ptrt:identifier&gt;&#13;
+ &lt;aeet:type&gt;start&lt;/aeet:type&gt;&#13;
+ &lt;aeet:taskCreatedDate&gt;{ $gCreationDateTime}&lt;/aeet:taskCreatedDate&gt;&#13;
+ &lt;aeet:deadlineList&gt;&#13;
+   {&#13;
+    for $deadlineDef in $processTaskRequestMessage.processTaskRequest/htd:task/htd:deadlines/htd:startDeadline&#13;
+    return&#13;
+     &lt;aeet:deadlineInstance&gt;&#13;
+       &lt;aeet:deadlineDef&gt;&#13;
+		{ $deadlineDef/child::* }&#13;
+       &lt;/aeet:deadlineDef&gt;&#13;
+      &lt;aeet:deadlineDateTime&gt;{ $gCreationDateTime}&lt;/aeet:deadlineDateTime&gt;&#13;
+     &lt;/aeet:deadlineInstance&gt;&#13;
+   }&#13;
+ &lt;/aeet:deadlineList&gt;&#13;
+ { $processTaskRequestMessage.processTaskRequest/b4ptrt:initialState }&#13;
+ { $gTaskInstance }&#13;
+ { $processTaskRequestMessage.processTaskRequest/b4plct:peopleActivityPid }&#13;
+ { $processTaskRequestMessage.processTaskRequest/b4plct:peopleActivityId }&#13;
+&lt;/aeet:createDeadlinesData&gt;</bpel:from>
+                     <bpel:to part="createDeadlinesData" variable="gCreateStartDeadlineRequest"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="gCreateStartDeadlineRequest" name="CreateStartDeadlines" operation="start" outputVariable="gCreateStartDeadlineResponse" partnerLink="taskEscalationServicePLT" portType="b4pesc:IAeTaskEscalationService">
+                  <bpel:correlations>
+                     <bpel:correlation initiate="yes" pattern="request" set="CS_startDeadlines"/>
+                  </bpel:correlations>
+               </bpel:invoke>
+               <bpel:assign name="InitSuspResumReqs">
+                  <bpel:copy>
+                     <bpel:from>&lt;ns:suspendProcessInput xmlns:ns="http://schemas.active-endpoints.com/activebpeladmin/2007/01/activebpeladmin.xsd"&gt;&#13;
+   &lt;ns:pid&gt;{ $gCreateStartDeadlineResponse.createDeadlinesReponse/b4pesct:pid/text() }&lt;/ns:pid&gt;&#13;
+&lt;/ns:suspendProcessInput&gt;</bpel:from>
+                     <bpel:to part="input" variable="gSuspendStartDeadlinesProcessRequest"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>&lt;ns:resumeProcessInput xmlns:ns="http://schemas.active-endpoints.com/activebpeladmin/2007/01/activebpeladmin.xsd"&gt;&#13;
+   &lt;ns:pid&gt;{ $gCreateStartDeadlineResponse.createDeadlinesReponse/b4pesct:pid/text() }&lt;/ns:pid&gt;&#13;
+&lt;/ns:resumeProcessInput&gt;</bpel:from>
+                     <bpel:to part="input" variable="gResumeStartDeadlinesProcessRequest"/>
+                  </bpel:copy>
+               </bpel:assign>
+            </bpel:sequence>
+         </bpel:if>
+         <bpel:if name="IfCreateCompletionDeadlines">
+            <bpel:condition>exists( $processTaskRequestMessage.processTaskRequest/htd:task/htd:deadlines/htd:completionDeadline )</bpel:condition>
+            <bpel:sequence>
+               <bpel:assign name="InitReq">
+                  <bpel:copy>
+                     <bpel:from>&lt;aeet:createDeadlinesData xmlns:aeet="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"&gt;&#13;
+ &lt;b4ptrt:identifier&gt;{ $gTaskId/text() }&lt;/b4ptrt:identifier&gt;&#13;
+ &lt;aeet:type&gt;completion&lt;/aeet:type&gt;&#13;
+ &lt;aeet:taskCreatedDate&gt;{ $gCreationDateTime }&lt;/aeet:taskCreatedDate&gt;&#13;
+ &lt;aeet:deadlineList&gt;&#13;
+   {&#13;
+    for $deadlineDef in $processTaskRequestMessage.processTaskRequest/htd:task/htd:deadlines/htd:completionDeadline&#13;
+    return&#13;
+     &lt;aeet:deadlineInstance&gt;&#13;
+       &lt;aeet:deadlineDef&gt;&#13;
+		{ $deadlineDef/child::* }&#13;
+       &lt;/aeet:deadlineDef&gt;&#13;
+      &lt;aeet:deadlineDateTime&gt;{ $gCreationDateTime}&lt;/aeet:deadlineDateTime&gt;&#13;
+     &lt;/aeet:deadlineInstance&gt;&#13;
+   }&#13;
+ &lt;/aeet:deadlineList&gt;&#13;
+ { $processTaskRequestMessage.processTaskRequest/b4ptrt:initialState }&#13;
+ { $gTaskInstance }&#13;
+ { $processTaskRequestMessage.processTaskRequest/b4plct:peopleActivityPid }&#13;
+ { $processTaskRequestMessage.processTaskRequest/b4plct:peopleActivityId }&#13;
+&lt;/aeet:createDeadlinesData&gt;</bpel:from>
+                     <bpel:to part="createDeadlinesData" variable="gCreateCompletionDeadlineRequest"/>
+                  </bpel:copy>
+               </bpel:assign>
+               <bpel:invoke inputVariable="gCreateCompletionDeadlineRequest" name="CreateCompletionDeadlines" operation="start" outputVariable="gCreateCompletionDeadlinesResponse" partnerLink="taskEscalationServicePLT" portType="b4pesc:IAeTaskEscalationService">
+                  <bpel:correlations>
+                     <bpel:correlation initiate="yes" pattern="request" set="CS_completionDeadline"/>
+                  </bpel:correlations>
+               </bpel:invoke>
+               <bpel:assign name="InitSuspResumReqs">
+                  <bpel:copy>
+                     <bpel:from>&lt;ns:suspendProcessInput xmlns:ns="http://schemas.active-endpoints.com/activebpeladmin/2007/01/activebpeladmin.xsd"&gt;&#13;
+   &lt;ns:pid&gt;{ $gCreateCompletionDeadlinesResponse.createDeadlinesReponse/b4pesct:pid/text() }&lt;/ns:pid&gt;&#13;
+&lt;/ns:suspendProcessInput&gt;</bpel:from>
+                     <bpel:to part="input" variable="gSuspendComplDeadlinesProcessRequest"/>
+                  </bpel:copy>
+                  <bpel:copy>
+                     <bpel:from>&lt;ns:resumeProcessInput xmlns:ns="http://schemas.active-endpoints.com/activebpeladmin/2007/01/activebpeladmin.xsd"&gt;&#13;
+   &lt;ns:pid&gt;{ $gCreateCompletionDeadlinesResponse.createDeadlinesReponse/b4pesct:pid /text() }&lt;/ns:pid&gt;&#13;
+&lt;/ns:resumeProcessInput&gt;</bpel:from>
+                     <bpel:to part="input" variable="gResumeComplDeadlinesProcessRequest"/>
+                  </bpel:copy>
+               </bpel:assign>
+            </bpel:sequence>
+         </bpel:if>
+         <bpel:scope>
+            <bpel:eventHandlers>
+               <bpel:onEvent messageType="b4plc:cancelMessage" operation="cancel" partnerLink="taskLifecyclePLT" variable="cancelMessage">
+                  <bpel:correlations>
+                     <bpel:correlation initiate="no" set="CS_cancel"/>
+                  </bpel:correlations>
+                  <bpel:scope>
+                     <bpel:variables>
+                        <bpel:variable element="b4ptst:cancel" name="cancelTask">
+                           <bpel:from>$gTaskId</bpel:from>
+                        </bpel:variable>
+                     </bpel:variables>
+                     <bpel:sequence>
+                        <bpel:invoke inputVariable="gRemoveTaskStateChangeListenerMessage" name="removeListener-cancel" operation="removeTaskStateChangeListener" partnerLink="taskStateChangeRegistryPLT" portType="b4pevt:IAeTaskStateChangeRegistry"/>
+                        <bpel:invoke inputVariable="cancelTask" name="cancelTaskState" operation="cancel" partnerLink="internalTaskServicePLT"/>
+                        <bpel:exit/>
+                     </bpel:sequence>
+                  </bpel:scope>
+               </bpel:onEvent>
+            </bpel:eventHandlers>
+            <bpel:repeatUntil name="RepeatUntilTaskIsFinal">
+               <bpel:condition expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$gKeepLooping = false()</bpel:condition>
+               <bpel:flow>
+                  <bpel:links>
+                     <bpel:link name="L1"/>
+                     <bpel:link name="L2"/>
+                     <bpel:link name="L3"/>
+                  </bpel:links>
+                  <bpel:scope name="Claim">
+                     <bpel:sources>
+                        <bpel:source linkName="L1">
+                           <bpel:transitionCondition>$gTaskState = 'IN_PROGRESS'</bpel:transitionCondition>
+                        </bpel:source>
+                        <bpel:source linkName="L2">
+                           <bpel:transitionCondition>$gTaskState != 'IN_PROGRESS'</bpel:transitionCondition>
+                        </bpel:source>
+                     </bpel:sources>
+                     <bpel:sequence>
+                        <bpel:assign name="IncrementCounter">
+                           <bpel:copy>
+                              <bpel:from>$gIterationCount + 1</bpel:from>
+                              <bpel:to variable="gIterationCount"/>
+                           </bpel:copy>
+                        </bpel:assign>
+                        <bpel:repeatUntil name="UntilInProgress">
+                           <bpel:condition expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$gTaskState = 'IN_PROGRESS' or $gTaskState = 'ERROR' or $gTaskState = 'EXITED' or $gTaskState = 'OBSOLETE'</bpel:condition>
+                           <bpel:sequence>
+                              <bpel:receive name="StateChange" operation="handleStateChangeEvent" partnerLink="taskStateChangeListenerPLT" portType="b4pevt:IAeTaskStateChangeListener" variable="taskStateChangeMessage">
+                                 <bpel:correlations>
+                                    <bpel:correlation initiate="no" set="CS_taskState"/>
+                                 </bpel:correlations>
+                              </bpel:receive>
+                              <bpel:assign name="UpdateState">
+                                 <bpel:copy>
+                                    <bpel:from part="taskStateChangeEvent" variable="taskStateChangeMessage">
+                                       <bpel:query>b4pevtt:state/text()</bpel:query>
+                                    </bpel:from>
+                                    <bpel:to variable="gTaskState"/>
+                                 </bpel:copy>
+                              </bpel:assign>
+                              <bpel:if name="SuspendResumeStartDeadlines">
+                                 <bpel:condition>$taskStateChangeMessage.taskStateChangeEvent/b4pevtt:state/text() = 'SUSPENDED' and exists( $processTaskRequestMessage.processTaskRequest/htd:task/htd:deadlines/htd:startDeadline )</bpel:condition>
+                                 <bpel:invoke inputVariable="gSuspendStartDeadlinesProcessRequest" name="SuspendStartDeadlines" operation="SuspendProcess" partnerLink="activeBpelAdmin"/>
+                                 <bpel:elseif>
+                                    <bpel:condition>$taskStateChangeMessage.taskStateChangeEvent/b4pevtt:oldState/text() = 'SUSPENDED' and exists( $processTaskRequestMessage.processTaskRequest/htd:task/htd:deadlines/htd:startDeadline )</bpel:condition>
+                                    <bpel:invoke inputVariable="gResumeStartDeadlinesProcessRequest" name="ResumeStartDeadlines" operation="ResumeProcess" partnerLink="activeBpelAdmin"/>
+                                 </bpel:elseif>
+                              </bpel:if>
+                              <bpel:if name="SuspendResumeCompletionDeadlines">
+                                 <bpel:condition>$taskStateChangeMessage.taskStateChangeEvent/b4pevtt:state/text() = 'SUSPENDED' and exists( $processTaskRequestMessage.processTaskRequest/htd:task/htd:deadlines/htd:completionDeadline )</bpel:condition>
+                                 <bpel:invoke inputVariable="gSuspendComplDeadlinesProcessRequest" name="SuspendCompletionDeadlines" operation="SuspendProcess" partnerLink="activeBpelAdmin"/>
+                                 <bpel:elseif>
+                                    <bpel:condition>$taskStateChangeMessage.taskStateChangeEvent/b4pevtt:oldState/text() = 'SUSPENDED' and exists( $processTaskRequestMessage.processTaskRequest/htd:task/htd:deadlines/htd:completionDeadline )</bpel:condition>
+                                    <bpel:invoke inputVariable="gResumeComplDeadlinesProcessRequest" name="ResumeCompletionDeadlines" operation="ResumeProcess" partnerLink="activeBpelAdmin"/>
+                                 </bpel:elseif>
+                              </bpel:if>
+                           </bpel:sequence>
+                        </bpel:repeatUntil>
+                        <bpel:if name="IfCancelStartDeadlines">
+                           <bpel:condition>$gIterationCount = 1 and exists( $processTaskRequestMessage.processTaskRequest/htd:task/htd:deadlines/htd:startDeadline )</bpel:condition>
+                           <bpel:invoke inputVariable="gStartDeadlineOpRequest" name="CancelStartDeadlines" operation="cancel" partnerLink="cancelEscalationPL" portType="b4pesc:IAeTaskEscalationService"/>
+                        </bpel:if>
+                     </bpel:sequence>
+                  </bpel:scope>
+                  <bpel:assign name="StopLooping">
+                     <bpel:targets>
+                        <bpel:target linkName="L2"/>
+                        <bpel:target linkName="L3"/>
+                     </bpel:targets>
+                     <bpel:copy>
+                        <bpel:from>false()</bpel:from>
+                        <bpel:to variable="gKeepLooping"/>
+                     </bpel:copy>
+                  </bpel:assign>
+                  <bpel:scope name="InProgressState">
+                     <bpel:targets>
+                        <bpel:target linkName="L1"/>
+                     </bpel:targets>
+                     <bpel:sources>
+                        <bpel:source linkName="L3">
+                           <bpel:transitionCondition>$gTaskState != 'READY' and $gTaskState != 'RESERVED'</bpel:transitionCondition>
+                        </bpel:source>
+                     </bpel:sources>
+                     <bpel:repeatUntil name="RepeatUntilNotSuspended">
+                        <bpel:condition>$taskStateChangeMessage.taskStateChangeEvent/b4pevtt:state/text() != 'SUSPENDED'&#13;
+and&#13;
+$taskStateChangeMessage.taskStateChangeEvent/b4pevtt:state/text() != 'IN_PROGRESS'</bpel:condition>
+                        <bpel:sequence>
+                           <bpel:receive name="StateChange" operation="handleStateChangeEvent" partnerLink="taskStateChangeListenerPLT" portType="b4pevt:IAeTaskStateChangeListener" variable="taskStateChangeMessage">
+                              <bpel:correlations>
+                                 <bpel:correlation initiate="no" set="CS_taskState"/>
+                              </bpel:correlations>
+                           </bpel:receive>
+                           <bpel:assign name="UpdateState">
+                              <bpel:copy>
+                                 <bpel:from part="taskStateChangeEvent" variable="taskStateChangeMessage">
+                                    <bpel:query>b4pevtt:state/text()</bpel:query>
+                                 </bpel:from>
+                                 <bpel:to variable="gTaskState"/>
+                              </bpel:copy>
+                           </bpel:assign>
+                           <bpel:if name="SuspendResumeCompletionDeadlines2">
+                              <bpel:condition>$taskStateChangeMessage.taskStateChangeEvent/b4pevtt:state/text() = 'SUSPENDED' and exists( $processTaskRequestMessage.processTaskRequest/htd:task/htd:deadlines/htd:completionDeadline )</bpel:condition>
+                              <bpel:invoke inputVariable="gSuspendComplDeadlinesProcessRequest" name="SuspendCompletionDeadlines2" operation="SuspendProcess" partnerLink="activeBpelAdmin"/>
+                              <bpel:elseif>
+                                 <bpel:condition>$taskStateChangeMessage.taskStateChangeEvent/b4pevtt:oldState/text() = 'SUSPENDED' and exists( $processTaskRequestMessage.processTaskRequest/htd:task/htd:deadlines/htd:completionDeadline )</bpel:condition>
+                                 <bpel:invoke inputVariable="gResumeComplDeadlinesProcessRequest" name="ResumeCompletionDeadlines2" operation="ResumeProcess" partnerLink="activeBpelAdmin"/>
+                              </bpel:elseif>
+                           </bpel:if>
+                        </bpel:sequence>
+                     </bpel:repeatUntil>
+                  </bpel:scope>
+               </bpel:flow>
+            </bpel:repeatUntil>
+         </bpel:scope>
+         <bpel:scope name="ReturnToPA">
+            <bpel:variables>
+               <bpel:variable element="b4ptst:getTaskInstance" name="getTaskInstance">
+                  <bpel:from>&lt;b4ptst:getTaskInstance xmlns:b4ptrt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:b4ptst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"&gt;&#13;
+   {$gTaskId}&#13;
+   &lt;b4ptst:includeAttachments&gt;true&lt;/b4ptst:includeAttachments&gt;&#13;
+&lt;/b4ptst:getTaskInstance&gt;</bpel:from>
+               </bpel:variable>
+               <bpel:variable name="ignoredAttachmentResult" type="xsd:string"/>
+            </bpel:variables>
+            <bpel:sequence>
+               <bpel:if>
+                  <bpel:condition>exists( $processTaskRequestMessage.processTaskRequest/htd:task/htd:deadlines/htd:completionDeadline)</bpel:condition>
+                  <bpel:invoke inputVariable="gCompletionDeadlineOpRequest" name="CancelCompletionDeadlines" operation="cancel" partnerLink="cancelEscalationPL" portType="b4pesc:IAeTaskEscalationService"/>
+               </bpel:if>
+               <bpel:invoke inputVariable="gRemoveTaskStateChangeListenerMessage" name="removeListener" operation="removeTaskStateChangeListener" partnerLink="taskStateChangeRegistryPLT" portType="b4pevt:IAeTaskStateChangeRegistry"/>
+               <bpel:sequence>
+                  <bpel:invoke inputVariable="getTaskInstance" name="getUpdatedTaskState" operation="getInstance" outputVariable="gGetTaskInstanceResponse" partnerLink="internalTaskServicePLT"/>
+                  <bpel:assign name="InitReply">
+                     <bpel:copy>
+                        <bpel:from>&lt;b4plct:processTaskResponse xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd" xmlns:ns1="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:ns2="http://www.example.org/WS-HT/api"&gt;&#13;
+   &lt;b4ptrt:identifier&gt;{ $gTaskId/text() }&lt;/b4ptrt:identifier&gt;&#13;
+   &lt;b4plct:metadata&gt;{ $gGetTaskInstanceResponse.taskInstance/b4ptrt:context/child::* }&lt;/b4plct:metadata&gt;&#13;
+   { $gGetTaskInstanceResponse.taskInstance/b4ptrt:operational/b4ptrt:output }&#13;
+   { $gGetTaskInstanceResponse.taskInstance/b4ptrt:operational/b4ptrt:fault }&#13;
+   { $gGetTaskInstanceResponse.taskInstance/b4ptrt:operational/b4ptrt:comments }&#13;
+   { $gGetTaskInstanceResponse.taskInstance/b4ptrt:operational/b4ptrt:attachmentInfos}&#13;
+&lt;/b4plct:processTaskResponse&gt;</bpel:from>
+                        <bpel:to part="processTaskResponse" variable="processTaskResponseMessage"/>
+                     </bpel:copy>
+                     <bpel:copy>
+                        <bpel:from>abx:copyAllAttachments( 'gGetTaskInstanceResponse' , 'processTaskResponseMessage' )</bpel:from>
+                        <bpel:to variable="ignoredAttachmentResult"/>
+                     </bpel:copy>
+                  </bpel:assign>
+                  <bpel:reply name="ReplyToPA" operation="processTask" partnerLink="taskLifecyclePLT" portType="b4plc:IAeTaskLifecycleService" variable="processTaskResponseMessage"/>
+               </bpel:sequence>
+            </bpel:sequence>
+         </bpel:scope>
+      </bpel:sequence>
+   </bpel:scope>
+</bpel:process>

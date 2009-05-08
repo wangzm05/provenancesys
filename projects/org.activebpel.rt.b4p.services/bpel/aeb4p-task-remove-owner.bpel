@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BPEL Process Definition
+Edited using ActiveBPEL(r) Designer Version 4.1.2 (http://www.active-endpoints.com)
+-->
+<bpel:process xmlns:aeptstw="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl" xmlns:aeptstw1="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl" xmlns:aeptstx="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:ident="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl" xmlns:ident2="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl" xmlns:identd="http://schemas.active-endpoints.com/identity/2007/01/identity.xsd" xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:ws-ht="http://www.example.org/WS-HT" xmlns:xsd="http://www.w3.org/2001/XMLSchema" expressionLanguage="urn:active-endpoints:expression-language:xquery1.0" name="aeb4p-task-remove-owner" suppressJoinFailure="yes" targetNamespace="http://www.activebpel.org/b4p/2007/10/wshumantask">
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-state.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../../org.activebpel.rt.identity/support/wsdl/identity.wsdl" namespace="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl"/>
+   <bpel:partnerLinks>
+      <bpel:partnerLink myRole="service_provider" name="removeOwnerPL" partnerLinkType="aeptstw:removeOwnerPLT"/>
+      <bpel:partnerLink name="identityPL" partnerLinkType="ident:identityPLT" partnerRole="service"/>
+   </bpel:partnerLinks>
+   <bpel:variables>
+      <bpel:variable messageType="aeptstw:RemoveOwnerRequest" name="RemoveOwnerRequest"/>
+      <bpel:variable messageType="aeptstw:RemoveOwnerResponse" name="RemoveOwnerResponse"/>
+      <bpel:variable messageType="ident:countIdentitiesInput" name="countIdentitiesInput"/>
+      <bpel:variable messageType="ident:countIdentitiesOutput" name="countIdentitiesOutput"/>
+      <bpel:variable messageType="ident:assertionInput" name="assertionInput"/>
+      <bpel:variable messageType="aeptstw:illegalArgumentFault" name="illegalArgumentFault"/>
+      <bpel:variable messageType="aeptstw:illegalAccessFault" name="illegalAccessFault"/>
+   </bpel:variables>
+   <bpel:faultHandlers>
+      <bpel:catch faultName="aeptstw:illegalArgumentFault">
+         <bpel:sequence name="HandleIllegalArgument">
+            <bpel:assign name="AssignIllegalArgumentFault">
+               <bpel:copy>
+                  <bpel:from>
+                     <bpel:literal>
+                        <ns:illegalArgument xmlns:ns="http://www.example.org/WS-HT/api/xsd">The excluded owners argument can only contain users.</ns:illegalArgument>
+                     </bpel:literal>
+                  </bpel:from>
+                  <bpel:to part="illegalArgument" variable="illegalArgumentFault"/>
+               </bpel:copy>
+            </bpel:assign>
+            <bpel:reply faultName="aeptstw:illegalArgumentFault" name="ReplyWithFault" operation="RemoveOwner" partnerLink="removeOwnerPL" variable="illegalArgumentFault"/>
+         </bpel:sequence>
+      </bpel:catch>
+      <bpel:catch faultName="ident:searchFault">
+         <bpel:sequence name="HandleSearchFault">
+            <bpel:assign name="AssignIllegalAccessFault">
+               <bpel:copy>
+                  <bpel:from>
+                     <bpel:literal>User does not have access to remove the notification.</bpel:literal>
+                  </bpel:from>
+                  <bpel:to part="illegalAccess" variable="illegalAccessFault"/>
+               </bpel:copy>
+            </bpel:assign>
+            <bpel:reply faultName="aeptstw:illegalAccessFault" name="ReplyWithFault" operation="RemoveOwner" partnerLink="removeOwnerPL" variable="illegalAccessFault"/>
+         </bpel:sequence>
+      </bpel:catch>
+   </bpel:faultHandlers>
+   <bpel:sequence>
+      <bpel:receive createInstance="yes" name="ReceiveRemoveOwnerRequest" operation="RemoveOwner" partnerLink="removeOwnerPL" portType="aeptstw:RemoveOwnerService" variable="RemoveOwnerRequest"/>
+      <bpel:if name="CheckArgument">
+         <bpel:condition>count( $RemoveOwnerRequest.removeOwnerRequest/aeptstx:excludedOwners/ws-ht:groups ) &gt;0</bpel:condition>
+         <bpel:throw faultName="aeptstw:illegalArgumentFault" name="HandleIllegalArgument"/>
+      </bpel:if>
+      <bpel:assign name="PrepareAssertion">
+         <bpel:copy>
+            <bpel:from>&lt;ident:principalQueryAssertion xmlns:ident="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl" xmlns:ns="http://schemas.active-endpoints.com/identity/2007/01/identity.xsd"&gt;&#13;
+   &lt;ident:principalName&gt;{ $RemoveOwnerRequest.removeOwnerRequest/aeptstx:principalName/text() }&lt;/ident:principalName&gt;&#13;
+{&#13;
+(: Convert the recipients and excludedOwners to an identityQuery :)&#13;
+	trt:toIdentityQuery( $RemoveOwnerRequest.removeOwnerRequest/aeptstx:recipients, $RemoveOwnerRequest.removeOwnerRequest/aeptstx:excludedOwners )&#13;
+}&#13;
+&lt;/ident:principalQueryAssertion&gt;</bpel:from>
+            <bpel:to part="assertion" variable="assertionInput"/>
+         </bpel:copy>
+      </bpel:assign>
+      <bpel:invoke inputVariable="assertionInput" name="AssertPotentialOwner" operation="assertPrincipalInQueryResult" partnerLink="identityPL" portType="ident:IdentitySearchPortType"/>
+      <bpel:assign name="PrepareQueryCountParameters">
+         <bpel:copy>
+            <bpel:from>
+               <bpel:literal>
+                  <identd:countIdentitiesRequest>
+</identd:countIdentitiesRequest>
+               </bpel:literal>
+            </bpel:from>
+            <bpel:to part="countIdentitiesRequest" variable="countIdentitiesInput"/>
+         </bpel:copy>
+         <bpel:copy>
+            <bpel:from>&lt;identd:identityQuery&gt;&#13;
+{&#13;
+(: Convert the recipients and excludedOwners to an identityQuery :)&#13;
+	trt:toIdentityQuery( $RemoveOwnerRequest.removeOwnerRequest/aeptstx:recipients, $RemoveOwnerRequest.removeOwnerRequest/aeptstx:excludedOwners )&#13;
+}&#13;
+ &lt;/identd:identityQuery&gt;</bpel:from>
+            <bpel:to part="countIdentitiesRequest" variable="countIdentitiesInput"/>
+         </bpel:copy>
+      </bpel:assign>
+      <bpel:invoke inputVariable="countIdentitiesInput" name="QueryPotentialOwnersCount" operation="countIdentities" outputVariable="countIdentitiesOutput" partnerLink="identityPL" portType="ident:IdentitySearchPortType"/>
+      <bpel:assign name="PrepareResponse">
+         <bpel:copy>
+            <bpel:from>&lt;aeptstx:removeOwnerResponse xmlns:aeptstx="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:ws-ht="http://www.example.org/WS-HT"&gt;&#13;
+   &lt;aeptstx:ownersRemovalComplete&gt;{$countIdentitiesOutput.count/. &lt;= $RemoveOwnerRequest.removeOwnerRequest/aeptstx:excludedOwnersCount+1}&lt;/aeptstx:ownersRemovalComplete&gt;&#13;
+   &lt;aeptstx:excludedOwners&gt;&#13;
+      &lt;ws-ht:users&gt;&#13;
+	 { $RemoveOwnerRequest.removeOwnerRequest/aeptstx:excludedOwners/ws-ht:users/ws-ht:user }&#13;
+         &lt;ws-ht:user&gt;{ data($RemoveOwnerRequest.removeOwnerRequest/aeptstx:principalName) }&lt;/ws-ht:user&gt;&#13;
+      &lt;/ws-ht:users&gt;&#13;
+   &lt;/aeptstx:excludedOwners&gt;&#13;
+&lt;/aeptstx:removeOwnerResponse&gt;</bpel:from>
+            <bpel:to part="removeOwnerResponse" variable="RemoveOwnerResponse"/>
+         </bpel:copy>
+      </bpel:assign>
+      <bpel:reply operation="RemoveOwner" partnerLink="removeOwnerPL" portType="aeptstw:RemoveOwnerService" variable="RemoveOwnerResponse"/>
+   </bpel:sequence>
+</bpel:process>

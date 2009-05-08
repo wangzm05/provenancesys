@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="getAttachmentById">
+   <abs:bUnitRef location="getAttachmentById.bunit"/>
+   <abs:bUnitRef location="getAttachmentById-illegalAccess.bunit"/>
+   <abs:bUnitRef location="getAttachmentById-illegalArgument.bunit"/>
+</abs:bSuite>

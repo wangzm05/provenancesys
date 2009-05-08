@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>WorkFlow Application Console(Active Endpoints Inc)</display-name>
+	<!--  Application Name that is display in the UI -->   
+	<context-param>
+		<param-name>ae.workflow.name</param-name>
+		<param-value></param-value>
+   </context-param>
+	<context-param>
+		<param-name>ae.workflow.inbox.context.path</param-name>
+		<param-value>/inbox/</param-value>
+   </context-param>
+	<context-param>
+		<param-name>ae.workflow.admin.context.path</param-name>
+		<param-value>/admin/</param-value>
+   </context-param>
+	<context-param>
+		<param-name>ae.workflow.config.filename</param-name>
+		<param-value>aeworkflow-config.xml</param-value>
+   </context-param>         
+   <!--  String resource bundle  -->  
+   <context-param>
+      <param-name>resource-bundle-class</param-name>
+      <param-value>org.activebpel.b4p.war.web.AeTaskWarBundle</param-value>
+   </context-param>   
+   <context-param>
+   	<param-name>bundle-prefix</param-name>
+   	<param-value>/WEB-INF/aeworkflow</param-value>
+   </context-param>   
+      
+	<filter>    
+		<filter-name>AeWorkFlowRequestFilter</filter-name>    
+     	<filter-class>org.activebpel.b4p.war.web.servlet.AeWorkFlowRequestFilter</filter-class>    
+	</filter>  
+   <filter-mapping>    
+		<filter-name>AeWorkFlowRequestFilter</filter-name>    
+      <url-pattern>/inbox/*</url-pattern>  
+   </filter-mapping> 
+   <filter-mapping>    
+		<filter-name>AeWorkFlowRequestFilter</filter-name>    
+      <url-pattern>/admin/*</url-pattern>  
+   </filter-mapping> 
+   
+	<listener>
+		<listener-class>org.activebpel.b4p.war.web.servlet.AeWorkFlowContextListener</listener-class>
+	</listener>
+
+	<servlet>
+		<display-name>Servlet for downloading an attachment.</display-name>
+		<servlet-name>AeWorkFlowAttachmentDownloadServlet</servlet-name> 		
+		<servlet-class>org.activebpel.b4p.war.web.servlet.AeWorkFlowAttachmentDownloadServlet</servlet-class> 
+		<load-on-startup>50</load-on-startup> 
+	</servlet>
+
+	<servlet>
+		<display-name>Servlet rendering task detail using xsl.</display-name>
+		<servlet-name>AeWorkFlowRenderTaskXslServlet</servlet-name> 		
+		<servlet-class>org.activebpel.b4p.war.web.servlet.AeWorkFlowRenderTaskXslServlet</servlet-class> 
+		<load-on-startup>10</load-on-startup> 
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>AeWorkFlowAttachmentDownloadServlet</servlet-name> 
+		<url-pattern>/inbox/getAttachment</url-pattern> 
+	</servlet-mapping>	
+
+	<servlet-mapping>
+		<servlet-name>AeWorkFlowRenderTaskXslServlet</servlet-name> 
+		<url-pattern>/inbox/task</url-pattern> 
+	</servlet-mapping>	
+ 
+   <!-- JSP_SERVLET_BEGIN 
+	<servlet-mapping>
+		<servlet-name>jsp</servlet-name>
+		<url-pattern>*.jspf</url-pattern>
+	</servlet-mapping>	
+   JSP_SERVLET_END -->
+		
+	<session-config>
+		<!-- Default to 30 minute session timeouts -->
+      <session-timeout>30</session-timeout>
+	</session-config>
+
+	<welcome-file-list id="WelcomeFileList">
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
+  <!-- === Error pages === -->
+   <error-page>
+       <error-code>400</error-code>
+       <location>/errors/error.jsp</location>
+   </error-page>
+   <error-page>
+       <error-code>403</error-code>
+       <location>/logindenied.jsp</location>
+   </error-page>
+   <error-page>
+       <error-code>404</error-code>
+       <location>/errors/error.jsp</location>
+   </error-page>
+   
+   <error-page>
+       <error-code>500</error-code>
+       <location>/errors/error.jsp</location>
+   </error-page>
+   <error-page>
+       <exception-type>java.lang.Throwable</exception-type>
+       <location>/errors/error.jsp</location>
+   </error-page>  
+  
+  <jsp-config>
+		<!--  Tag lib -->
+		<taglib>
+			<taglib-uri>http://activebpel.org/aetaglib</taglib-uri>
+			<taglib-location>/WEB-INF/aetags.tld</taglib-location>
+		</taglib>
+		<!--   
+		<taglib>
+			<taglib-uri>http://activebpel.org/aeworkflowtaglib</taglib-uri>
+			<taglib-location>/WEB-INF/aeworkflowtags.tld</taglib-location>
+		</taglib>
+		-->  
+	</jsp-config>  
+	
+   <security-role>
+      <description>Configure the workflowuser role through your server's administration console</description>
+      <role-name>workflowuser</role-name>
+   </security-role>
+  
+   <security-role>
+      <description>Configure the workflowtaskadmin role through your server's administration console.</description>
+      <role-name>workflowtaskadmin</role-name>
+   </security-role>
+  
+   <security-role>
+      <description>Configure the workflowappadmin role through your server's administration console.</description>
+      <role-name>workflowappadmin</role-name>
+   </security-role>
+	
+</web-app>

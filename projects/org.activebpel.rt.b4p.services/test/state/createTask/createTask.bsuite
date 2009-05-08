@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="createTask">
+   <abs:bUnitRef location="createTask-AutoClaim.bunit"/>
+   <abs:bUnitRef location="createTask-completeBy.bunit"/>
+   <abs:bUnitRef location="createTask-createdBy.bunit"/>
+   <abs:bUnitRef location="createTask-createdBy-useTaskInitiator.bunit"/>
+   <abs:bUnitRef location="createTask-createdBy-useTaskInitiator-anonymous.bunit"/>
+   <abs:bUnitRef location="createTask-DeferActivation.bunit"/>
+   <abs:bUnitRef location="createTask-Expires.bunit"/>
+   <abs:bUnitRef location="createTask-NoAutoClaim.bunit"/>
+   <abs:bUnitRef location="createTask-NoExpiration.bunit"/>
+   <abs:bUnitRef location="createTask-no-PrimarySearchBy.bunit"/>
+   <abs:bUnitRef location="createTask-PrimarySearchBy.bunit"/>
+   <abs:bUnitRef location="createTask-StartAndcompleteBy.bunit"/>
+   <abs:bUnitRef location="createTask-startBy.bunit"/>
+</abs:bSuite>

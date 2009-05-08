@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="AEDEV/lib/servlet-api.jar"/>
+	<classpathentry kind="var" path="AEDEV/lib/axis.jar" sourcepath="AEDEV/external/axis/axis-src-1_4.zip"/>
+	<classpathentry kind="var" path="AEDEV/lib/servlet.jar"/>
+	<classpathentry kind="src" path="/org.activebpel.rt.bpel.server"/>
+	<classpathentry kind="src" path="/org.activebpel.rt"/>
+	<classpathentry kind="src" path="/org.activebpel.rt.bpel"/>
+	<classpathentry kind="src" path="/org.activebpel.rt.axis.bpel"/>
+	<classpathentry kind="src" path="/org.activebpel.rt.axis"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

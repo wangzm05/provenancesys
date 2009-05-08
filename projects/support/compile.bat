@@ -1,0 +1,1 @@
+ant -f -lib ..\..\lib activebpel.xml activebpel.all

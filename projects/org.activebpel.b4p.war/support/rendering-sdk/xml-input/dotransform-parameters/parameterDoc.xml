@@ -1,0 +1,21 @@
+<aefp:parameters
+   xmlns:aefp="http://schemas.active-endpoints.com/humanworkflow/2007/07/renderxsl/formparams"
+   method="post" path-info=""
+   principalName="[PrincipalName]"
+   taskRef="[TaskRefID]"
+   user-agent="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6">
+
+   <aefp:header name="content-length" type="text">83</aefp:header>
+   <aefp:header name="user-agent" type="text">Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6</aefp:header>
+   <aefp:header name="content-type" type="text">application/x-www-form-urlencoded</aefp:header>
+
+   <aefp:parameter name="firstName" type="text">John</aefp:parameter>
+	<aefp:parameter name="lastName"  type="text">Smith</aefp:parameter>
+   <aefp:parameter name="address"   type="xml">
+	   <address>
+	      <street>123 ABC St</street>
+	      <city>Shelton</city>
+	      <state>CT</state>
+	   </address>
+   </aefp:parameter>
+</aefp:parameters>

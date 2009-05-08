@@ -1,0 +1,4 @@
+   <abu:engineProperties xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd">
+      <abu:engineProperty path="Logging" value="urn:ae:execution"/>
+      <abu:engineProperty path="ProcessLogger/Class" value="com.activee.rt.bunit.impl.AeConsoleProcessLogger"/>
+   </abu:engineProperties>

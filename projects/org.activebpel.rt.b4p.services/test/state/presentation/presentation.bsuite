@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="presentation">
+   <abs:bUnitRef location="presentation-noParams-aeGetTaskInstance.bunit"/>
+   <abs:bUnitRef location="presentation-noParams-getTaskInfo.bunit"/>
+   <abs:bUnitRef location="presentation-noParams-store.bunit"/>
+   <abs:bUnitRef location="presentation-noParams-update.bunit"/>
+   <abs:bUnitRef location="presentation-params-store.bunit"/>
+
+   <abs:bUnitRef location="notification-presentation-aeGetTaskInstance.bunit"/>
+   <abs:bUnitRef location="notification-presentation-getTaskInfo.bunit"/>
+   <abs:bUnitRef location="notification-presentation-store.bunit"/>
+   <abs:bUnitRef location="notification-presentation-update.bunit"/>
+</abs:bSuite>

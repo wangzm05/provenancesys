@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsw:createTaskRequest xmlns:htapi="http://www.example.org/WS-HT/api"
+	xmlns:htd="http://www.example.org/WS-HT"
+	xmlns:htp="http://www.example.org/WS-HT/protocol"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:sref="http://docs.oasis-open.org/wsbpel/2.0/serviceref"
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+	xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:test="urn:test">
+	<htd:notification name="N1">
+		<htd:interface operation="ncname" portType="qname" />
+		<htd:priority>'1'</htd:priority>
+		<htd:peopleAssignments>
+			<htd:recipients>
+				<htd:from logicalPeopleGroup="qname" />
+			</htd:recipients>
+			<htd:businessAdministrators>
+				<htd:from logicalPeopleGroup="qname" />
+			</htd:businessAdministrators>
+		</htd:peopleAssignments>
+		<htd:presentationElements>
+			<htd:name>Alert</htd:name> 
+         <htd:presentationParameters expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">
+            <htd:presentationParameter name="amount" type="xs:double">number(htd:getInput('partOne')/test:amount)</htd:presentationParameter>
+            <htd:presentationParameter name="actualOwner" type="xs:string">htd:getActualOwner('parentTask')</htd:presentationParameter>
+            <htd:presentationParameter name="parentData" type="xs:string">htd:getInput('inputPart1', 'parentTask')</htd:presentationParameter>
+         </htd:presentationParameters>
+			<htd:subject>Task: {$parentData} is overdue</htd:subject>
+			<htd:description>{$actualOwner} has not completed the task. This task is worth ${$amount}.</htd:description>
+		</htd:presentationElements>
+	</htd:notification>
+	<trt:initialState>
+		<trt:input>
+			<trt:part name="partOne">
+            <test:inputData>
+               <test:id>ABC</test:id>
+               <test:amount>100</test:amount>
+            </test:inputData>
+         </trt:part>
+		</trt:input>
+		<trt:createdBy>anonymous</trt:createdBy>
+		<htp:humanTaskContext>
+			<htp:priority>1</htp:priority>
+			<htp:peopleAssignments>
+				<htp:recipients>
+					<htd:organizationalEntity>
+						<htd:users>
+							<htd:user>user1</htd:user>
+						</htd:users>
+					</htd:organizationalEntity>
+				</htp:recipients>
+				<htp:businessAdministrators>
+					<htd:organizationalEntity>
+						<htd:users>
+							<htd:user>admin</htd:user>
+						</htd:users>
+					</htd:organizationalEntity>
+				</htp:businessAdministrators>
+			</htp:peopleAssignments>
+		</htp:humanTaskContext>
+		<trt:processVariables />
+	</trt:initialState>
+	<trt:interfaceMetadata>
+		<trt:input>
+			<trt:part name="inputPart1" />
+		</trt:input>
+	</trt:interfaceMetadata>
+   <trt:taskInstance>
+      <trt:identifier>urn:b4p:100</trt:identifier>
+      <trt:name>parentTask</trt:name>
+      <trt:targetNamespace>string</trt:targetNamespace>
+      <trt:taskType>TASK</trt:taskType>
+      <trt:presentation>
+         <trt:name>Some parent task</trt:name>
+         <trt:subject>Task Subject</trt:subject>
+         <trt:description>Task Desc</trt:description>
+      </trt:presentation>
+      <trt:context>
+         <trt:status>IN_PROGRESS</trt:status>
+         <trt:priority>2</trt:priority>
+         <trt:taskInitiator>anonymous</trt:taskInitiator>
+         <trt:taskStakeholders xsi:nil="true"/>
+         <trt:potentialOwners>
+            <htd:users>
+               <htd:user>user1</htd:user>
+               <htd:user>user2</htd:user>
+            </htd:users>
+         </trt:potentialOwners>
+         <trt:excludedOwners xsi:nil="true"/>
+         <trt:businessAdministrators>
+            <htd:users>
+               <htd:user>admin</htd:user>
+            </htd:users>
+         </trt:businessAdministrators>
+         <trt:recipients xsi:nil="true"/>
+         <trt:actualOwner>user1</trt:actualOwner>
+         <trt:createdOn>2008-02-04T15:39:28.560Z</trt:createdOn>
+         <trt:createdBy>anonymous</trt:createdBy>
+         <trt:activationTime>2008-02-04T15:39:28.560Z</trt:activationTime>
+         <trt:expirationTime>2008-02-04T15:39:28.560Z</trt:expirationTime>
+         <trt:lastModifiedTime>2008-02-04T15:39:28.560Z</trt:lastModifiedTime>
+         <trt:lastModifiedBy>string</trt:lastModifiedBy>
+         <trt:completionTime xsi:nil="true"/>
+         <trt:isSkipable>true</trt:isSkipable>
+         <trt:lastEscalatedTime>2008-02-04T15:39:28.560Z</trt:lastEscalatedTime>
+         <trt:primarySearchBy>string</trt:primarySearchBy>
+         <trt:startByMillis>2008-02-04T15:39:28.560Z</trt:startByMillis>
+         <trt:completeByMillis>2008-02-04T15:39:28.560Z</trt:completeByMillis>
+      </trt:context>
+      <trt:operational>
+         <trt:input>
+            <trt:part name="inputPart1">ABC-123</trt:part>
+         </trt:input>
+         <trt:output>
+            <trt:part name="outputPart1">data for outputPart1</trt:part>
+         </trt:output>
+         <trt:comments/>
+         <trt:attachments/>
+      </trt:operational>
+      <trt:interfaceMetadata>
+         <trt:input>
+            <trt:part name="inputPart1"/>
+         </trt:input>
+         <trt:output>
+            <trt:part name="outputPart1"/>
+         </trt:output>
+      </trt:interfaceMetadata>
+   </trt:taskInstance>
+</tsw:createTaskRequest>

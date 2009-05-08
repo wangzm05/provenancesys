@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="deleteAttachmentById">
+   <abs:bUnitRef location="deleteAttachmentById-both.bunit"/>
+   <abs:bUnitRef location="deleteAttachmentById-illegalAccess.bunit"/>
+   <abs:bUnitRef location="deleteAttachmentById-illegalState.bunit"/>
+   <abs:bUnitRef location="deleteAttachmentById-MIME.bunit"/>
+   <abs:bUnitRef location="deleteAttachmentById-URL.bunit"/>
+   <abs:bUnitRef location="deleteAttachmentById-URL-stakeholder.bunit"/>
+</abs:bSuite>

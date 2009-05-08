@@ -1,0 +1,5 @@
+	<%@ include file="htmlhead_internal_common_incl.jspf" %>
+	<script type="text/javascript" src="../script/jquery.cookie.js"></script>	
+	<script type="text/javascript" src="../script/jquery.treeview.js"></script>	
+	<link rel="stylesheet" href="../css/jquery.treeview.css" type="text/css" media="print,screen" />
+	<script type="text/javascript" src="../script/aeworkflow-inbox.js"></script>

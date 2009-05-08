@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="removeOwner">
+   <abs:bUnitRef location="removeOwner-complete-return.bunit"/>
+   <abs:bUnitRef location="removeOwner-illegalAccess.bunit"/>
+   <abs:bUnitRef location="removeOwner-illegalArgument.bunit"/>
+   <abs:bUnitRef location="removeOwner-not-complete.bunit"/>
+</abs:bSuite>

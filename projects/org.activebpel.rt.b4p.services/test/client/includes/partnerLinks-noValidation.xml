@@ -1,0 +1,32 @@
+<abu:partnerLinks
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+	xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+	<abu:partnerLink name="taskStatePL"
+		processName="bpelNS:aeb4p-task-client"
+		xmlns:bpelNS="http://www.activebpel.org/b4p/2007/10/wshumantask">
+		<abu:partnerRole endpointReference="static">
+			<wsa:EndpointReference 	xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing">
+				<wsa:Address>taskStateMachine</wsa:Address>
+				<wsp:Policy>
+					<abp:MapProcessInitiatorAsHeader />
+					<abp:Validation direction="none" />
+					<abp:Validation direction="out" operation="setFault" />
+					<abp:Validation direction="out" operation="setOutput" />
+					<abp:Validation direction="out" operation="complete" />
+				</wsp:Policy>
+			</wsa:EndpointReference>
+		</abu:partnerRole>
+	</abu:partnerLink>
+	<abu:partnerLink name="taskClientPL"
+		processName="bpelNS:aeb4p-task-client"
+		xmlns:bpelNS="http://www.activebpel.org/b4p/2007/10/wshumantask">
+		<abu:myRole>
+			<wsp:Policy
+				xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+				<wsp:PolicyReference
+					URI="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl#AeB4PTaskClient-taskOperations" />
+			</wsp:Policy>
+		</abu:myRole>
+	</abu:partnerLink>
+</abu:partnerLinks>

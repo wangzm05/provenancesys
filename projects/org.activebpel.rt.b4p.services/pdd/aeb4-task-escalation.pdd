@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pdd:process xmlns:bpelns="http://www.activebpel.org/b4p/2007/10/wshumantask" xmlns:pdd="http://schemas.active-endpoints.com/pdd/2006/08/pdd.xsd" location="bpel/org.activebpel.rt.b4p.services/bpel/aeb4-task-escalation.bpel" name="bpelns:aeb4-task-escalation" platform="enterprise" processGroup="$system">
+  <pdd:partnerLinks>
+    <pdd:partnerLink name="internalTaskServicePLT">
+      <pdd:partnerRole endpointReference="static" invokeHandler="process">
+        <wsa:EndpointReference xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing">
+  <wsa:Address>AeB4PState-aeInternalTaskOperations</wsa:Address>
+</wsa:EndpointReference>
+      </pdd:partnerRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskCustomNotificationServicePLT">
+      <pdd:partnerRole endpointReference="dynamic" invokeHandler="process"/>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskEscalationServicePLT">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PEscalation"/>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskNotificationServicePLT">
+      <pdd:partnerRole endpointReference="static" invokeHandler="process">
+        <wsa:EndpointReference xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing">
+  <wsa:Address>AeB4PNotificationLifecycle</wsa:Address>
+</wsa:EndpointReference>
+      </pdd:partnerRole>
+    </pdd:partnerLink>
+  </pdd:partnerLinks>
+  <pdd:references>
+    <pdd:wsdl location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-escalations.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-escalations.wsdl"/>
+    <pdd:wsdl location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-state.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"/>
+    <pdd:wsdl location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-notifications.wsdl" namespace="http://www.activebpel.org/b4p/2007/12/wshumantask/aeb4p-task-notification.wsdl"/>
+    <pdd:schema location="project:/org.activebpel.rt.b4p.services/schema/aeb4p-task-custom-notifications.xsd" namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-custom-notification.xsd"/>
+    <pdd:wsdl location="project:/org.activebpel.rt.ht/support/wsdl/ws-humantask-api.wsdl" namespace="http://www.example.org/WS-HT/api/wsdl"/>
+  </pdd:references>
+</pdd:process>

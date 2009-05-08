@@ -1,0 +1,13 @@
+	<title><ae:GetResource name="aeRequestContext" property="pageName" /></title>
+	<link rel="stylesheet" href="../css/aeworkflow.css" media="print,screen"  />
+   <link rel="stylesheet" href="../css/aetaskstate.css" type="text/css" media="print,screen" /> 
+   <link rel="stylesheet" href="../css/aetaskpriority.css" type="text/css" media="print,screen" /> 	
+	<link rel="stylesheet" href="../css/jqModal.css" />
+	<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+	<script type="text/javascript" src="../script/jquery.js"></script>
+	<script type="text/javascript" src="../script/jquery.block.js"></script>
+	<script type="text/javascript" src="../script/jqModal.js"></script>
+	<script type="text/javascript" src="../script/aeworkflow-util.js"></script>
+	<script type="text/javascript" src="../script/aeworkflow-taskdefs.js"></script>
+	<script type="text/javascript" src="../script/aeworkflow-common.js"></script>	

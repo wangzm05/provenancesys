@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<htapis:getCommentsResponse xmlns:htapis="http://www.example.org/WS-HT/api/xsd" xmlns:ns="http://www.example.org/WS-HT/api">
+   <htapis:comment>
+      <ns:addedAt>2008-02-01T15:19:36.016Z</ns:addedAt>
+      <ns:addedBy>string</ns:addedBy>
+      <ns:text>string</ns:text>
+   </htapis:comment>
+</htapis:getCommentsResponse>

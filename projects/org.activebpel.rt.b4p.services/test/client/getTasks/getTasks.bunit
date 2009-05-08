@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abu:bpelUnit 
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd" 
+	xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" 
+	xmlns:cmn="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl" 
+	xmlns:htapis="http://www.example.org/WS-HT/api/xsd" 
+	xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl" 
+	xmlns:id="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl" 
+	xmlns:ns1="http://www.example.org/task-presentation/" 
+	xmlns:ns2="http://www.example.org/ClaimApprovalRequest" 
+	xmlns:ns3="http://www.active-endpoints.com/wsdl/test/test_people_activity" 
+	xmlns:ns4="http://www.example.org/WS-HT" 
+	xmlns:ns5="http://www.activebpel.org/b4p/2007/12/wshumantask/notificationLifecycle.wsdl" 
+	xmlns:ns6="http://www.activebpel.org/b4p/2007/10/wshumantask/taskLifecycle.wsdl" 
+	xmlns:ns7="http://www.activebpel.org/b4p/2007/12/wshumantask/aeb4p-task-notification.wsdl" 
+	xmlns:ns8="urn:designer:peopleactivity" 
+	xmlns:ns9="http://www.active-endpoints.com/wsdl/test/bpel20_unit" 
+	xmlns:store="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl" 
+	xmlns:tew="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-events.wsdl" 
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" 
+	xmlns:ts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl" 
+	xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+ 	xmlns:xi="http://www.w3.org/2001/XInclude"	
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	name="client-getTasks">
+   <abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml"/>
+	<xi:include href="../includes/bpels.xml"/>
+	<xi:include href="../includes/wsdls.xml"/>
+	<xi:include href="../includes/schemas.xml"/>
+	<xi:include href="../includes/partnerLinks.xml"/>
+   <abu:invokes>
+      <abu:invoke name="FindRolesByPrincipal-getTasks">
+         <abu:defaultInvoke>
+            <abu:asserts>
+               <abu:assertEquals part="principalName" query="/id:principalName">anonymous</abu:assertEquals>
+            </abu:asserts>
+            <abu:simulatedResponse>
+               <abu:message type="id:roleListOutput">
+                  <abu:parts>
+                     <abu:part name="roles" href="../data/myRoles.xml"/>
+                  </abu:parts>
+               </abu:message>
+            </abu:simulatedResponse>
+         </abu:defaultInvoke>
+      </abu:invoke>
+      <abu:invoke name="listTasks"> 
+         <abu:defaultInvoke>
+            <abu:asserts>
+               <abu:assertEquals part="listTasks" query="//store:principal">anonymous</abu:assertEquals>
+               <abu:assertEquals part="listTasks" query="//store:roleList">
+               	<store:roleList>
+               		<store:role>string</store:role>
+               	</store:roleList>
+               </abu:assertEquals>
+            </abu:asserts>
+            <abu:simulatedResponse>
+               <abu:message type="store:ListTasksResponseMessage">
+                  <abu:parts>
+                     <abu:part name="listTasksResponse" href="tasks.xml"/>
+                  </abu:parts>
+               </abu:message>
+            </abu:simulatedResponse>
+         </abu:defaultInvoke>
+      </abu:invoke>
+   </abu:invokes>
+   <abu:commands>
+      <abu:sendMessage xmlns:ns="http://www.activebpel.org/b4p/2007/10/wshumantask" operation="getTasks" partnerLink="aeTaskOperationsPL" processName="ns:aeb4p-task-client">
+         <abu:message type="ts:GetTasksRequest">
+            <abu:parts>
+               <abu:part name="getTasks" href="getTasks.xml"/>
+            </abu:parts>
+         </abu:message>
+      </abu:sendMessage>
+   </abu:commands>
+</abu:bpelUnit>

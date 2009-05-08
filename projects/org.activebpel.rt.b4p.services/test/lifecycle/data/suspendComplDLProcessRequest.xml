@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns:suspendProcessInput xmlns:ns="http://schemas.active-endpoints.com/activebpeladmin/2007/01/activebpeladmin.xsd">
+   <ns:pid>4</ns:pid>
+</ns:suspendProcessInput>

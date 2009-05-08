@@ -1,0 +1,47 @@
+<abu:bpelUnit
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:abx="http://www.activebpel.org/bpel/extension"
+	xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+	xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl"
+	xmlns:htd="http://www.example.org/WS-HT"
+	xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+	xmlns:ts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"
+	xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:tn="http://www.activebpel.org/b4p/2007/12/wshumantask/aeb4p-task-notification.wsdl"
+	xmlns:aeid="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl" 
+   >
+	<abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml" />
+	<xi:include href="../includes/bpels.xml" />
+	<xi:include href="../includes/wsdls.xml" />
+	<abu:invokes>
+		<abu:invoke name="createTask">
+			<abu:defaultInvoke>
+				<abu:simulatedResponse>
+					<abu:message
+						type="ts:CreateTaskResponse">
+						<abu:parts>
+							<abu:part name="createTaskResponse" href="../data/createTaskResponse.xml"/>
+						</abu:parts>
+					</abu:message>
+				</abu:simulatedResponse>
+			</abu:defaultInvoke>
+		</abu:invoke>
+	</abu:invokes>
+
+	<abu:commands>
+		<abu:sendMessage operation="processNotification"
+			partnerLink="taskNotification">
+			<abu:message type="tn:processNotificationRequest">
+				<abu:parts>
+					<abu:part href="../data/processNotification.xml"
+						name="processNotificationRequest" />
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+		<abu:waitUntil delay="2000" />
+	</abu:commands>
+</abu:bpelUnit>

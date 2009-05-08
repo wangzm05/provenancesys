@@ -1,0 +1,6 @@
+<ns:processCustomNotificationRequest xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-notifications-wsdl.xsd" xmlns:ns1="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd">
+   <trt:identifier xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">anyURI</trt:identifier>
+   <ns1:peopleActivityPid>1</ns1:peopleActivityPid>
+   <ns1:peopleActivityId>1</ns1:peopleActivityId>
+   <ns:data/>
+</ns:processCustomNotificationRequest>

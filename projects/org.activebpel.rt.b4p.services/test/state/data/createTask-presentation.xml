@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsw:createTaskRequest 
+	xmlns:htapi="http://www.example.org/WS-HT/api" 
+	xmlns:htd="http://www.example.org/WS-HT" 
+	xmlns:htp="http://www.example.org/WS-HT/protocol" 
+	xmlns:sref="http://docs.oasis-open.org/wsbpel/2.0/serviceref" 
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" 
+	xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+   xmlns:dt="urn:ae:dinner:xsd"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <htd:task name="T1">
+      <htd:interface operation="op" portType="qname" />
+      <htd:priority>'1'</htd:priority>
+      <htd:peopleAssignments>
+         <htd:potentialOwners>
+            <htd:from>
+            </htd:from>
+         </htd:potentialOwners>
+      </htd:peopleAssignments>
+      <htd:presentationElements>
+         <htd:name>Dinner Order</htd:name>
+         <htd:presentationParameters expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">
+            <htd:presentationParameter name="personOrdering" type="xs:string">$personOrdering</htd:presentationParameter>
+            <htd:presentationParameter name="restaurant" type="xs:string">htd:getInput('partOne')/dt:restaurant/dt:name</htd:presentationParameter>
+            <htd:presentationParameter name="dinnerAllowance" type="xs:double">$dinnerAllowance</htd:presentationParameter>
+         </htd:presentationParameters>
+         <htd:subject>Place your dinner order for {$restaurant}</htd:subject>
+         <htd:description><div xmlns="http://www.w3.org/1999/xhtml/">{$personOrdering} is ordering dinner from <b>{$restaurant}</b>. Review the menu below and select the items you want. Your department dinner allowance is ${$dinnerAllowance} per employee.</div></htd:description>
+      </htd:presentationElements>
+   </htd:task>
+   <trt:initialState>
+      <trt:input>
+         <trt:part name="partOne">
+            <dt:whatDoYouWantForDinner>
+               <dt:restaurant>
+                  <dt:name>Outback Steakhouse</dt:name>
+                  <dt:menu>
+                     <dt:menuItem>
+                        <dt:id>Chicken on the Barbie</dt:id>
+                        <dt:description>Grilled chicken breast with a marinade. Comes with a side of steamed vegetables.</dt:description>
+                        <dt:price>14.99</dt:price>
+                     </dt:menuItem>
+                     <dt:menuItem>
+                        <dt:id>Steak on the Barbie</dt:id>
+                        <dt:description>8oz steak with a marinade. Comes with a side of steamed vegetables.</dt:description>
+                        <dt:price>15.99</dt:price>
+                     </dt:menuItem>
+                     <dt:menuItem>
+                        <dt:id>Outback burger</dt:id>
+                        <dt:description>1/2 pound burger served on a hard rolled with Aussie Chips.</dt:description>
+                        <dt:price>8.99</dt:price>
+                     </dt:menuItem>
+                  </dt:menu>
+               </dt:restaurant>
+            </dt:whatDoYouWantForDinner>
+         </trt:part>
+      </trt:input>
+      <trt:createdBy>anonymous</trt:createdBy>
+      <htp:humanTaskContext>
+         <htp:priority>1</htp:priority>
+         <htp:peopleAssignments>
+            <htp:potentialOwners>
+               <htd:organizationalEntity>
+                  <htd:users>
+                     <htd:user>user1</htd:user>
+                  </htd:users>
+               </htd:organizationalEntity>
+            </htp:potentialOwners>
+            <htp:businessAdministrators>
+               <htd:organizationalEntity>
+                  <htd:users>
+                     <htd:user>admin</htd:user>
+                  </htd:users>
+               </htd:organizationalEntity>
+            </htp:businessAdministrators>
+            <htp:taskStakeholders>
+               <htd:organizationalEntity>
+                  <htd:groups>
+                     <htd:group>stakes</htd:group>
+                  </htd:groups>
+               </htd:organizationalEntity>
+            </htp:taskStakeholders>
+         </htp:peopleAssignments>
+         <htp:isSkipable>true</htp:isSkipable>
+      </htp:humanTaskContext>
+      <trt:processVariables>
+			<trt:processVariable element="dt:employee" name="personOrdering">
+            <dt:employee>Tom</dt:employee>
+			</trt:processVariable>
+         <trt:processVariable type="xs:double" name="dinnerAllowance">25.00</trt:processVariable>
+		</trt:processVariables>
+   </trt:initialState>
+   <trt:interfaceMetadata>
+   	<trt:input>
+   		<trt:part name="inputPart1" />
+   	</trt:input>
+   	<trt:output>
+   		<trt:part name="outputPart1" />
+   	</trt:output>
+   	<trt:faults>
+   		<trt:fault name="fault1" />
+   	</trt:faults>
+   </trt:interfaceMetadata>
+   <sref:service-ref reference-scheme="anyURI">
+   	<wsa:EndpointReference xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing">
+   		<wsa:Address>lifecycleProcess</wsa:Address>
+   	</wsa:EndpointReference>
+   </sref:service-ref>
+</tsw:createTaskRequest>

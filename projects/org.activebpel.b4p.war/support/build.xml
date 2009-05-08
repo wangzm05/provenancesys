@@ -1,0 +1,49 @@
+<project name="Auxiliary build file for rendering sdk files" default="main">
+   <!-- ========================================================================= -->
+   <!-- Build script to create rendering sdk zip  -->
+   <!-- ========================================================================= -->
+   <target name="main" if="project" >
+      <echo message="Creating task rendering SDK ..."/>
+   	<property name="ae.workflow.base-sdk.dir" value="${ae.dist}/workflow/sdk" />
+   	<delete dir="${ae.workflow.base-sdk.dir}" quiet="true" />
+   	<mkdir dir="${ae.workflow.base-sdk.dir}" />
+      <property name="ae.workflow.rendering-sdk.dir" value="${ae.workflow.base-sdk.dir}/ae_b4pInboxRendering_sdk" />      
+      <mkdir dir="${ae.workflow.rendering-sdk.dir}" />      
+      
+      <!-- copy xml input sample data -->
+   	<copy todir="${ae.workflow.rendering-sdk.dir}">
+   		<fileset dir="${projectsroot}/org.activebpel.b4p.war/support/rendering-sdk"/>
+   	</copy>   	
+   	   	   	
+      <!--  prepare and copy web files over -->
+      <mkdir dir="${ae.workflow.rendering-sdk.dir}/web" />
+      <mkdir dir="${ae.workflow.rendering-sdk.dir}/web/inbox" />
+   	
+   	<copy todir="${ae.workflow.rendering-sdk.dir}/web/css">
+   		<fileset dir="${projectsroot}/org.activebpel.b4p.war/war/css"/>
+   	</copy>   	
+   	<copy todir="${ae.workflow.rendering-sdk.dir}/web/images">
+   		<fileset dir="${projectsroot}/org.activebpel.b4p.war/war/images"/>
+   	</copy>   	
+   	<copy todir="${ae.workflow.rendering-sdk.dir}/web/script">
+   		<fileset dir="${projectsroot}/org.activebpel.b4p.war/war/script"/>
+   	</copy>   	      
+      <!--  copy xsl files -->
+   	<copy todir="${ae.workflow.rendering-sdk.dir}/xsl/ae-xsl">
+   		<fileset dir="${projectsroot}/org.activebpel.rt.b4p.services/rendering/ae-xsl"/>
+   	</copy>   	
+      <!--  schema  -->    
+   	<copy todir="${ae.workflow.rendering-sdk.dir}/schema">
+   		<fileset dir="${projectsroot}/org.activebpel.rt.b4p.services/rendering/schema"/>
+   	</copy> 
+   	<copy todir="${ae.workflow.rendering-sdk.dir}/schema">
+   		<fileset dir="${projectsroot}/org.activebpel.rt.b4p.services/schema"/>
+   	</copy>
+   	<copy todir="${ae.workflow.rendering-sdk.dir}/schema">
+   		<fileset dir="${projectsroot}/org.activebpel.rt.ht/support/schema"/>
+   	</copy>   	
+      <!--  zip  -->
+	  <zip destfile="${ae.dist}/ae_b4pInboxRendering_sdk.zip" basedir="${ae.workflow.base-sdk.dir}"	 encoding="UTF-8" />      
+     <delete dir="${ae.workflow.base-sdk.dir}" quiet="true" /> 
+   </target>
+</project>

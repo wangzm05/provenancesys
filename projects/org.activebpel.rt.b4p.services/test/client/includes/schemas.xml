@@ -1,0 +1,4 @@
+	<abu:schemas xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd">
+		<abu:schema
+			location="../../../schema/ws-bpel_serviceref.xsd" />
+	</abu:schemas>

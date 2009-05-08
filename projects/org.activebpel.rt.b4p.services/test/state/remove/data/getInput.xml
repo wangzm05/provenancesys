@@ -1,0 +1,4 @@
+<htdt:getInput xmlns:htdt="http://www.example.org/WS-HT/api/xsd">
+	<htdt:identifier>urn:b4pn:1</htdt:identifier>
+	<htdt:part>inputPart1</htdt:part>
+</htdt:getInput>

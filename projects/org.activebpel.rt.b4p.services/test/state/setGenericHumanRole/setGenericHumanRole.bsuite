@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="setGenericHumanRole">
+   <abs:bUnitRef location="setGenericHumanRole-businessAdministrators.bunit"/>
+   <abs:bUnitRef location="setGenericHumanRole-businessAdministrators-stakeholder.bunit"/>
+   <abs:bUnitRef location="setGenericHumanRole-excludedOwners.bunit"/>
+   <abs:bUnitRef location="setGenericHumanRole-potentialOwners.bunit"/>
+   <abs:bUnitRef location="setGenericHumanRole-recipients.bunit"/>
+   <abs:bUnitRef location="setGenericHumanRole-taskInitiator.bunit"/>
+   <abs:bUnitRef location="setGenericHumanRole-taskStakeholders.bunit"/>
+   <abs:bUnitRef location="setGenericHumanRole-illegalAccess.bunit"/>
+   <abs:bUnitRef location="setGenericHumanRole-illegalState.bunit"/>
+</abs:bSuite>

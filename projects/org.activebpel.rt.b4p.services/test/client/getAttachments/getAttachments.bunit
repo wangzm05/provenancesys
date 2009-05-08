@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abu:bpelUnit
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl"
+	xmlns:xi="http://www.w3.org/2001/XInclude"	
+   >
+	<abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml"/>
+	<xi:include href="../includes/bpels.xml"/>
+	<xi:include href="../includes/wsdls.xml"/>
+	<xi:include href="../includes/schemas.xml"/>
+	<xi:include href="../includes/partnerLinks.xml"/>
+	<abu:invokes>
+		<abu:invoke name="getAttachments" partnerAddress="taskStateMachine-getAttachments">
+			<abu:defaultInvoke>
+				<abu:simulatedResponse>
+					<abu:message type="htapiw:getAttachmentsResponse">
+						<abu:parts>
+							<abu:part name="getAttachmentsResponse" href="getAttachmentsResponse.xml"/>
+						</abu:parts>
+					</abu:message>
+				</abu:simulatedResponse>
+			</abu:defaultInvoke>
+		</abu:invoke>
+	</abu:invokes>
+	<abu:commands>
+		<abu:sendMessage operation="getAttachments" partnerLink="taskClientPL">
+			<abu:message type="htapiw:getAttachments">
+				<abu:parts>
+					<abu:part name="getAttachments" href="getAttachments.xml"/>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+	</abu:commands>
+</abu:bpelUnit>

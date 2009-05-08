@@ -1,0 +1,10 @@
+	<abu:resources xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd">
+		<abu:resource
+			location="../../../xsl/removeXsiType.xsl"
+			locationHint="project:/org.activebpel.rt.b4p.services/xsl/removeXsiType.xsl"
+			type="http://www.w3.org/1999/XSL/Transform" />
+		<abu:resource
+			location="../../../xsl/common.xsl"
+			locationHint="project:/org.activebpel.rt.b4p.services/xsl/common.xsl"
+			type="http://www.w3.org/1999/XSL/Transform" />
+	</abu:resources>

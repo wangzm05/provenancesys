@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns:taskStateChangeEvent xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd">
+   <ns:listenerId>1</ns:listenerId>
+<trt:identifier xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">anyURI</trt:identifier>   <ns:state>READY</ns:state>
+   <ns:oldState>CREATED</ns:oldState>
+</ns:taskStateChangeEvent>

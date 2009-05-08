@@ -1,0 +1,59 @@
+<b4ptrt:taskInstance
+   xmlns:b4ptrt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+   xmlns:ns2="http://www.example.org/WS-HT/api" xmlns:htd="http://www.example.org/WS-HT"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   xmlns:ns="http://www.example.org/WS-HT/api">
+
+   <b4ptrt:identifier>urn:ae:T1</b4ptrt:identifier>
+   <b4ptrt:name>T1</b4ptrt:name>
+   <b4ptrt:targetNamespace>urn:active-endpoints:bunit_test:b4p:escalation</b4ptrt:targetNamespace>
+   <b4ptrt:taskType>TASK</b4ptrt:taskType>
+
+   <b4ptrt:presentation>
+      <b4ptrt:name>presentation name</b4ptrt:name>
+      <b4ptrt:subject>presentation subject</b4ptrt:subject>
+      <b4ptrt:description contentType="string" xml:lang="en">Sample_Description</b4ptrt:description>
+   </b4ptrt:presentation>
+
+   <b4ptrt:context>
+      <b4ptrt:status>RESERVED</b4ptrt:status>
+      <b4ptrt:priority>17</b4ptrt:priority>
+      <b4ptrt:taskInitiator>bpeluser</b4ptrt:taskInitiator>
+      <b4ptrt:taskStakeholders>
+         <htd:users>
+            <htd:user>bpeluserStakeHolder1</htd:user>
+            <htd:user>bpeluserStakeHolder2</htd:user>
+         </htd:users>
+      </b4ptrt:taskStakeholders>
+      <b4ptrt:potentialOwners>
+         <htd:users>
+            <htd:user>bpeluserPO1</htd:user>
+            <htd:user>bpeluserPO2</htd:user>
+         </htd:users>
+      </b4ptrt:potentialOwners>
+      <b4ptrt:businessAdministrators>
+         <htd:users>
+            <htd:user>bpeluserAdmin1</htd:user>
+         </htd:users>
+      </b4ptrt:businessAdministrators>
+      <b4ptrt:actualOwner>bpeluserOwner</b4ptrt:actualOwner>
+      <b4ptrt:createdOn>2007-11-29T19:11:58.453Z</b4ptrt:createdOn>
+      <b4ptrt:createdBy>anonymous</b4ptrt:createdBy>
+      <b4ptrt:activationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+      <b4ptrt:lastModifiedTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+      <b4ptrt:lastModifiedBy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+      <b4ptrt:completionTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+      <b4ptrt:lastEscalatedTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+   </b4ptrt:context>
+
+   <b4ptrt:operational>
+      <b4ptrt:input>
+         <b4ptrt:part name="Document">
+            <data:root xmlns:data="urn:test:data" />
+         </b4ptrt:part>
+         <b4ptrt:part name="Duration">PT01S</b4ptrt:part>
+      </b4ptrt:input>
+      <b4ptrt:output />
+   </b4ptrt:operational>
+
+</b4ptrt:taskInstance>

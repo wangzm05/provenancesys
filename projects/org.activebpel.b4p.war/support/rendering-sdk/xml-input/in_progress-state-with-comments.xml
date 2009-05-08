@@ -1,0 +1,322 @@
+  <trt:taskInstance
+       xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+       xmlns:htapi="http://www.example.org/WS-HT/api"
+       xmlns:htd="http://www.example.org/WS-HT"
+       xmlns:result="http://saxon.sf.net/xquery-results"
+       xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+       xmlns:xs="http://www.w3.org/2001/XMLSchema"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <trt:identifier>urn:b4p:2411</trt:identifier>
+    <trt:name>reviewTask</trt:name>
+    <trt:targetNamespace />
+    <trt:taskType>TASK</trt:taskType>
+    <trt:presentation
+         xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">
+      <ns:name
+           xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+           xmlns:ae4b4ptask="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+           xmlns:aets="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+           xmlns:approvews="http://docs.active-endpoints.com/sample/wsdl/loanApproval/2008/02/loanApproval.wsdl"
+           xmlns:b4p="http://www.example.org/BPEL4People"
+           xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+           xmlns:crmws="http://docs.active-endpoints.com/sample/wsdl/loanCRM/2008/02/loanCRM.wsdl"
+           xmlns:htp="http://www.example.org/WS-HT/protocol"
+           xmlns:loan="http://schemas.active-endpoints.com/sample/LoanRequest/2008/02/loanRequest.xsd"
+           xmlns:loanhws="http://docs.active-endpoints.com/sample/wsdl/loanApproval/2008/02/loanApprovalHuman.wsdl"
+           xmlns:loanmsg="http://docs.active-endpoints.com/sample/wsdl/loanMessages/2008/02/loanMessages.wsdl"
+           xmlns:loanprocess="http://docs.active-endpoints.com/sample/wsdl/loanprocess/2008/02/loanProcess.wsdl"
+           xmlns:ns1="http://docs.active-endpoints.com/sample/wsdl/loanprocess/2008/02/loanProcess.wsdl"
+           xmlns:riskws="http://docs.active-endpoints.com/sample/wsdl/riskAssessment/2008/02/riskAssessment.wsdl"
+           xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+           xmlns:wsht="http://www.example.org/WS-HT"
+           xmlns:xsd="http://www.w3.org/2001/XMLSchema">Loan for review</ns:name>
+      <ns:subject
+           xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+           xmlns:ae4b4ptask="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+           xmlns:aets="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+           xmlns:approvews="http://docs.active-endpoints.com/sample/wsdl/loanApproval/2008/02/loanApproval.wsdl"
+           xmlns:b4p="http://www.example.org/BPEL4People"
+           xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+           xmlns:crmws="http://docs.active-endpoints.com/sample/wsdl/loanCRM/2008/02/loanCRM.wsdl"
+           xmlns:htp="http://www.example.org/WS-HT/protocol"
+           xmlns:loan="http://schemas.active-endpoints.com/sample/LoanRequest/2008/02/loanRequest.xsd"
+           xmlns:loanhws="http://docs.active-endpoints.com/sample/wsdl/loanApproval/2008/02/loanApprovalHuman.wsdl"
+           xmlns:loanmsg="http://docs.active-endpoints.com/sample/wsdl/loanMessages/2008/02/loanMessages.wsdl"
+           xmlns:loanprocess="http://docs.active-endpoints.com/sample/wsdl/loanprocess/2008/02/loanProcess.wsdl"
+           xmlns:ns1="http://docs.active-endpoints.com/sample/wsdl/loanprocess/2008/02/loanProcess.wsdl"
+           xmlns:riskws="http://docs.active-endpoints.com/sample/wsdl/riskAssessment/2008/02/riskAssessment.wsdl"
+           xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+           xmlns:wsht="http://www.example.org/WS-HT"
+           xmlns:xsd="http://www.w3.org/2001/XMLSchema">Please look at this loan and approve or decline it. (for Smith, John; $24000)</ns:subject>
+    </trt:presentation>
+    <trt:context>
+      <trt:status>RESERVED</trt:status>
+      <trt:priority>3</trt:priority>
+      <trt:taskInitiator>anonymous</trt:taskInitiator>
+      <trt:taskStakeholders  />
+      <b4ptrt:potentialOwners
+           xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"
+           xmlns:ae4b4ptask="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+           xmlns:aeb4pcnt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-custom-notification.xsd"
+           xmlns:aeb4tst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+           xmlns:aeesct="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"
+           xmlns:aeet="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"
+           xmlns:approvews="http://docs.active-endpoints.com/sample/wsdl/loanApproval/2008/02/loanApproval.wsdl"
+           xmlns:b4p="http://www.example.org/BPEL4People"
+           xmlns:b4ptrt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+           xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+           xmlns:cpn="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-custom-notification.xsd"
+           xmlns:crmws="http://docs.active-endpoints.com/sample/wsdl/loanCRM/2008/02/loanCRM.wsdl"
+           xmlns:ht="http://www.example.org/WS-HT"
+           xmlns:htp="http://www.example.org/WS-HT/protocol"
+           xmlns:loan="http://schemas.active-endpoints.com/sample/LoanRequest/2008/02/loanRequest.xsd"
+           xmlns:loanhws="http://docs.active-endpoints.com/sample/wsdl/loanApproval/2008/02/loanApprovalHuman.wsdl"
+           xmlns:loanmsg="http://docs.active-endpoints.com/sample/wsdl/loanMessages/2008/02/loanMessages.wsdl"
+           xmlns:loanprocess="http://docs.active-endpoints.com/sample/wsdl/loanprocess/2008/02/loanProcess.wsdl"
+           xmlns:ns1="http://docs.active-endpoints.com/sample/wsdl/loanprocess/2008/02/loanProcess.wsdl"
+           xmlns:riskws="http://docs.active-endpoints.com/sample/wsdl/riskAssessment/2008/02/riskAssessment.wsdl"
+           xmlns:tet="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"
+           xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+           xmlns:tst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+           xmlns:wsht="http://www.example.org/WS-HT"
+           xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+           <ht:users>
+
+                <ht:user>loanmgr1</ht:user>
+
+           </ht:users>
+
+      </b4ptrt:potentialOwners>
+      <trt:excludedOwners  />
+      <trt:businessAdministrators>
+        <htd:groups
+             xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+             xmlns:aeb4p="http://www.activebpel.org/b4p/2007/10/wshumantask/deployments"
+             xmlns:aets="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+             xmlns:bpelns="http://docs.active-endpoints.com/sample/bpel/loanprocess/2008/02/loanProcessHumanCompleted.bpel"
+             xmlns:htp="http://www.example.org/WS-HT/protocol"
+             xmlns:ns="http://www.example.org/WS-HT/protocol"
+             xmlns:pdd="http://schemas.active-endpoints.com/pdd/2006/08/pdd.xsd"
+             xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd">
+
+                          <htd:group>loanmgrs</htd:group>
+
+                    </htd:groups>
+      </trt:businessAdministrators>
+      <trt:recipients  />
+      <b4ptrt:actualOwner
+           xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"
+           xmlns:abx="http://www.activebpel.org/bpel/extension"
+           xmlns:ae4b4ptask="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+           xmlns:aeb4pcnt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-custom-notification.xsd"
+           xmlns:aeb4tst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+           xmlns:aeesct="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"
+           xmlns:aeet="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"
+           xmlns:aeid="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl"
+           xmlns:approvews="http://docs.active-endpoints.com/sample/wsdl/loanApproval/2008/02/loanApproval.wsdl"
+           xmlns:b4p="http://www.example.org/BPEL4People"
+           xmlns:b4ptrt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+           xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+           xmlns:cpn="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-custom-notification.xsd"
+           xmlns:crmws="http://docs.active-endpoints.com/sample/wsdl/loanCRM/2008/02/loanCRM.wsdl"
+           xmlns:ext="http://www.activebpel.org/2006/09/bpel/extension/activity"
+           xmlns:ht="http://www.example.org/WS-HT"
+           xmlns:htaw="http://www.example.org/WS-HT/api/wsdl"
+           xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+           xmlns:htp="http://www.example.org/WS-HT/protocol"
+           xmlns:loan="http://schemas.active-endpoints.com/sample/LoanRequest/2008/02/loanRequest.xsd"
+           xmlns:loanhws="http://docs.active-endpoints.com/sample/wsdl/loanApproval/2008/02/loanApprovalHuman.wsdl"
+           xmlns:loanmsg="http://docs.active-endpoints.com/sample/wsdl/loanMessages/2008/02/loanMessages.wsdl"
+           xmlns:loanprocess="http://docs.active-endpoints.com/sample/wsdl/loanprocess/2008/02/loanProcess.wsdl"
+           xmlns:ns1="http://docs.active-endpoints.com/sample/wsdl/loanprocess/2008/02/loanProcess.wsdl"
+           xmlns:ns2="http://www.activebpel.org/b4p/2007/12/wshumantask/aeb4p-task-notification.wsdl"
+           xmlns:ns3="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-custom-notification.xsd"
+           xmlns:ns4="http://www.activebpel.org/b4p/2007/10/wshumantask/taskLifecycle.wsdl"
+           xmlns:ns5="http://docs.active-endpoints/wsdl/activebpeladmin/2007/01/activebpeladmin.wsdl"
+           xmlns:riskws="http://docs.active-endpoints.com/sample/wsdl/riskAssessment/2008/02/riskAssessment.wsdl"
+           xmlns:sref="http://docs.oasis-open.org/wsbpel/2.0/serviceref"
+           xmlns:store="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl"
+           xmlns:tc="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl"
+           xmlns:tet="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"
+           xmlns:tew="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-events.wsdl"
+           xmlns:tewt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd"
+           xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+           xmlns:ts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"
+           xmlns:tst="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+           xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+           xmlns:wsht="http://www.example.org/WS-HT"
+           xmlns:xsd="http://www.w3.org/2001/XMLSchema">loanmgr1</b4ptrt:actualOwner>
+      <trt:createdOn>2008-03-19T12:15:49.815-04:00</trt:createdOn>
+      <trt:createdBy>anonymous</trt:createdBy>
+      <trt:activationTime>2008-03-19T12:15:49.815-04:00</trt:activationTime>
+      <trt:expirationTime>2008-03-19T16:30:48.611Z</trt:expirationTime>
+      <trt:lastModifiedTime>2008-03-19T12:27:58.469-04:00</trt:lastModifiedTime>
+      <trt:lastModifiedBy>loanmgr1</trt:lastModifiedBy>
+      <trt:completionTime  />
+      <trt:isSkipable>false</trt:isSkipable>
+      <trt:lastEscalatedTime>2008-03-19T12:25:51.248-04:00</trt:lastEscalatedTime>
+      <trt:startByMillis>2008-03-19T16:20:48.611Z</trt:startByMillis>
+      <trt:completeByMillis>2008-03-19T16:25:48.611Z</trt:completeByMillis>
+    </trt:context>
+    <trt:operational>
+      <trt:input
+           xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+           xmlns:aets="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+           xmlns:htp="http://www.example.org/WS-HT/protocol"
+           xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd">
+        <trt:part name="Document">
+          <ns1:loanProcessRequest
+               xmlns:ns1="http://schemas.active-endpoints.com/sample/LoanRequest/2008/02/loanRequest.xsd">
+
+                     <ns1:loanType>standard</ns1:loanType>
+
+                     <ns1:firstName>John</ns1:firstName>
+
+                     <ns1:lastName>Smith</ns1:lastName>
+
+                     <ns1:dayPhone>203-929-9400</ns1:dayPhone>
+
+                     <ns1:nightPhone>929-1212</ns1:nightPhone>
+
+                     <ns1:socialSecurityNumber>001-02-3456</ns1:socialSecurityNumber>
+
+                     <ns1:amountRequested>24000</ns1:amountRequested>
+
+                     <ns1:loanDescription>Loan for a hybrid automobile</ns1:loanDescription>
+
+
+                     <ns1:otherInfo>Good FICA score</ns1:otherInfo>
+
+                     <ns1:responseEmail>john.smith@example.com</ns1:responseEmail>
+
+
+                     <ns1:firstApprovalTaskRef />
+
+                </ns1:loanProcessRequest>
+        </trt:part>
+      </trt:input>
+      <trt:output  />
+      <trt:fault  />
+      <trt:comments>
+        <htapi:comment>
+          <htapi:addedAt>2008-03-19T12:27:11.312-04:00</htapi:addedAt>
+          <htapi:addedBy>loanmgr1</htapi:addedBy>
+          <htapi:text>This comment is added by the user 'loanmgr1'.</htapi:text>
+          <trt:commentId>2</trt:commentId>
+        </htapi:comment>
+        <htapi:comment>
+          <htapi:addedAt>2008-03-19T12:24:05.449-04:00</htapi:addedAt>
+          <htapi:addedBy>loanrep1</htapi:addedBy>
+          <htapi:text>This is a sample comment.</htapi:text>
+          <trt:commentId>1</trt:commentId>
+        </htapi:comment>
+      </trt:comments>
+      <trt:attachments
+           xmlns:api="http://www.example.org/WS-HT/api">
+        <api:attachment>
+          <api:attachmentInfo>
+            <api:name>ablogo.gif</api:name>
+            <api:accessType>MIME</api:accessType>
+            <api:contentType>image/gif</api:contentType>
+            <api:attachedAt>2008-03-19T16:24:54.044Z</api:attachedAt>
+            <api:attachedBy>loanrep1</api:attachedBy>
+            <trt:attachmentId>201</trt:attachmentId>
+          </api:attachmentInfo>
+          <api:value />
+        </api:attachment>
+        <api:attachment>
+          <api:attachmentInfo>
+            <api:name>README.rtf</api:name>
+            <api:accessType>MIME</api:accessType>
+            <api:contentType>application/msword</api:contentType>
+            <api:attachedAt>2008-03-19T16:27:57.610Z</api:attachedAt>
+            <api:attachedBy>loanmgr1</api:attachedBy>
+            <trt:attachmentId>202</trt:attachmentId>
+          </api:attachmentInfo>
+          <api:value />
+        </api:attachment>
+      </trt:attachments>
+    </trt:operational>
+    <trt:permissions isBusinessAdministrator="true" isOwner="true">
+      <trt:start />
+      <trt:release />
+      <trt:suspend />
+      <trt:suspendUntil />
+      <trt:setPriority />
+      <trt:addAttachment />
+      <trt:getAttachmentInfos />
+      <trt:getAttachments />
+      <trt:deleteAttachments />
+      <trt:addComment />
+      <trt:getComments />
+      <trt:forward />
+      <trt:getRendering />
+      <trt:getRenderingTypes />
+      <trt:getTaskInfo />
+      <trt:getTaskDescription />
+      <trt:getInput />
+      <trt:getOutput />
+      <trt:getFault />
+    </trt:permissions>
+    <trt:interfaceMetadata
+         xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+         xmlns:aeaaanstmp0="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+         xmlns:aets="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+         xmlns:htp="http://www.example.org/WS-HT/protocol"
+         xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd">
+      <trt:input>
+        <trt:part name="Document" typeHint="complex" />
+      </trt:input>
+      <trt:output>
+        <trt:part name="Document" typeHint="complex" />
+      </trt:output>
+      <trt:faults>
+        <trt:fault name="loanProcessFault" />
+      </trt:faults>
+    </trt:interfaceMetadata>
+    <trt:renderings
+         xmlns:aetgt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+         xmlns:abx="http://www.activebpel.org/bpel/extension"
+         xmlns:ae4b4ptask="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+         xmlns:aeaaanstmp0="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+         xmlns:aeid="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl"
+         xmlns:aets="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+         xmlns:approvews="http://docs.active-endpoints.com/sample/wsdl/loanApproval/2008/02/loanApproval.wsdl"
+         xmlns:b4p="http://www.example.org/BPEL4People"
+         xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:crmws="http://docs.active-endpoints.com/sample/wsdl/loanCRM/2008/02/loanCRM.wsdl"
+         xmlns:ext="http://www.activebpel.org/2006/09/bpel/extension/activity"
+         xmlns:htaw="http://www.example.org/WS-HT/api/wsdl"
+         xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+         xmlns:htp="http://www.example.org/WS-HT/protocol"
+         xmlns:loan="http://schemas.active-endpoints.com/sample/LoanRequest/2008/02/loanRequest.xsd"
+         xmlns:loanhws="http://docs.active-endpoints.com/sample/wsdl/loanApproval/2008/02/loanApprovalHuman.wsdl"
+         xmlns:loanmsg="http://docs.active-endpoints.com/sample/wsdl/loanMessages/2008/02/loanMessages.wsdl"
+         xmlns:loanprocess="http://docs.active-endpoints.com/sample/wsdl/loanprocess/2008/02/loanProcess.wsdl"
+         xmlns:ns1="http://docs.active-endpoints.com/sample/wsdl/loanprocess/2008/02/loanProcess.wsdl"
+         xmlns:riskws="http://docs.active-endpoints.com/sample/wsdl/riskAssessment/2008/02/riskAssessment.wsdl"
+         xmlns:sref="http://docs.oasis-open.org/wsbpel/2.0/serviceref"
+         xmlns:store="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl"
+         xmlns:tc="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl"
+         xmlns:tew="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-events.wsdl"
+         xmlns:tewt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd"
+         xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+         xmlns:ts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"
+         xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+         xmlns:wsht="http://www.example.org/WS-HT"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <htd:rendering type="ns:xsl"
+           xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">
+        <xsl:xsl
+             xmlns:aeb4p="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+             xmlns:xsl="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">
+
+                                           <aeb4p:presentation-xsl>project:/loan_approval_integrated/xsl-renderings/loan_taskdetail.xsl</aeb4p:presentation-xsl>
+
+                                           <aeb4p:command-xsl>project:/loan_approval_integrated/xsl-renderings/loan_param2commands.xsl</aeb4p:command-xsl>
+
+                                      </xsl:xsl>
+      </htd:rendering>
+    </trt:renderings>
+  </trt:taskInstance>

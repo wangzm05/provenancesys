@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsw:getTaskInstance xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd">
+<trt:identifier>anyURI</trt:identifier>
+</tsw:getTaskInstance>

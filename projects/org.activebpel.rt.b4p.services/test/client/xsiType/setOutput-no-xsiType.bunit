@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abu:bpelUnit
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:htapis="http://www.example.org/WS-HT/api/xsd"
+	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+    xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl"
+	xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	name="setOutput-no-xsiType">
+	<abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml"/>
+	<xi:include href="../includes/bpels.xml"/>
+	<xi:include href="../includes/wsdls.xml"/>
+	<xi:include href="../includes/schemas.xml"/>
+	<xi:include href="../includes/resources.xml"/>
+	<xi:include href="../includes/partnerLinks-noValidation.xml"/>
+	<abu:invokes>
+		<abu:invoke name="setOutput">
+			<abu:defaultInvoke>
+				<abu:asserts>
+					<abu:assertEquals part="setOutput" query="count(//@xsi:type) = 0">true</abu:assertEquals>
+				</abu:asserts>
+				<abu:simulatedResponse>
+					<abu:message type="htapiw:setOutputResponse">
+						<abu:parts>
+							<abu:part name="setOutputResponse">
+								<htapis:setOutputResponse/>
+							</abu:part>
+						</abu:parts>
+					</abu:message>
+				</abu:simulatedResponse>
+			</abu:defaultInvoke>
+		</abu:invoke>
+	</abu:invokes>
+	<abu:commands>
+		<abu:sendMessage operation="setOutput" partnerLink="taskClientPL">
+			<abu:message type="htapiw:setOutput">
+				<abu:parts>
+					<abu:part name="setOutput">
+						<htdt:setOutput>
+							<htdt:identifier>urn:b4p:1</htdt:identifier>
+							<htdt:part>outputPart1</htdt:part>
+							<htdt:taskData>
+								<someData>
+									<hello>hello</hello>
+								</someData>
+							</htdt:taskData>
+						</htdt:setOutput>
+					</abu:part>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+	</abu:commands>
+</abu:bpelUnit>

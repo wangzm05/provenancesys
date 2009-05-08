@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="delegate">
+   <abs:bUnitRef location="delegate-illegalState.bunit"/>
+   <abs:bUnitRef location="delegate-ready.bunit"/>
+   <abs:bUnitRef location="delegate-ready-multiUser.bunit"/>
+   <abs:bUnitRef location="delegate-ready-nobody-recipNotAllowed.bunit"/>
+   <abs:bUnitRef location="delegate-ready-other.bunit"/>
+   <abs:bUnitRef location="delegate-ready-other-recipNotAllowed.bunit"/>
+   <abs:bUnitRef location="delegate-ready-potentialOwners.bunit"/>
+   <abs:bUnitRef location="delegate-reserved-admin.bunit"/>
+   <abs:bUnitRef location="delegate-reserved-stakeholder.bunit"/>
+   <abs:bUnitRef location="delegate-reserved-illegalAccess.bunit"/>
+</abs:bSuite>

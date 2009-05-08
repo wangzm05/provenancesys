@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpel:process xmlns:abx="http://www.activebpel.org/bpel/extension" xmlns:aeid="http://schemas.active-endpoints.com/identity/2007/01/identity.xsd" xmlns:aeidw="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl" xmlns:aent="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-notifications-wsdl.xsd" xmlns:aenw="http://www.activebpel.org/b4p/2007/12/wshumantask/aeb4p-task-notification.wsdl" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:ht="http://www.example.org/WS-HT" xmlns:htp="http://www.example.org/WS-HT/protocol" xmlns:ns1="http://www.activebpel.org/b4p/2007/10/wshumantask/taskLifecycle.wsdl" xmlns:ns2="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-events.wsdl" xmlns:ns3="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-escalations.wsdl" xmlns:ns4="http://www.example.org/WS-HT/api" xmlns:ns5="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl" xmlns:ns6="http://docs.active-endpoints/wsdl/activebpeladmin/2007/01/activebpeladmin.wsdl" xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:tsw="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl" xmlns:tswt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" expressionLanguage="urn:active-endpoints:expression-language:xquery1.0" name="aeb4p-notification-lifecycle" suppressJoinFailure="yes" targetNamespace="http://www.activebpel.org/b4p/2007/10/wshumantask">
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-notifications.wsdl" namespace="http://www.activebpel.org/b4p/2007/12/wshumantask/aeb4p-task-notification.wsdl"/>
+   <bpel:import importType="http://www.w3.org/2001/XMLSchema" location="../schema/aeb4p-task-notifications-wsdl.xsd" namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-notifications-wsdl.xsd"/>
+   <bpel:import importType="http://www.w3.org/2001/XMLSchema" location="../../org.activebpel.rt.identity/support/schema/identity.xsd" namespace="http://schemas.active-endpoints.com/identity/2007/01/identity.xsd"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../../org.activebpel.rt.identity/support/wsdl/identity.wsdl" namespace="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl"/>
+   <bpel:import importType="http://www.w3.org/2001/XMLSchema" location="../schema/aeb4p-task-state-wsdl.xsd" namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-state.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-events.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-events.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-escalations.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-escalations.wsdl"/>
+   <bpel:import importType="http://schemas.xmlsoap.org/wsdl/" location="../wsdl/aeb4p-task-common.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl"/>
+   <bpel:partnerLinks>
+      <bpel:partnerLink myRole="notify" name="taskNotification" partnerLinkType="aenw:taskNotificationServicePLT"/>
+      <bpel:partnerLink name="identity" partnerLinkType="aeidw:identityPLT" partnerRole="service"/>
+      <bpel:partnerLink name="aeInternalTaskOperations" partnerLinkType="tsw:aeInternalTaskOperationsPLT" partnerRole="process"/>
+   </bpel:partnerLinks>
+   <bpel:variables>
+      <bpel:variable element="aent:processNotificationRequest" name="processNotification"/>
+      <bpel:variable element="aeid:countIdentitiesRequest" name="countIdentitiesInput"/>
+      <bpel:variable element="aeidw:identitiesCount" name="countIdentitiesOutput"/>
+      <bpel:variable element="tswt:createTaskRequest" name="createTask"/>
+      <bpel:variable element="tswt:createTaskResponse" name="createTaskResponse"/>
+      <bpel:variable name="ignoredAttachmentCopyResult" type="xsd:string"/>
+      <bpel:variable element="aent:processNotificationResponse" name="processNotificationResponse">
+         <bpel:from>
+            <bpel:literal>
+               <empty/>
+            </bpel:literal>
+         </bpel:from>
+      </bpel:variable>
+   </bpel:variables>
+   <bpel:flow>
+      <bpel:links>
+         <bpel:link name="L3"/>
+         <bpel:link name="L1"/>
+         <bpel:link name="L6"/>
+         <bpel:link name="L2"/>
+         <bpel:link name="L4"/>
+         <bpel:link name="L5"/>
+      </bpel:links>
+      <bpel:if>
+         <bpel:targets>
+            <bpel:target linkName="L4"/>
+         </bpel:targets>
+         <bpel:sources>
+            <bpel:source linkName="L3">
+               <bpel:transitionCondition>exists($processNotification/trt:initialState/htp:humanTaskContext/htp:peopleAssignments/htp:recipients/ht:organizationalEntity/ht:users)&#13;
+or&#13;
+exists( $processNotification/trt:initialState/htp:humanTaskContext/htp:peopleAssignments/htp:businessAdministrators/ht:organizationalEntity/ht:users )</bpel:transitionCondition>
+            </bpel:source>
+            <bpel:source linkName="L1">
+               <bpel:transitionCondition>not(exists($processNotification/trt:initialState/htp:humanTaskContext/htp:peopleAssignments/htp:recipients/ht:organizationalEntity/ht:users))&#13;
+and&#13;
+not(exists( $processNotification/trt:initialState/htp:humanTaskContext/htp:peopleAssignments/htp:businessAdministrators/ht:organizationalEntity/ht:users ))</bpel:transitionCondition>
+            </bpel:source>
+            <bpel:source linkName="L6"/>
+         </bpel:sources>
+         <bpel:condition>not(exists($processNotification/trt:initialState/htp:humanTaskContext))</bpel:condition>
+         <bpel:assign name="CreateContext">
+            <bpel:copy>
+               <bpel:from>&lt;trt:initialState&gt;&#13;
+   { $processNotification/trt:initialState/trt:input }&#13;
+   { $processNotification/trt:initialState/trt:createdBy }&#13;
+   {&#13;
+(: Create human context from notificationDef, inputData, parentTaskState, processVariables :) &#13;
+trt:createHumanTaskContext($processNotification/ht:notification, $processNotification/trt:initialState/trt:input,  $processNotification/trt:taskInstance, $processNotification/trt:initialState/trt:processVariables ) &#13;
+   }&#13;
+   { $processNotification/trt:initialState/trt:comments }&#13;
+   { $processNotification/trt:initialState/trt:processVariables }&#13;
+&lt;/trt:initialState&gt;</bpel:from>
+               <bpel:to variable="processNotification">
+                  <bpel:query>trt:initialState</bpel:query>
+               </bpel:to>
+            </bpel:copy>
+         </bpel:assign>
+      </bpel:if>
+      <bpel:sequence>
+         <bpel:targets>
+            <bpel:target linkName="L1"/>
+         </bpel:targets>
+         <bpel:sources>
+            <bpel:source linkName="L2">
+               <bpel:transitionCondition>$countIdentitiesOutput &gt; 0</bpel:transitionCondition>
+            </bpel:source>
+         </bpel:sources>
+         <bpel:assign name="prepCountInput">
+            <bpel:copy>
+               <bpel:from>&lt;aeid:countIdentitiesRequest xmlns:ns3="http://schemas.active-endpoints.com/identity/2007/01/identity.xsd"&gt;&#13;
+{&#13;
+  (: Add the recipients :)&#13;
+  trt:toIdentityQuery( $processNotification/trt:initialState/htp:humanTaskContext/htp:peopleAssignments/htp:recipients/* )&#13;
+}&#13;
+{	&#13;
+  (: Add the businessAdministrators :)&#13;
+  trt:toIdentityQuery( $processNotification/trt:initialState/htp:humanTaskContext/htp:peopleAssignments/htp:businessAdministrators/*)&#13;
+}&#13;
+&lt;/aeid:countIdentitiesRequest&gt;</bpel:from>
+               <bpel:to variable="countIdentitiesInput"/>
+            </bpel:copy>
+         </bpel:assign>
+         <bpel:invoke inputVariable="countIdentitiesInput" name="getRecipientsCount" operation="countIdentities" outputVariable="countIdentitiesOutput" partnerLink="identity"/>
+      </bpel:sequence>
+      <bpel:receive createInstance="yes" operation="processNotification" partnerLink="taskNotification" variable="processNotification">
+         <bpel:sources>
+            <bpel:source linkName="L4"/>
+         </bpel:sources>
+      </bpel:receive>
+      <bpel:sequence>
+         <bpel:targets>
+            <bpel:target linkName="L3"/>
+            <bpel:target linkName="L2"/>
+         </bpel:targets>
+         <bpel:sources>
+            <bpel:source linkName="L5"/>
+         </bpel:sources>
+         <bpel:assign name="prepareCreateTask">
+            <bpel:copy>
+               <bpel:from>&lt;createTaskRequest&gt;&#13;
+{ $processNotification/ht:notification }&#13;
+{ $processNotification/trt:initialState }&#13;
+   &lt;trt:interfaceMetadata&gt;&#13;
+      &lt;trt:input&gt;&#13;
+	{&#13;
+		for $part in $processNotification/trt:initialState/trt:input/trt:part&#13;
+		return &lt;trt:part name="{data($part/@name)}"/&gt;&#13;
+	}&#13;
+      &lt;/trt:input&gt;&#13;
+   &lt;/trt:interfaceMetadata&gt;&#13;
+{ $processNotification/trt:taskInstance }&#13;
+&lt;/createTaskRequest&gt;</bpel:from>
+               <bpel:to variable="createTask"/>
+            </bpel:copy>
+            <bpel:copy>
+               <bpel:from>abx:copyAllAttachments('processNotification' ,'createTask')</bpel:from>
+               <bpel:to variable="ignoredAttachmentCopyResult"/>
+            </bpel:copy>
+         </bpel:assign>
+         <bpel:invoke inputVariable="createTask" name="createTask" operation="create" outputVariable="createTaskResponse" partnerLink="aeInternalTaskOperations"/>
+      </bpel:sequence>
+      <bpel:reply operation="processNotification" partnerLink="taskNotification" variable="processNotificationResponse">
+         <bpel:targets>
+            <bpel:target linkName="L5"/>
+            <bpel:target linkName="L6"/>
+         </bpel:targets>
+      </bpel:reply>
+   </bpel:flow>
+</bpel:process>

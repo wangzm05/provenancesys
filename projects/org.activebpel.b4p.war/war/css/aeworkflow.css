@@ -1,0 +1,749 @@
+html, body 
+{
+ margin: 2px;
+ padding: 2px;
+ font-family: Arial, Helvetica, sans-serif;
+ font-size:1.1em;	
+ background-color: #fff;
+ color: #333;
+}
+
+table
+{
+ border-collapse: collapse;
+}
+
+img
+{
+ display: block;
+ border: 0;
+}
+
+a, a:link, a:visited, a:active 
+{
+ color: #0371A4;
+ text-decoration: none;
+}
+
+p
+{
+ padding:0.5em;
+}
+
+#body 
+{
+ background-color: #fff;
+ margin:0px;
+ padding: 0px;
+ border:1px solid #666;
+}
+	
+#sidebar 
+{
+ width: 160px;
+ float: left;
+ padding:10px;
+ font-size:1.0em;
+ background-color:#fff;
+}
+		
+#content 
+{
+ padding:2px 2px 2px 2px;
+ border-right: 0px solid #666;
+ background-color: #fff;
+}
+
+#content2 
+{
+ padding:5px 5px 5px 15px;
+ margin-left: 180px;
+ border-left: 1px solid #666;
+ background-color: #fff;
+}
+
+.filterheader
+{
+   color: #000;
+   font-weight:bold;
+   background-color:transparent;
+   background-repeat:repeat-y; 
+   background-image: url(../images/hgradientbg.gif);
+}
+
+.inboxfilter
+{
+  color: #0371A4;
+}
+
+#ae_searchby_label
+{
+	color: #fff;
+}
+
+#header 
+{
+ background-color: #fff;
+ color: #006;
+ border-bottom: 1px solid #666;
+ margin-bottom: 0px;
+ padding:10px 0 5px 10px; 
+ background-image: url(../images/headerbg.gif); 
+}
+
+#headermenucontainer
+{
+ font-size:0.75em;	
+ float: right;
+ padding-right:5px;
+}
+
+#header img
+{
+ display: inline;
+}
+
+#header h1 
+{
+ display: inline;
+ padding:0px;
+ margin:0px;
+ height:40px;
+ font-size:1.5em;
+}
+	
+#footer 
+{
+ background-color: #fff;
+ color: #777;
+ border-top: 1px solid #666;
+ font-size: 11px;
+ padding: 10px 10px 10px 10px;
+ clear: both;
+ background-image: url(../images/headerbg.gif); 
+}
+
+#copy 
+{
+ padding:0;
+ margin:0;	
+}
+
+#aeprogressmessage
+{
+	display:inline;
+	background: transparent;
+	border: 0px;	
+	padding: 0x;
+	margin-right:15px;
+	font-size:0.85em;
+}
+
+#aeprogressmessage img
+{
+  display:inline;
+  padding:0px;
+  margin:0px;
+  margin-right:5px;
+}
+
+.erroricon
+{
+   background-image: url(../images/cancel.png);	
+}
+
+.warnicon
+{
+	background-image: url(../images/error.png);
+}
+
+#aestatusmessagecontainer
+{
+	display:none;
+	font-size:0.70em;
+	background-color: #ffc;
+	border: 1px solid #333;	
+	padding: 5px 5px 5px 25px;
+	background-repeat:no-repeat; 	
+	background-position: 5px 5px;
+}
+
+#aestatusmessage
+{
+	width:100%;
+}
+
+#aestatusmessagedetailcontainer
+{
+	display:none;	
+	padding:0px;
+	margin:0px
+}
+
+#aestatusmessagedetail
+{
+	width:100%;
+}
+
+.messagepanel 
+{
+ padding:5px; 
+ margin: 2px;
+ border-top: 1px solid #f30;
+ border-bottom: 1px solid #f30;
+ background-color: #ff9;
+ width:80%;
+}
+
+.spacer 
+{
+  clear: both;
+}
+
+.inline 
+{
+ display:inline;
+}
+
+h2 
+{		
+  margin:20px 0 5px 5px;
+  padding:2px;  
+  font-size:1em;
+  font-weight:bold;
+  color:#333;
+  border:1px solid #999;
+  background-color: #9cf;
+}
+
+div.center 
+{
+ /* for IE */
+ text-align:center;
+ margin:0px 0px; 
+ padding:0px;	
+}
+
+div.center table 
+{
+ margin: 0 auto; text-align: left;
+}
+
+input, textarea 
+{
+ font-size: 1em;
+ border: 1px solid #5D8A91;
+ margin-bottom: 0px;
+ padding: 2px;
+}
+
+input.formbutton 
+{
+  color:#333;
+  background-color: #fff;
+  border: 1px solid #333;
+  margin: 0px;
+  padding: 2px;
+}
+
+form 
+{
+ margin: 0;
+ padding: 0;
+}
+
+form table 
+{
+ background-color: #eee;
+ margin: 0 0 0 0;
+ padding:0;
+ border:1px solid #333;
+}
+
+form table th 
+{
+ color: #387FA7;
+ background-color: #eee;
+ font-size: 1.25px;
+ font-weight: bold;
+ padding: 5px;
+ text-align: center;	
+}
+
+form table td 
+{ 
+ text-align: left;
+ font-size: 1.0em;
+ padding: 2px 4px 2px 4px;
+}
+
+form table td.label 
+{
+ text-align: right;
+ white-space: nowrap;
+ vertical-align: top;
+}
+
+form table td.reqlabel 
+{
+ text-align: right;
+ white-space: nowrap;
+ vertical-align:top;
+ color:#600;
+}
+
+#loginform
+{
+ margin-top:100px;
+ margin-bottom:100px;
+}
+
+#loginform th, #loginform td
+{
+	font-size:1.0em;
+}
+#loginform input.login
+{
+   font-size:1.0em;
+   width:12em;
+}
+
+/** AE Image Button */
+a.imagebutton 
+{
+ display:block;
+ width: 32px;
+ height: 22px;
+ margin: 1px auto;
+ padding: 2px 0 0 0;
+ text-align: center;
+ font-size: 12px;
+ font-weight:bold;
+ text-decoration: none;
+ background-color:transparent;
+ border:1px solid #333;
+ background-image: url(../images/buttonbg.png);
+}
+
+a.imagebuttondis 
+{
+ display:block;
+ width: 32px;
+ height: 22px;
+ margin: 1px auto;
+ padding: 2px 0 0 0;
+ text-align: center;
+ font-size: 12px;
+ font-weight: normal;
+ text-decoration: none;
+ background-color:transparent;
+ border:1px solid #999;
+ background-image: url(../images/buttonbg.png);
+ background-position: 0 -48px;
+}
+
+a.imagebutton:link, a.imagebutton:visited 
+{
+ color: #333;
+}
+
+a.imagebuttondis:link, a.imagebuttondis:visited 
+{
+ color: #999;
+ cursor:no-drop;
+}
+
+a.imagebutton:hover, a.imagebutton:active 
+{
+ border:1px solid #00c;
+ background-color: #ff6;
+ color: #000;
+ background-position: 0 -24px;
+ text-decoration: none;
+ cursor:pointer;
+}
+
+.imagebuttonicon 
+{ 
+ background-repeat:no-repeat; 
+ display: inline-block;
+ padding: 0 0 5px 18px;
+}
+
+/** AE Link With Image */
+
+a.imagelink:hover
+{
+ border-bottom:1px solid #666;
+}
+a.imagelinkdis:link, a.imagelinkdis:visited 
+{
+ color: #999;
+ cursor:no-drop;
+}
+.imagelinkinlineleftimg 
+{ 
+ background-repeat:no-repeat; 
+ display: inline-block;
+ margin-right: 2px;
+ padding-right:18px;
+
+}
+
+.imagelinkinlinerightimg 
+{ 
+ background-repeat:no-repeat; 
+ display: inline-block;
+ margin-left: 2px;
+ padding-left:18px;
+}
+
+/** Toolbar containing image buttons. */
+.toolbar
+{
+	margin:0px;
+	padding:0px;
+	width:100%;
+	text-align:left;
+   color: #fff;
+   background: #eee url(../images/toolbarbg.gif); repeat-x top left;
+}
+.toolbarbuttons
+{
+	margin:2px;
+	padding:2px;	
+}
+tr.toolbarbuttons, td.toolbarbuttons
+{
+	padding:0px;
+	margin:0px;
+}
+
+.backlink
+{
+	display:block;
+	margin: 5px auto;
+	padding: 2px 10px 5px 20px;
+	background-color:transparent;
+	background-repeat:no-repeat; 
+	background-image: url(../images/arrow_left.png);
+	font-size: 1.0em;
+	font-weight:normal;
+	text-decoration: none;
+}
+
+.resultsetcontainer
+{
+	border:1px solid #666;	
+   background-color: #fff;
+}
+.resultset
+{
+	border-top:0px solid #666;	
+	border-bottom:0px solid #666;	
+}
+.ruledlistingborder
+{
+	border-top:1px solid #666;	
+	border-bottom:1px solid #666;	
+}
+
+.inboxtasklistingnotasks
+{
+	display:none;
+	padding:10px;
+	margin:10px;
+	border:1px solid #ccc;
+}
+
+.ruledlisting
+{
+	width:100%;
+	border:0px;	
+	padding:0;
+	margin:0;
+}
+
+table.ruledlisting th
+{
+	padding-left:5px;
+	font-size:0.9em;
+	text-align: left;
+	font-weight:bold;
+	text-decoration: none;
+	line-height:1.5em;
+	background-color:#9cf;	
+	border-right:1px solid #666;
+	border-bottom:1px solid #666;
+	background-image: url(../images/headerbg.gif); 
+}
+
+table.ruledlisting td
+{
+	padding-left:5px;
+	font-size:0.8em;
+	text-align: left;
+	text-decoration: none;
+	background-color:#fff;
+	border-bottom: 1px solid #95bce2;
+	border-right:1px solid #666;
+	line-height:1.3em;
+}
+
+table.ruledlisting tr.altrule td
+{
+   background: #eee;
+}
+
+table.inboxtasklisting tr.escalated td 
+{
+   background: #ffff99; 
+}
+
+table.inboxtasklisting tr.over td, table.ruledlisting tr.over td 
+{
+	background:#eee;
+   background: #bcd4ec;
+   cursor:pointer;
+}
+
+table.inboxtasklisting tr.selrow td, table.ruledlisting tr.selrow td  
+{
+	color:#fff;
+   background: #369;
+}
+
+.entrypreview
+{	
+	margin:10px;
+	border:1px solid #999;
+}
+
+.previewcontent
+{
+		
+}
+
+.inboxpreview
+{
+	width:100%; 
+	overflow:auto;
+}
+
+table.taskdetailgrid
+{
+   margin: 5px 2px 5px 2px;
+   width:100%;
+}
+
+table.taskdetailgrid tr
+{
+}
+
+table.taskdetailgrid td
+{
+  font-size:0.9em;
+  text-align:left;
+  border-bottom: 1px solid #ccc; 
+}
+table.taskdetailgrid td.gridvline
+{
+	border-left:1px solid #ccc;  
+}
+
+table.taskdetailgrid td.gridlabel
+{
+ width:08%;
+ font-weight: bold;
+ text-align:left;
+}
+
+table.taskdetailgrid td.gridvalue
+{
+ width:35%; 
+ text-align:left;
+}
+
+.propertycontainer
+{
+	border:1px solid #666;	
+   background-color: #fff;
+   margin-bottom:10px;
+}
+
+.propertytable
+{
+}
+
+.tlabel
+{
+	font-size:0.8em;
+	text-align: right;
+	text-decoration: none;
+	font-weight:bold;
+	background-color:#9cf;
+}
+.tdata
+{
+	padding-left: 10px;
+	font-size:0.8em;
+	text-align: left;
+	text-decoration: none;
+}
+
+.check_icon
+{
+	padding: 1px 10px 5px 20px;
+	background-color:transparent;
+	background-repeat:no-repeat; 
+	background-image: url(../images/tick.png);	
+}
+
+
+#taskdetailtabcontainer
+{
+   margin:0px;
+   padding:0px;
+   display:none;
+   font-size:0.8em;
+}
+
+.taskdetailtabdiv
+{
+   margin:0px 10px 5px 10px;
+   border:1px solid #999;
+}
+
+#taskdetailtablist ul
+{
+   margin:0px;
+   padding:0px
+}
+
+#taskdetailtablist li
+{
+   margin:0px 0px 0px 10px;
+}
+
+.taskcomment
+{
+	border:1px solid #999;
+	padding:5px; 
+	margin:5px;	
+}
+
+.taskcommentalt
+{
+	background: #ecf6fc;
+}
+
+.activecomment
+{
+	background: #ffff99;
+}
+
+#addcomment
+{
+	padding:0;
+	margin:10px;
+	text-align:left;
+}
+
+#addcomment a
+{
+	display:inline;
+	margin:0 10px 0 0;
+}
+
+#newcomment
+{
+	display:none;
+}
+
+#newcomment p
+{
+	padding:0;
+	margin:10px;
+	text-align:left;
+}
+
+#newcomment p a
+{
+	display:inline;
+	margin:0 10px 0 0;
+}
+
+.aedialog
+{
+   border: 1px solid #666;
+   padding:0px;
+}
+.aedialog_header
+{
+	width:100%;	
+	padding:0px;
+	margin:0px;	
+	border-bottom:1px solid #000;
+}
+table.aedialog_header tr
+{
+	background-color:#9cf;
+}
+.aedialog_close
+{
+}
+
+.devnotes
+{
+	padding:5px;
+	margin-top:25px;
+	font-size:0.75em;
+	background-color: #ff9;
+	border: 1px dotted #fc0;
+}
+
+.sortasc
+{
+	padding: 1px 10px 5px 20px;
+	background-color:transparent;
+	background-repeat:no-repeat; 
+	background-image: url(../images/bullet_arrow_up.png);	
+}
+
+.sortdesc
+{
+	padding: 1px 10px 5px 20px;
+	background-color:transparent;
+	background-repeat:no-repeat; 
+	background-image: url(../images/bullet_arrow_down.png);	
+}
+
+a.ae_inbox_col
+{
+   color:#333;
+}
+
+a.ae_inbox_col:hover
+{
+   color:#333;
+   background: #eee;
+}
+
+#aefilter_notification_glyph
+{
+	font-size: 0.85em;
+   padding: 1px 5px 5px 20px;
+   background-color:transparent;
+   background-repeat:no-repeat; 
+   background-image: url(../images/email.png);          
+}
+
+#inboxfilteroutline
+{
+	font-size: 0.80em;
+}
+
+#inboxfilteroutline li
+{
+   background-color: #fff;
+}

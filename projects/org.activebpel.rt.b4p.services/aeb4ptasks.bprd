@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="run" name="AEB4P Process Service Archive">
+
+   <property name="taskdef.jar" value="../../dist/bpr_tasks.jar"/>
+
+   <!-- Taskdefs required when running this script from the command line. -->
+   <taskdef classname="com.activee.ant.bpr.tasks.AeCreateCatalogTask" name="createcatalog">
+      <classpath location="${taskdef.jar}"/>
+   </taskdef>
+   <taskdef classname="com.activee.ant.bpr.tasks.AeValidateBPRTask" name="validatebpr">
+      <classpath location="${taskdef.jar}"/>
+   </taskdef>
+
+   <!-- Some properties used by the script. -->
+   <property name="archive.filename" value="${basedir}/aeb4ptasks.bpr"/>
+
+   <!-- The deployment location.  Typically a server/container deployment directory. -->
+   <property name="archive.deploypath" value=""/>
+
+   <!-- Build the BPR file from the following (generated) file set. -->
+   <target depends="" name="build">
+      <delete file="${archive.filename}"/>
+      <jar destfile="${archive.filename}">
+         <!-- ==== PDD Files ==== -->         
+		<zipfileset file="pdd\aeb4p-task-client.pdd" fullpath="META-INF/pdd/org.activebpel.rt.b4p.services/pdd/aeb4p-task-client.pdd"/>         
+		<zipfileset file="pdd\aeb4p-task-lifecycle.pdd" fullpath="META-INF/pdd/org.activebpel.rt.b4p.services/pdd/aeb4p-task-lifecycle.pdd"/>
+		<zipfileset file="pdd\aeb4p-task-remove-owner.pdd" fullpath="META-INF/pdd/org.activebpel.rt.b4p.services/pdd/aeb4p-task-remove-owner.pdd"/>
+		<zipfileset file="pdd\aeb4p-task-state.pdd" fullpath="META-INF/pdd/org.activebpel.rt.b4p.services/pdd/aeb4p-task-state.pdd"/>
+		<zipfileset file="pdd\aeb4p-task-suspenduntilresumer.pdd" fullpath="META-INF/pdd/org.activebpel.rt.b4p.services/pdd/aeb4p-task-suspenduntilresumer.pdd"/>
+		<zipfileset file="pdd\aeb4-task-escalation.pdd" fullpath="META-INF/pdd/org.activebpel.rt.b4p.services/pdd/aeb4-task-escalation.pdd"/>
+		<zipfileset file="pdd\aeb4p-notification-lifecycle.pdd" fullpath="META-INF/pdd/org.activebpel.rt.b4p.services/pdd/aeb4p-notification-lifecycle.pdd"/>
+      	
+         <!-- === BPEL Files === -->
+		<zipfileset file="bpel\aeb4p-task-client.bpel" fullpath="bpel/org.activebpel.rt.b4p.services/bpel/aeb4p-task-client.bpel"/>                  
+		<zipfileset file="bpel\aeb4p-task-lifecycle.bpel" fullpath="bpel/org.activebpel.rt.b4p.services/bpel/aeb4p-task-lifecycle.bpel"/>         
+		<zipfileset file="bpel\aeb4p-task-remove-owner.bpel" fullpath="bpel/org.activebpel.rt.b4p.services/bpel/aeb4p-task-remove-owner.bpel"/>
+		<zipfileset file="bpel\aeb4p-task-state.bpel" fullpath="bpel/org.activebpel.rt.b4p.services/bpel/aeb4p-task-state.bpel"/>
+		<zipfileset file="bpel\aeb4p-task-suspenduntilresumer.bpel" fullpath="bpel/org.activebpel.rt.b4p.services/bpel/aeb4p-task-suspenduntilresumer.bpel"/>
+		<zipfileset file="bpel\aeb4-task-escalation.bpel" fullpath="bpel/org.activebpel.rt.b4p.services/bpel/aeb4-task-escalation.bpel"/>
+		<zipfileset file="bpel\aeb4p-notification-lifecycle.bpel" fullpath="bpel/org.activebpel.rt.b4p.services/bpel/aeb4p-notification-lifecycle.bpel"/>
+      	
+		<!-- === WSDL Files === -->
+      	<!-- Identity Service and aeadmin -->
+   		<zipfileset file="..\org.activebpel.rt.identity\support\wsdl\identity.wsdl" fullpath="wsdl/org.activebpel.rt.identity/support/wsdl/identity.wsdl"/>      	
+   		<zipfileset file="..\org.activebpel.rt.bpel.server\support\ActiveBpelAdmin.wsdl" fullpath="wsdl/org.activebpel.rt.bpel.server/support/ActiveBpelAdmin.wsdl"/>
+      	<!-- wsht -->
+      	<zipfileset file="..\org.activebpel.rt.ht\support\wsdl\ws-humantask-api.wsdl" fullpath="wsdl/org.activebpel.rt.ht/support/wsdl/ws-humantask-api.wsdl"/>      	
+      	<zipfileset file="..\org.activebpel.rt.ht\support\wsdl\ws-humantask-protocol.wsdl" fullpath="wsdl/org.activebpel.rt.ht/support/wsdl/ws-humantask-protocol.wsdl"/>
+      	
+      	<!-- ws-b4p and ae-b4p -->
+      	<zipfileset file="wsdl\aeb4p-task-common.wsdl" fullpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-common.wsdl"/>
+      	<zipfileset file="wsdl\aeb4p-task-escalations.wsdl" fullpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-escalations.wsdl"/>
+      	<zipfileset file="wsdl\aeb4p-task-events.wsdl" fullpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-events.wsdl"/>
+      	<zipfileset file="wsdl\aeb4p-task-lifecycle.wsdl" fullpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-lifecycle.wsdl"/>
+      	<zipfileset file="wsdl\aeb4p-task-notifications.wsdl" fullpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-notifications.wsdl"/>
+			<zipfileset file="wsdl\aeb4p-task-state.wsdl" fullpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-state.wsdl"/>
+			<zipfileset file="wsdl\aeb4p-task-storage.wsdl" fullpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-storage.wsdl"/>
+      	
+         <!-- === XSD Files === -->
+      	<!-- Identity Service -->
+      	<zipfileset file="..\org.activebpel.rt.identity\support\schema\identity.xsd" fullpath="wsdl/org.activebpel.rt.identity/support/schema/identity.xsd"/>      	
+      	<!-- wsht -->
+      	<zipfileset file="..\org.activebpel.rt.ht\support\schema\ws-humantask.xsd" fullpath="wsdl/org.activebpel.rt.ht/support/schema/ws-humantask.xsd"/>
+      	<zipfileset file="..\org.activebpel.rt.ht\support\schema\ws-humantask-api.xsd" fullpath="wsdl/org.activebpel.rt.ht/support/schema/ws-humantask-api.xsd"/>
+   		<zipfileset file="..\org.activebpel.rt.ht\support\schema\ws-humantask-api-wsdl.xsd" fullpath="wsdl/org.activebpel.rt.ht/support/schema/ws-humantask-api-wsdl.xsd"/>
+   		<zipfileset file="..\org.activebpel.rt.ht\support\schema\ws-humantask-policy.xsd" fullpath="wsdl/org.activebpel.rt.ht/support/schema/ws-humantask-policy.xsd"/>
+      	<zipfileset file="..\org.activebpel.rt.ht\support\schema\ws-humantask-protocol.xsd" fullpath="wsdl/org.activebpel.rt.ht/support/schema/ws-humantask-protocol.xsd"/>      			
+      	<!-- ws-b4p and ae-b4p -->
+		<zipfileset file="schema\aeb4p-task-custom-notifications.xsd" fullpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-custom-notifications.xsd"/>
+		<zipfileset file="schema\aeb4p-task-escalations-wsdl.xsd" fullpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-escalations-wsdl.xsd"/>
+		<zipfileset file="schema\aeb4p-task-events-wsdl.xsd" fullpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-events-wsdl.xsd"/>
+		<zipfileset file="schema\aeb4p-task-lifecycle-wsdl.xsd" fullpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-lifecycle-wsdl.xsd"/>
+		<zipfileset file="schema\aeb4p-task-notifications-wsdl.xsd" fullpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-notifications-wsdl.xsd"/>
+		<zipfileset file="schema\aeb4p-task-rt.xsd" fullpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-rt.xsd"/>
+		<zipfileset file="schema\aeb4p-task-state-wsdl.xsd" fullpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-state-wsdl.xsd"/>
+		<zipfileset file="schema\ws-bpel4people.xsd" fullpath="wsdl/org.activebpel.rt.b4p.services/schema/ws-bpel4people.xsd"/>
+		<zipfileset file="schema\ws-bpel_executable.xsd" fullpath="wsdl/org.activebpel.rt.b4p.services/schema/ws-bpel_executable.xsd"/>
+		<zipfileset file="schema\ws-bpel_serviceref.xsd" fullpath="wsdl/org.activebpel.rt.b4p.services/schema/ws-bpel_serviceref.xsd"/>                  	
+      	
+		<!-- === Other Files === -->
+		<zipfileset file="xsl\common.xsl" fullpath="wsdl/org.activebpel.rt.b4p.services/xsl/common.xsl"/>
+		<zipfileset file="xsl\getTaskInfo.xsl" fullpath="wsdl/org.activebpel.rt.b4p.services/xsl/getTaskInfo.xsl"/>
+		<zipfileset file="xsl\getTaskDescription.xsl" fullpath="wsdl/org.activebpel.rt.b4p.services/xsl/getTaskDescription.xsl"/>
+		<zipfileset file="xsl\removeXsiType.xsl" fullpath="wsdl/org.activebpel.rt.b4p.services/xsl/removeXsiType.xsl"/>
+         
+		<!-- ===  Task XSL renderings === -->
+		<zipfileset file="rendering\ae-xsl\ae_base_commands.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_base_commands.xsl"/>      	
+		<zipfileset file="rendering\ae-xsl\ae_base_param2command.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_base_param2command.xsl"/>
+		<zipfileset file="rendering\ae-xsl\ae_base_taskdetail.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_base_taskdetail.xsl"/>
+		<zipfileset file="rendering\ae-xsl\ae_debug_task.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_debug_task.xsl"/>
+		<zipfileset file="rendering\ae-xsl\ae_default_notification.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_default_notification.xsl"/>      	
+		<zipfileset file="rendering\ae-xsl\ae_default_param2command.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_default_param2command.xsl"/>      	
+		<zipfileset file="rendering\ae-xsl\ae_default_task.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_default_task.xsl"/>
+		<zipfileset file="rendering\ae-xsl\ae_escapexml.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_escapexml.xsl"/>
+		<zipfileset file="rendering\ae-xsl\ae_imp_taskattachments.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_imp_taskattachments.xsl"/>
+		<zipfileset file="rendering\ae-xsl\ae_imp_taskbuttons.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_imp_taskbuttons.xsl"/>
+		<zipfileset file="rendering\ae-xsl\ae_imp_taskcomments.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_imp_taskcomments.xsl"/>
+		<zipfileset file="rendering\ae-xsl\ae_imp_taskmetadatagrid.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_imp_taskmetadatagrid.xsl"/>      	
+		<zipfileset file="rendering\ae-xsl\ae_debug_notification.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_debug_notification.xsl"/>
+		<zipfileset file="rendering\ae-xsl\ae_imp_taskdesc.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_imp_taskdesc.xsl"/>
+		<zipfileset file="rendering\ae-xsl\ae_imp_taskinput.xsl" fullpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_imp_taskinput.xsl"/>      	
+  
+      </jar>
+      
+      <createcatalog file="${archive.filename}" replaceExisting="true">
+      	<!-- === WSDL Catalog === -->
+      	<!-- Identity and Email Service and admin -->
+         <wsdlentry classpath="wsdl/org.activebpel.rt.identity/support/wsdl/identity.wsdl" location="project:/org.activebpel.rt.identity/support/wsdl/identity.wsdl"/>
+         <wsdlentry classpath="wsdl/org.activebpel.rt.bpel.server/support/ActiveBpelAdmin.wsdl" location="project:/org.activebpel.rt.bpel.server/support/ActiveBpelAdmin.wsdl"/>
+
+		<!-- ws-ht -->
+      	<wsdlentry classpath="wsdl/org.activebpel.rt.ht/support/wsdl/ws-humantask-api.wsdl" location="project:/org.activebpel.rt.ht/support/wsdl/ws-humantask-api.wsdl"/>      	
+		<wsdlentry classpath="wsdl/org.activebpel.rt.ht/support/wsdl/ws-humantask-protocol.wsdl" location="project:/org.activebpel.rt.ht/support/wsdl/ws-humantask-protocol.wsdl"/>
+		
+      	<!-- ws-b4p and ae-b4p -->
+        <wsdlentry classpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-common.wsdl" location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-common.wsdl"/>
+      	<wsdlentry classpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-escalations.wsdl" location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-escalations.wsdl"/>
+      	<wsdlentry classpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-events.wsdl" location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-events.wsdl"/>
+		<wsdlentry classpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-lifecycle.wsdl" location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-lifecycle.wsdl"/>
+		<wsdlentry classpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-notifications.wsdl" location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-notifications.wsdl"/>
+		<wsdlentry classpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-state.wsdl" location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-state.wsdl"/>
+      	<wsdlentry classpath="wsdl/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-storage.wsdl" location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-storage.wsdl"/>
+      	      	
+      	<!-- === Schema Catalog === -->
+      	<!-- Identity and Email Service -->
+         <schemaentry classpath="wsdl/org.activebpel.rt.identity/support/schema/identity.xsd" location="project:/org.activebpel.rt.identity/support/schema/identity.xsd"/>      	
+      	<!-- ws-ht -->
+		<schemaentry classpath="wsdl/org.activebpel.rt.ht/support/schema/ws-humantask.xsd" location="project:/org.activebpel.rt.ht/support/schema/ws-humantask.xsd"/>      	
+      	<schemaentry classpath="wsdl/org.activebpel.rt.ht/support/schema/ws-humantask-api.xsd" location="project:/org.activebpel.rt.ht/support/schema/ws-humantask-api.xsd"/>
+		<schemaentry classpath="wsdl/org.activebpel.rt.ht/support/schema/ws-humantask-api-wsdl.xsd" location="project:/org.activebpel.rt.ht/support/schema/ws-humantask-api-wsdl.xsd"/>
+      	<schemaentry classpath="wsdl/org.activebpel.rt.ht/support/schema/ws-humantask-policy.xsd" location="project:/org.activebpel.rt.ht/support/schema/ws-humantask-policy.xsd"/>
+		<schemaentry classpath="wsdl/org.activebpel.rt.ht/support/schema/ws-humantask-protocol.xsd" location="project:/org.activebpel.rt.ht/support/schema/ws-humantask-protocol.xsd"/>      	
+      	<!-- ws-b4p and ae-b4p -->
+         <schemaentry classpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-custom-notifications.xsd" location="project:/org.activebpel.rt.b4p.services/schema/aeb4p-task-custom-notifications.xsd"/>
+      	<schemaentry classpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-escalations-wsdl.xsd" location="project:/org.activebpel.rt.b4p.services/schema/aeb4p-task-escalations-wsdl.xsd"/>
+      	<schemaentry classpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-events-wsdl.xsd" location="project:/org.activebpel.rt.b4p.services/schema/aeb4p-task-events-wsdl.xsd"/>
+		<schemaentry classpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-lifecycle-wsdl.xsd" location="project:/org.activebpel.rt.b4p.services/schema/aeb4p-task-lifecycle-wsdl.xsd"/>
+		<schemaentry classpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-notifications-wsdl.xsd" location="project:/org.activebpel.rt.b4p.services/schema/aeb4p-task-notifications-wsdl.xsd"/>
+		<schemaentry classpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-rt.xsd" location="project:/org.activebpel.rt.b4p.services/schema/aeb4p-task-rt.xsd"/>
+		<schemaentry classpath="wsdl/org.activebpel.rt.b4p.services/schema/aeb4p-task-state-wsdl.xsd" location="project:/org.activebpel.rt.b4p.services/schema/aeb4p-task-state-wsdl.xsd"/>
+		<schemaentry classpath="wsdl/org.activebpel.rt.b4p.services/schema/ws-bpel4people.xsd" location="project:/org.activebpel.rt.b4p.services/schema/ws-bpel4people.xsd"/>
+		<schemaentry classpath="wsdl/org.activebpel.rt.b4p.services/schema/ws-bpel_executable.xsd" location="project:/org.activebpel.rt.b4p.services/schema/ws-bpel_executable.xsd"/>
+		<schemaentry classpath="wsdl/org.activebpel.rt.b4p.services/schema/ws-bpel_serviceref.xsd" location="project:/org.activebpel.rt.b4p.services/schema/ws-bpel_serviceref.xsd"/>			
+      		      	
+		<otherentry classpath="wsdl/org.activebpel.rt.b4p.services/xsl/common.xsl" location="project:/org.activebpel.rt.b4p.services/xsl/common.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+		<otherentry classpath="wsdl/org.activebpel.rt.b4p.services/xsl/getTaskInfo.xsl" location="project:/org.activebpel.rt.b4p.services/xsl/getTaskInfo.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+		<otherentry classpath="wsdl/org.activebpel.rt.b4p.services/xsl/getTaskDescription.xsl" location="project:/org.activebpel.rt.b4p.services/xsl/getTaskDescription.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+		<otherentry classpath="wsdl/org.activebpel.rt.b4p.services/xsl/removeXsiType.xsl" location="project:/org.activebpel.rt.b4p.services/xsl/removeXsiType.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+         
+         <!-- task xsl renderings -->
+		<otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_base_commands.xsl" location="urn:/aeb4p/rendering/xsl/ae_base_commands.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+		<otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_base_param2command.xsl" location="urn:/aeb4p/rendering/xsl/ae_base_param2command.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+		<otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_base_taskdetail.xsl" location="urn:/aeb4p/rendering/xsl/ae_base_taskdetail.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+		<otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_debug_task.xsl" location="urn:/aeb4p/rendering/xsl/ae_debug_task.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>      	      	
+      <otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_default_notification.xsl" location="urn:/aeb4p/rendering/xsl/ae_default_notification.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>      	      	
+      <otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_default_param2command.xsl" location="urn:/aeb4p/rendering/xsl/ae_default_param2command.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+      <otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_default_task.xsl" location="urn:/aeb4p/rendering/xsl/ae_default_task.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>      	
+		<otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_escapexml.xsl" location="urn:/aeb4p/rendering/xsl/ae_escapexml.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+		<otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_imp_taskattachments.xsl" location="urn:/aeb4p/rendering/xsl/ae_imp_taskattachments.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+		<otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_imp_taskbuttons.xsl" location="urn:/aeb4p/rendering/xsl/ae_imp_taskbuttons.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+		<otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_imp_taskcomments.xsl" location="urn:/aeb4p/rendering/xsl/ae_imp_taskcomments.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+		<otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_imp_taskmetadatagrid.xsl" location="urn:/aeb4p/rendering/xsl/ae_imp_taskmetadatagrid.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>                                          	
+   	<otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_debug_notification.xsl" location="urn:/aeb4p/rendering/xsl/ae_debug_notification.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+   	<otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_imp_taskdesc.xsl" location="urn:/aeb4p/rendering/xsl/ae_imp_taskdesc.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>
+   	<otherentry classpath="xsl/org.activebpel.rt.b4p.services/rendering/ae-xsl/ae_imp_taskinput.xsl" location="urn:/aeb4p/rendering/xsl/ae_imp_taskinput.xsl" typeURI="http://www.w3.org/1999/XSL/Transform"/>      	
+      </createcatalog>
+   </target>
+
+   <!-- Validate the BPR once it is built. -->
+   <target depends="" name="validate">
+      <echo message="Validating the Business Process Archive..."/>
+      <validatebpr file="${archive.filename}"/>
+      <echo message="Validation completed successfully."/>
+   </target>
+
+   <!-- Deploy the built BPR file to some kind of container/server. -->
+   <target depends="" name="deploy">
+      <echo message="Deploying Business Process Archive."/>
+      <!-- 
+         **** deploybpr task usage: **** 
+         @type: Either 'file' or 'webservice'.
+         @file: The path to the BPR file created by the build target.
+         @todir: The path to deploy the BPR to when @type is 'file'.
+         @tourl: The URL of the server to deploy the BPR to when @type is 'webservice'.
+         @username: A username to use to authenticate when @type is 'webservice'.
+         @password: A password to use to authenticate when @type is 'webservice'.
+      -->
+      <deploybpr file="${archive.filename}" todir="${archive.deploypath}" type="file"/>
+      <echo message="Business Process Archive deployed."/>
+   </target>
+
+   <!-- The main entry point into this script, the run target calls various other targets in turn. -->
+   <target depends="build,validate" name="run"/>
+
+   <target depends="run,deploy" name="runDeploy"/>
+
+</project>

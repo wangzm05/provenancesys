@@ -1,0 +1,79 @@
+<ns:taskInstance xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:ns1="http://www.example.org/WS-HT" xmlns:ns2="http://www.example.org/WS-HT/api" xmlns:xml="http://www.w3.org/XML/1998/namespace">
+   <trt:identifier xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">anyURI</trt:identifier>
+   <ns:presentation>
+      <ns:name xml:lang="en"><ns1:documentation xml:lang="en"></ns1:documentation>
+      </ns:name>
+      <ns:subject xml:lang="en"><ns1:documentation xml:lang="en"></ns1:documentation>
+      </ns:subject>
+      <ns:description contentType="string" xml:lang="en"><ns1:documentation xml:lang="en"></ns1:documentation>
+      </ns:description>
+   </ns:presentation>
+   <ns:context>
+      <ns:status>CREATED</ns:status>
+      <ns:priority>1</ns:priority>
+      <ns:taskInitiator>string</ns:taskInitiator>
+      <ns:taskStakeholders>
+         <ns1:users>
+            <ns1:user>string</ns1:user>
+         </ns1:users>
+      </ns:taskStakeholders>
+      <ns:potentialOwners>
+         <ns1:users>
+            <ns1:user>string</ns1:user>
+         </ns1:users>
+      </ns:potentialOwners>
+      <ns:businessAdministrators>
+         <ns1:users>
+            <ns1:user>string</ns1:user>
+         </ns1:users>
+      </ns:businessAdministrators>
+      <ns:actualOwner>string</ns:actualOwner>
+      <ns:notificationRecipients>
+         <ns1:users>
+            <ns1:user>string</ns1:user>
+         </ns1:users>
+      </ns:notificationRecipients>
+      <ns:createdOn>2007-11-29T19:11:58.453Z</ns:createdOn>
+      <ns:createdBy>string</ns:createdBy>
+      <ns:activationTime>2007-11-29T19:11:58.453Z</ns:activationTime>
+      <ns:expirationTime>2007-11-29T19:11:58.453Z</ns:expirationTime>
+      <ns:isSkipable>true</ns:isSkipable>
+      <ns:escalated>true</ns:escalated>
+   </ns:context>
+   <ns:operational>
+      <ns:input>
+         <ns:part name="ncname"></ns:part>
+      </ns:input>
+      <ns:output>
+			<ns:part name="result">RESULT</ns:part>
+      </ns:output>
+      <!--  <ns:fault name="qname"/> -->
+      <ns:comments>
+         <ns:comment>
+            <ns2:addedAt>2007-11-29T19:11:58.453Z</ns2:addedAt>
+            <ns2:addedBy>string</ns2:addedBy>
+            <ns2:text>string</ns2:text>
+            <ns:modified>
+               <ns:modifiedAt>2007-11-29T19:11:58.453Z</ns:modifiedAt>
+               <ns:modifiedBy>string</ns:modifiedBy>
+            </ns:modified>
+         </ns:comment>
+      </ns:comments>
+      <ns:attachmentInfos>
+         <ns:attachmentInfo>
+            <ns2:name>string</ns2:name>
+            <ns2:accessType>string</ns2:accessType>
+            <ns2:contentType>string</ns2:contentType>
+            <ns2:attachedAt>2007-11-29T19:11:58.453Z</ns2:attachedAt>
+            <ns2:attachedBy>string</ns2:attachedBy>
+            <ns:modified>
+               <ns:modifiedAt>2007-11-29T19:11:58.453Z</ns:modifiedAt>
+               <ns:modifiedBy>string</ns:modifiedBy>
+            </ns:modified>
+         </ns:attachmentInfo>
+      </ns:attachmentInfos>
+      <ns:processVariables>
+         <ns:processVariable element="qname" message="qname" name="ncname" type="qname"></ns:processVariable>
+      </ns:processVariables>
+   </ns:operational>
+</ns:taskInstance>

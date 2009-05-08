@@ -1,0 +1,3 @@
+<aefe:errors 
+     xmlns:aefe="http://schemas.active-endpoints.com/humanworkflow/2007/07/renderxsl/errors" 
+    principalName="[PrincipalName]" taskRef="[TaskRefID]" />

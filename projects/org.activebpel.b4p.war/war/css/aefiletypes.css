@@ -1,0 +1,55 @@
+/**
+ * Icon decorator for file content mimetypes and extensions.
+ * E.g. usage: <span class="filename filename_application_msword">HelloWord.doc</span>
+ */
+ 
+.filename
+{
+	padding: 1px 10px 5px 20px;
+	background-color:transparent;
+	background-repeat:no-repeat; 
+	background-image: url(../images/filetypes/page_white.png);	
+}
+
+.filename_doc, .filename_application_msword
+{
+	background-image: url(../images/filetypes/page_white_word.png);	
+}
+
+.filename_pdf, .filename_application_pdf
+{
+	background-image: url(../images/filetypes/page_white_acrobat.png);	
+}
+
+.filename_txt, .filename_text_plain
+{
+	background-image: url(../images/filetypes/page_white_text.png);	
+}
+
+.filename_xls, .filename_application_excel, .filename_application_vnd_ms_excel
+{
+	background-image: url(../images/filetypes/page_white_excel.png);	
+}
+
+.filename_xml, .filename_html, .filename_text_html, .filename_text_xml, .filename_application_xhtml, .filename_application_xml
+{
+	background-image: url(../images/filetypes/page_white_code_red.png);	
+}
+
+.filename_gif, .filename_png, .filename_jpg, .filename_jpeg, .filename_bmp, 
+	.filename_image_gif, .filename_image_bmp, .filename_image_jpeg, .filename_image_jpg, 
+	.filename_image_png, .filename_image_x_png
+{
+	background-image: url(../images/filetypes/page_white_picture.png);	
+}
+
+.filename_zip, .filename_bpr, .filename_rar, .filename_gzip, 
+	.filename_application_zip, .filename_application_x_gzip
+{
+	background-image: url(../images/filetypes/file_ext_zip.png);	
+}
+
+.filename_ppt, .filename_application_powerpoint, .filename_application_vnd_ms_powerpoint
+{
+	background-image: url(../images/filetypes/page_white_powerpoint.png);	
+}

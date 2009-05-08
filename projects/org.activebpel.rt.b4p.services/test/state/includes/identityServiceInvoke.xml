@@ -1,0 +1,3 @@
+         <abu:defaultInvoke xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd">
+            <abu:customResponse class="org.activebpel.rt.identity.invoke.AeIdentityServiceInvokeHandler"/>
+         </abu:defaultInvoke>

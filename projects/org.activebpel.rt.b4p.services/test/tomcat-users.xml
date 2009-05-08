@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<tomcat-users>
+  <role rolename="admin"/>
+  <role rolename="stakes"/>
+  <role rolename="group1"/>
+  <role rolename="groupAll"/>
+  <role rolename="groupEven"/>
+  <role rolename="groupOdd"/>
+  <role rolename="groupLowerFive"/>
+  <role rolename="groupUpperFive"/>
+  <user name="admin" password="password" roles="groupAll" email="admin@active-endpoints.com"/>
+  <user name="stakes" password="password" roles="groupAll,stakes" email="stakes@active-endpoints.com"/>
+  <user name="user1" password="password" roles="groupAll,groupLowerFive,groupOdd,group1" email="user1@active-endpoints.com"/>
+  <user name="user2" password="password" roles="groupAll,groupLowerFive,groupEven" email="user2@active-endpoints.com"/>
+  <user name="user3" password="password" roles="groupAll,groupLowerFive,groupOdd" email="user3@active-endpoints.com"/>
+  <user name="user4" password="password" roles="groupAll,groupLowerFive,groupEven" email="use41@active-endpoints.com"/>
+  <user name="user5" password="password" roles="groupAll,groupLowerFive,groupOdd" email="user5@active-endpoints.com"/>
+  <user name="user6" password="password" roles="groupAll,groupUpperFive,groupEven" email="user6@active-endpoints.com"/>
+  <user name="user7" password="password" roles="groupAll,groupUpperFive,groupOdd" email="user7@active-endpoints.com"/>
+  <user name="user8" password="password" roles="groupAll,groupUpperFive,groupEven" email="user8@active-endpoints.com"/>
+  <user name="user9" password="password" roles="groupAll,groupUpperFive,groupOdd" email="user9@active-endpoints.com"/>
+  <user name="user10" password="password" roles="groupAll,groupUpperFive,groupEven" email="user10@active-endpoints.com"/>
+</tomcat-users>

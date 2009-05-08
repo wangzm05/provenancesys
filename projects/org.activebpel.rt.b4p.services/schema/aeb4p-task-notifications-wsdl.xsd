@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<xs:schema
+   targetNamespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-notifications-wsdl.xsd"
+   xmlns:aeb4pnt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-notifications-wsdl.xsd"
+   xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+   xmlns:htd="http://www.example.org/WS-HT" xmlns:api="http://www.example.org/WS-HT/api"
+   xmlns:htdp="http://www.example.org/WS-HT/protocol"
+   xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+   <xs:import namespace="http://www.w3.org/2001/XMLSchema" />
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+   <xs:import namespace="http://www.example.org/WS-HT" schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask.xsd" />
+   <xs:import namespace="http://www.example.org/WS-HT/api" schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask-api.xsd" />
+   <xs:import namespace="http://www.example.org/WS-HT/protocol" schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask-protocol.xsd" />
+   <xs:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" schemaLocation="aeb4p-task-rt.xsd" />
+   <xs:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd" schemaLocation="aeb4p-task-lifecycle-wsdl.xsd" />
+
+   <xs:element name="processNotificationRequest">
+      <xs:complexType>
+         <xs:annotation>
+            <xs:documentation>
+               Contains ws-ht notification definition and creation data overides.
+            </xs:documentation>
+         </xs:annotation>
+         <xs:sequence>
+            <xs:element ref="htd:notification" />
+            <xs:element ref="trt:initialState" />
+            <xs:element ref="trt:interfaceMetadata" />
+            <xs:element ref="trt:taskInstance" minOccurs="0" />
+            <xs:element ref="tlc:peopleActivityPid" />
+            <xs:element ref="tlc:peopleActivityId" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   
+   <xs:element name="processNotificationResponse">
+   	<xs:complexType/>
+   </xs:element>
+
+   <xs:element name="cancelNotificationRequest">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element ref="tlc:peopleActivityPid" />
+            <xs:element ref="tlc:peopleActivityId" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+
+   <xs:element name="processCustomNotificationRequest">
+      <xs:complexType>
+         <xs:annotation>
+            <xs:documentation>Contains notification used by custom notification handlers.</xs:documentation>
+         </xs:annotation>
+         <xs:sequence>
+            <xs:element ref="trt:identifier" />
+            <xs:element ref="tlc:peopleActivityPid" />
+            <xs:element ref="tlc:peopleActivityId" />
+            <xs:element name="data">
+               <xs:complexType mixed="true">
+                  <xs:sequence>
+                     <xs:any minOccurs="0" processContents="skip" />
+                  </xs:sequence>
+               </xs:complexType>
+            </xs:element>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+
+</xs:schema>

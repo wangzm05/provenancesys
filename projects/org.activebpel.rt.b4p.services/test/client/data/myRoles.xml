@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<id:roleList xmlns:id="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl">
+   <id:role>string</id:role>
+</id:roleList>

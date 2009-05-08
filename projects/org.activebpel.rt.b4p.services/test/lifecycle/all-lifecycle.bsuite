@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="lifecycle">
+   <abs:bUnitRef location="bunits/lifecycle_01_nodeadlines.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_02_startdeadline.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_03_completiondeadline.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_04_alldeadlines.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_10_ready-reserved.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_11_ready-reserved-ready.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_12_ready-reserved-reserved.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_13_ready-error.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_13_reserved-error.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_14_ready-exited.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_14_reserved-exited.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_15_ready-obsolete.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_15_reserved-obsolete.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_20_inprogress-failed.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_21_inprogress-error.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_22_inprogress-exited.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_23_inprogress-obsolete.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_30_ready-suspend-resume.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_31_ready-suspend-error.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_32_inprogress-suspend-resume.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_33_inprogress-suspend-error.bunit"/>
+   <abs:bUnitRef location="bunits/lifecycle_34_ready-suspend-inprogress-suspend.bunit"/>
+</abs:bSuite>

@@ -1,0 +1,34 @@
+/**
+ * Icon decorator for Active Endpoints work flow task priority
+ * E.g. usage: <span class="aetaskpriorityglyph aetaskpriorityglyph_1">Priority Level 1</span>
+ */
+  
+ .aetaskpriorityglyph
+{
+	padding: 1px 10px 5px 20px;
+	background-color:transparent;
+	background-repeat:no-repeat; 
+	background-image: url(../images/trans16x16.gif);		
+}
+
+.aetaskpriorityglyph_0
+{
+	background-image: url(../images/flag_red.png);	
+}
+
+.aetaskpriorityglyph_1
+{
+	background-image: url(../images/flag_yellow.png);	
+}
+
+._aetaskpriorityglyph_2
+{
+	background-image: url(../images/flag_green.png);	
+}
+
+._aetaskpriorityglyph_3
+{
+	background-image: url(../images/flag_blue.png);	
+}
+
+ 

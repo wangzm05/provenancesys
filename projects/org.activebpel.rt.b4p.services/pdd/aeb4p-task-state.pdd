@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pdd:process xmlns:bpelns="http://www.activebpel.org/b4p/2007/10/wshumantask" xmlns:pdd="http://schemas.active-endpoints.com/pdd/2006/08/pdd.xsd" location="bpel/org.activebpel.rt.b4p.services/bpel/aeb4p-task-state.bpel" name="bpelns:aeb4p-task-state" platform="enterprise" processGroup="$system">
+  <pdd:partnerLinks>
+    <pdd:partnerLink name="aeTaskOperations">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-aeTaskOperations">
+        <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+				<abp:ReceiverXPathMap>
+					<abp:parameter name="xmlns:abx" value="http://www.activebpel.org/bpel/extension"/>
+					<abp:parameter name="xpath:principal" value="//abx:principal"/>
+				</abp:ReceiverXPathMap>   
+                  <abp:Validation direction="none"/>
+         </wsp:Policy>
+      </pdd:myRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="aeTaskOperations-getAttachmentById">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-aeTaskOperations-getAttachmentById">
+        <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+				<abp:ReceiverXPathMap>
+					<abp:parameter name="xmlns:abx" value="http://www.activebpel.org/bpel/extension"/>
+					<abp:parameter name="xpath:principal" value="//abx:principal"/>
+				</abp:ReceiverXPathMap>         
+<abp:Validation direction="none"/>            
+         </wsp:Policy>
+      </pdd:myRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="aeTaskOperations-getInstance">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-aeTaskOperations-getInstance">
+        <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+<abp:Validation direction="none"/>            
+         </wsp:Policy>
+      </pdd:myRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="identityPL">
+      <pdd:partnerRole endpointReference="dynamic" invokeHandler="identity"/>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="internal">
+      <pdd:partnerRole endpointReference="static" invokeHandler="process">
+        <wsa:EndpointReference xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing">
+				<wsa:Address>AeB4PState-aeInternalTaskOperations</wsa:Address>
+<wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+<abp:Validation direction="none"/>            
+         </wsp:Policy>
+			</wsa:EndpointReference>
+      </pdd:partnerRole>
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-aeInternalTaskOperations"/>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="removeOwnerPLT">
+      <pdd:partnerRole endpointReference="static" invokeHandler="process">
+        <wsa:EndpointReference xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing">
+  <wsa:Address>AeB4PRemoveOwner</wsa:Address>
+<wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+<abp:Validation direction="none"/>            
+         </wsp:Policy>
+</wsa:EndpointReference>
+      </pdd:partnerRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="storagePL">
+      <pdd:partnerRole endpointReference="dynamic" invokeHandler="java:org.activebpel.rt.b4p.server.storage.invoke.AeTaskStorageInvokeHandler"/>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskOperations">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-taskOperations">
+        <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+				<abp:ReceiverXPathMap>
+					<abp:parameter name="xmlns:abx" value="http://www.activebpel.org/bpel/extension"/>
+					<abp:parameter name="xpath:principal" value="//abx:principal"/>
+				</abp:ReceiverXPathMap>  
+   <abp:Validation direction="none"/>
+         </wsp:Policy>
+      </pdd:myRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskOperations-getAttachmentInfos">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-taskOperations-getAttachmentInfos">
+        <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+				<abp:ReceiverXPathMap>
+					<abp:parameter name="xmlns:abx" value="http://www.activebpel.org/bpel/extension"/>
+					<abp:parameter name="xpath:principal" value="//abx:principal"/>
+				</abp:ReceiverXPathMap>    
+   <abp:Validation direction="none"/>
+                 
+         </wsp:Policy>
+      </pdd:myRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskOperations-getAttachments">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-taskOperations-getAttachments">
+        <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+				<abp:ReceiverXPathMap>
+					<abp:parameter name="xmlns:abx" value="http://www.activebpel.org/bpel/extension"/>
+					<abp:parameter name="xpath:principal" value="//abx:principal"/>
+				</abp:ReceiverXPathMap>                     
+   <abp:Validation direction="none"/>
+
+         </wsp:Policy>
+      </pdd:myRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskOperations-getFault">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-taskOperations-getFault">
+        <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+				<abp:ReceiverXPathMap>
+					<abp:parameter name="xmlns:abx" value="http://www.activebpel.org/bpel/extension"/>
+					<abp:parameter name="xpath:principal" value="//abx:principal"/>
+				</abp:ReceiverXPathMap>                     
+   <abp:Validation direction="none"/>
+
+         </wsp:Policy>
+      </pdd:myRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskOperations-getInput">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-taskOperations-getInput">
+        <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+				<abp:ReceiverXPathMap>
+					<abp:parameter name="xmlns:abx" value="http://www.activebpel.org/bpel/extension"/>
+					<abp:parameter name="xpath:principal" value="//abx:principal"/>
+				</abp:ReceiverXPathMap>                     
+   <abp:Validation direction="none"/>
+
+         </wsp:Policy>
+      </pdd:myRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskOperations-getOutput">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-taskOperations-getOutput">
+        <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+				<abp:ReceiverXPathMap>
+					<abp:parameter name="xmlns:abx" value="http://www.activebpel.org/bpel/extension"/>
+					<abp:parameter name="xpath:principal" value="//abx:principal"/>
+				</abp:ReceiverXPathMap>                     
+   <abp:Validation direction="none"/>
+
+         </wsp:Policy>
+      </pdd:myRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskOperations-getRendering">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-taskOperations-getRenderingService">
+        <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+				<abp:ReceiverXPathMap>
+					<abp:parameter name="xmlns:abx" value="http://www.activebpel.org/bpel/extension"/>
+					<abp:parameter name="xpath:principal" value="//abx:principal"/>
+				</abp:ReceiverXPathMap>                     
+   <abp:Validation direction="none"/>
+
+         </wsp:Policy>
+      </pdd:myRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskOperations-getRenderingTypes">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-taskOperations-getRenderingTypesService">
+        <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+				<abp:ReceiverXPathMap>
+					<abp:parameter name="xmlns:abx" value="http://www.activebpel.org/bpel/extension"/>
+					<abp:parameter name="xpath:principal" value="//abx:principal"/>
+				</abp:ReceiverXPathMap>                     
+   <abp:Validation direction="none"/>
+
+         </wsp:Policy>
+      </pdd:myRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskOperations-getTaskDescription">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-taskOperations-getTaskDescription">
+        <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+				<abp:ReceiverXPathMap>
+					<abp:parameter name="xmlns:abx" value="http://www.activebpel.org/bpel/extension"/>
+					<abp:parameter name="xpath:principal" value="//abx:principal"/>
+				</abp:ReceiverXPathMap>                     
+   <abp:Validation direction="none"/>
+
+         </wsp:Policy>
+      </pdd:myRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskOperations-getTaskInfo">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-taskOperations-getTaskInfo">
+        <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+				<abp:ReceiverXPathMap>
+					<abp:parameter name="xmlns:abx" value="http://www.activebpel.org/bpel/extension"/>
+					<abp:parameter name="xpath:principal" value="//abx:principal"/>
+				</abp:ReceiverXPathMap>                     
+   <abp:Validation direction="none"/>
+
+         </wsp:Policy>
+      </pdd:myRole>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskStateChangeListenerPL">
+      <pdd:partnerRole endpointReference="dynamic" invokeHandler="process"/>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="taskStateChangeRegistryPL">
+      <pdd:myRole binding="EXTERNAL" service="AeB4PState-stateChangeRegistry"/>
+    </pdd:partnerLink>
+    <pdd:partnerLink name="wakeupPL">
+      <pdd:partnerRole endpointReference="static" invokeHandler="process">
+        <wsa:EndpointReference xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing">
+  <wsa:Address>AeB4PSuspendUntilResumer</wsa:Address>
+<wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:abp="http://schemas.active-endpoints.com/ws/2005/12/policy">
+   <abp:Validation direction="none"/>
+         </wsp:Policy>
+</wsa:EndpointReference>
+      </pdd:partnerRole>
+    </pdd:partnerLink>
+  </pdd:partnerLinks>
+  <pdd:references>
+    <pdd:wsdl location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-state.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"/>
+    <pdd:wsdl location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-common.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl"/>
+    <pdd:wsdl location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-storage.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-storage.wsdl"/>
+    <pdd:wsdl location="project:/org.activebpel.rt.b4p.services/wsdl/aeb4p-task-events.wsdl" namespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-events.wsdl"/>
+    <pdd:wsdl location="project:/org.activebpel.rt.ht/support/wsdl/ws-humantask-api.wsdl" namespace="http://www.example.org/WS-HT/api/wsdl"/>
+    <pdd:wsdl location="project:/org.activebpel.rt.identity/support/wsdl/identity.wsdl" namespace="http://docs.active-endpoints/wsdl/identity/2007/03/identity.wsdl"/>
+    <pdd:schema location="project:/org.activebpel.rt.b4p.services/schema/aeb4p-task-state-wsdl.xsd" namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"/>
+    <pdd:schema location="project:/org.activebpel.rt.b4p.services/schema/aeb4p-task-rt.xsd" namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"/>
+    <pdd:schema location="project:/org.activebpel.rt.ht/support/schema/ws-humantask-api-wsdl.xsd" namespace="http://www.example.org/WS-HT/api/xsd"/>
+  </pdd:references>
+</pdd:process>

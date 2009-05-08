@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsw:createTaskRequest 
+	xmlns:htapi="http://www.example.org/WS-HT/api" 
+	xmlns:htd="http://www.example.org/WS-HT" 
+	xmlns:htp="http://www.example.org/WS-HT/protocol" 
+	xmlns:sref="http://docs.oasis-open.org/wsbpel/2.0/serviceref" 
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" 
+	xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+	xmlns:r="urn:myRenderingType">
+   <htd:task name="T1">
+      <htd:interface operation="op" portType="qname" />
+      <htd:priority>'1'</htd:priority>
+      <htd:peopleAssignments>
+         <htd:potentialOwners>
+            <htd:from>
+            </htd:from>
+         </htd:potentialOwners>
+      </htd:peopleAssignments>
+      <htd:delegation potentialDelegatees="anybody"/>
+      <htd:presentationElements>
+         <htd:name>Task 1</htd:name>
+         <htd:name xml:lang="en-US">Task 1 (USA)</htd:name>
+         <htd:name xml:lang="en-CA">Task 1 (Canada)</htd:name>
+         <htd:subject>Task Subject</htd:subject>
+         <htd:subject xml:lang="en-US">Task Subject (USA)</htd:subject>
+         <htd:subject xml:lang="en-CA">Task Subject (Canada)</htd:subject>
+         <htd:description xml:lang="en-CA">Task Desc (Canada)</htd:description>
+         <htd:description xml:lang="en-US">Task Desc (USA)</htd:description>
+         <htd:description xml:lang="en-CA" contentType="text/bunit">Task Desc (Canada) contentType=text/bunit</htd:description>
+         <htd:description xml:lang="en-US" contentType="text/bunit">Task Desc (USA) contentType=text/bunit</htd:description>
+         <htd:description contentType="text/bunit">Task Desc contentType=text/bunit</htd:description>
+         <htd:description>Task Desc</htd:description>
+      </htd:presentationElements>
+      <htd:searchBy>concat('My search by value: ',htd:getInput('inputPart1'))</htd:searchBy>
+      <htd:renderings>
+      	<htd:rendering type="r:myRenderingType"><r:hint>foo</r:hint></htd:rendering>
+      </htd:renderings>
+   </htd:task>
+   <trt:initialState>
+      <trt:input>
+         <trt:part name="inputPart1">string data</trt:part>
+      </trt:input>
+      <trt:createdBy>someUser</trt:createdBy>
+      <htp:humanTaskContext> 
+         <htp:priority>1</htp:priority>
+         <htp:peopleAssignments>
+            <htp:potentialOwners>
+               <htd:organizationalEntity>
+                  <htd:users>
+                     <htd:user>user1</htd:user>
+                     <htd:user>user2</htd:user>
+                     <htd:user>user3</htd:user>
+                  </htd:users>
+               </htd:organizationalEntity>
+            </htp:potentialOwners>
+            <htp:businessAdministrators>
+               <htd:organizationalEntity>
+                  <htd:users>
+                     <htd:user>admin</htd:user>
+                  </htd:users>
+               </htd:organizationalEntity>
+            </htp:businessAdministrators>
+            <htp:taskInitiator>
+               <htd:organizationalEntity>
+                  <htd:users>
+                     <htd:user>user4</htd:user>
+                  </htd:users>
+               </htd:organizationalEntity>
+            </htp:taskInitiator>
+            <htp:taskStakeholders>
+               <htd:organizationalEntity>
+                  <htd:groups>
+                     <htd:group>stakes</htd:group>
+                  </htd:groups>
+               </htd:organizationalEntity>
+            </htp:taskStakeholders>
+         </htp:peopleAssignments>
+         <htp:isSkipable>true</htp:isSkipable>
+         <htp:expirationTime>2010-12-30T17:31:41.628Z</htp:expirationTime>
+      </htp:humanTaskContext>
+      <trt:processVariables>
+         <trt:processVariable element="qname" message="qname" name="ncname" type="qname"></trt:processVariable>
+      </trt:processVariables>
+   </trt:initialState>
+   <trt:interfaceMetadata>
+   	<trt:input>
+   		<trt:part name="inputPart1" />
+   	</trt:input>
+   	<trt:output>
+   		<trt:part name="outputPart1" />
+   	</trt:output>
+   	<trt:faults>
+   		<trt:fault name="fault1" />
+   	</trt:faults>
+   </trt:interfaceMetadata>
+   <sref:service-ref reference-scheme="anyURI">
+   	<wsa:EndpointReference xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing">
+   		<wsa:Address>lifecycleProcess</wsa:Address>
+   	</wsa:EndpointReference>
+   </sref:service-ref>
+</tsw:createTaskRequest>

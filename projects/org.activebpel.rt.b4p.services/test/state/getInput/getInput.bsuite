@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="getInput">
+   <abs:bUnitRef location="getInput-complex-onePart-noArg.bunit"/>
+   <abs:bUnitRef location="getInput-illegalAccess.bunit"/>
+   <abs:bUnitRef location="getInput-noArg-multiPart-illegalArgument.bunit"/>
+   <abs:bUnitRef location="getInput-owner.bunit"/>
+   <abs:bUnitRef location="getInput-passArg-illegalArgument.bunit"/>
+   <abs:bUnitRef location="getInput-simple-onePart-noArg.bunit"/>
+   <abs:bUnitRef location="getInput-simple-onePart-passArg.bunit"/>
+   <abs:bUnitRef location="notification-getInput-simple-onePart-passArg.bunit"/>
+</abs:bSuite>

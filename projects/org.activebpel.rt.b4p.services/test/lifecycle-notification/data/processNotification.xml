@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aent:processNotificationRequest xmlns:aent="http://schemas.active-endpoints.com/b4p/wshumantask/2007/12/aeb4p-task-notifications-wsdl.xsd" xmlns:ht="http://www.example.org/WS-HT" xmlns:htp="http://www.example.org/WS-HT/protocol" xmlns:ns="http://www.example.org/WS-HT/api" xmlns:ns1="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd" xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">
+   <ht:notification name="Reminder">
+      <ht:interface operation="ncname" portType="qname"/>
+      <ht:priority>1</ht:priority>
+      <ht:peopleAssignments>
+         <ht:recipients>
+            <ht:from>
+            	<ht:literal>
+	               <ht:organizationalEntity>
+	                  <ht:users>
+	                     <ht:user>notificationUser</ht:user>
+	                  </ht:users>
+	               </ht:organizationalEntity>
+            	</ht:literal>
+            </ht:from>
+         </ht:recipients>
+         <ht:businessAdministrators>
+            <ht:from>
+            	<ht:literal>
+	               <ht:organizationalEntity>
+	                  <ht:users>
+	                     <ht:user>notificationAdmin</ht:user>
+	                  </ht:users>
+	               </ht:organizationalEntity>
+            	</ht:literal>
+            </ht:from>
+         </ht:businessAdministrators>
+      </ht:peopleAssignments>
+      <ht:presentationElements>
+         <ht:name>Reminder</ht:name>
+         <ht:subject>Dinner order is due</ht:subject>
+         <ht:description>Your dinner order is due within 30 minutes.</ht:description>
+      </ht:presentationElements>
+   </ht:notification>
+   <trt:initialState>
+      <trt:input>
+         <trt:part name="inputPart1">some data</trt:part>
+      </trt:input>
+      <trt:createdBy>string</trt:createdBy>
+      <htp:humanTaskContext>
+         <htp:priority>1</htp:priority>
+         <htp:peopleAssignments>
+            <htp:recipients>
+               <ht:organizationalEntity>
+                  <ht:users>
+                     <ht:user>user1</ht:user>
+                  </ht:users>
+               </ht:organizationalEntity>
+            </htp:recipients>
+            <htp:businessAdministrators>
+               <ht:organizationalEntity>
+                  <ht:users>
+                     <ht:user>admin</ht:user>
+                  </ht:users>
+               </ht:organizationalEntity>
+            </htp:businessAdministrators>
+         </htp:peopleAssignments>
+      </htp:humanTaskContext>
+   </trt:initialState>
+    <trt:interfaceMetadata>
+       <trt:input>
+          <trt:part name="inputPart1" typeHint="string"/>
+       </trt:input>
+    </trt:interfaceMetadata>
+   <ns1:peopleActivityPid>1</ns1:peopleActivityPid>
+   <ns1:peopleActivityId>1</ns1:peopleActivityId>
+</aent:processNotificationRequest>

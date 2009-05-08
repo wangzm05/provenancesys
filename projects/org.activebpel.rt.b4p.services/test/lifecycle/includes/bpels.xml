@@ -1,0 +1,3 @@
+   <abu:bpels xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd">
+      <abu:bpel location="../../../bpel/aeb4p-task-lifecycle.bpel"/>
+   </abu:bpels>

@@ -1,0 +1,5 @@
+<ns:organizationalEntity xmlns:ns="http://www.example.org/WS-HT">
+   <ns:users>
+      <ns:user>string</ns:user>
+   </ns:users>
+</ns:organizationalEntity>

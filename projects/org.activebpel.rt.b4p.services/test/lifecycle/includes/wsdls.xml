@@ -1,0 +1,9 @@
+   <abu:wsdls xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd">
+      <abu:wsdl location="../../../wsdl/aeb4p-task-lifecycle.wsdl"/>
+      <abu:wsdl location="../../../wsdl/aeb4p-task-events.wsdl"/>
+      <abu:wsdl location="../../../wsdl/aeb4p-task-state.wsdl"/>
+      <abu:wsdl location="../../../wsdl/aeb4p-task-escalations.wsdl"/>
+      <abu:wsdl location="../../../wsdl/aeb4p-task-events.wsdl"/>
+      <abu:wsdl location="../../../wsdl/aeb4p-task-common.wsdl"/>
+      <abu:wsdl location="../../../../org.activebpel.rt.bpel.server/support/ActiveBpelAdmin.wsdl"/>
+   </abu:wsdls>

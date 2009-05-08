@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.activebpel.rt.bpel.ext.expr.bsf
+Bundle-Version: 4.1.3
+Bundle-ClassPath: classes,
+ ../../lib/bsf.jar,
+ ../../lib/jython.jar
+Bundle-Localization: plugin
+Require-Bundle: org.activebpel.rt.bpel
+Export-Package: net.sf.saxon, 
+ org.activebpel.rt.bpel.ext.expr.bsf,
+ org.activebpel.rt.bpel.ext.expr.bsf.impl,
+ org.activebpel.rt.bpel.ext.expr.bsf.impl.python
+Bundle-Vendor: %providerName
+Import-Package: org.activebpel.rt.util,
+ org.activebpel.rt.xml.schema

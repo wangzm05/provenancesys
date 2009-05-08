@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="addComment">
+   <abs:bUnitRef location="addComment-claimed.bunit"/>
+   <abs:bUnitRef location="addComment-illegalAccess.bunit"/>
+   <abs:bUnitRef location="addComment-illegalState.bunit"/>
+   <abs:bUnitRef location="addComment-ready.bunit"/>
+   <abs:bUnitRef location="notification-addComment-ready.bunit"/>
+</abs:bSuite>

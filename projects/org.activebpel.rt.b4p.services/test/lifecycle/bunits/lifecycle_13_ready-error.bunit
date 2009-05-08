@@ -1,0 +1,104 @@
+<abu:bpelUnit xmlns:xi="http://www.w3.org/2001/XInclude"  xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:ns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd" xmlns:ns1="http://www.activebpel.org/b4p/2007/10/wshumantask/taskLifecycle.wsdl" xmlns:ns10="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-common.wsdl" xmlns:ns12="http://docs.oasis-open.org/wsbpel/2.0/serviceref" xmlns:ns2="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-events.wsdl" xmlns:ns3="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd" xmlns:ns4="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl" xmlns:ns5="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-escalations.wsdl" xmlns:ns6="http://www.example.org/WS-HT/api" xmlns:ns7="http://www.example.org/WS-HT" xmlns:ns8="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd" xmlns:ns9="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <abu:trace>on</abu:trace>
+   <xi:include href="../includes/engineProperties.xml"/>
+   <xi:include href="../includes/bpels.xml"/>
+   <xi:include href="../includes/wsdls.xml"/>
+   <xi:include href="../includes/schemas.xml"/>
+   <abu:invokes>
+      <abu:invoke name="CreateTaskState">
+         <abu:defaultInvoke>
+            <abu:simulatedResponse>
+            <abu:message type="ns4:CreateTaskResponse">
+               <abu:parts>
+               	<abu:part href="../data/createTaskStateResponse.xml" name="createTaskResponse"/>
+               </abu:parts>
+            </abu:message>
+         </abu:simulatedResponse>
+         </abu:defaultInvoke>
+      </abu:invoke>
+   
+      <abu:invoke name="CreateStartDeadlines">
+         <abu:defaultInvoke>
+            <abu:simulatedResponse>
+            <abu:message type="ns5:StartDeadlinesResponse">
+               <abu:parts>
+                  <abu:part href="../data/createStartDeadlinesResponse.xml" name="createDeadlinesReponse"/>
+               </abu:parts>
+            </abu:message>
+         </abu:simulatedResponse>
+         </abu:defaultInvoke>
+      </abu:invoke>
+      
+      <abu:invoke name="CreateCompletionDeadlines">
+         <abu:defaultInvoke>
+            <abu:simulatedResponse>
+            <abu:message type="ns5:StartDeadlinesResponse">
+               <abu:parts>
+                  <abu:part href="../data/createCompletionDeadlinesResponse.xml" name="createDeadlinesReponse"/>
+               </abu:parts>
+            </abu:message>
+         </abu:simulatedResponse>
+         </abu:defaultInvoke>
+      </abu:invoke>      
+      <abu:invoke name="CancelStartDeadlines">
+         <abu:defaultInvoke/>
+      </abu:invoke>      
+      <abu:invoke name="CancelCompletionDeadlines">
+         <abu:defaultInvoke/>
+      </abu:invoke>
+      <abu:invoke name="removeListener">
+         <abu:defaultInvoke>
+            <abu:asserts>
+            <abu:assertEquals href="../data/removeListenerReq.xml" part="removeListenerData"/>
+         </abu:asserts>
+            <abu:simulatedResponse>
+            <abu:message type="ns2:EmptyMessage"/>
+         </abu:simulatedResponse>
+         </abu:defaultInvoke>
+      </abu:invoke>      
+      
+      <abu:invoke name="getUpdatedTaskState">
+         <abu:defaultInvoke>
+         	<xi:include href="../data/getUpdatedTask-assertion.xml"/>
+            <abu:simulatedResponse>
+            <abu:message type="ns4:GetTaskInstanceResponse">
+               <abu:parts>
+                  <abu:part href="../data/getTaskInstanceResponse-minimal.xml" name="taskInstance" xsl="../xsl/change-task-instance-state.xsl">
+		               <abu:params>
+		                  <abu:param name="state" value="ERROR"/>
+		               </abu:params>
+                  </abu:part>
+               </abu:parts>
+            </abu:message>
+         </abu:simulatedResponse>
+         </abu:defaultInvoke>
+      </abu:invoke>
+   </abu:invokes>
+   <abu:commands>
+      <abu:sendMessage async="true" operation="processTask" partnerLink="taskLifecyclePLT">
+         <abu:message type="ns1:processTaskRequestMessage">
+            <abu:parts>
+               <abu:part href="../data/processTaskRequest-alldeadlines.xml" name="processTaskRequest"/>
+            </abu:parts>
+         </abu:message>         
+         <abu:asserts>
+            <abu:assertEquals part="processTaskResponse" query="//trt:status">ERROR</abu:assertEquals>
+         </abu:asserts>                  
+      </abu:sendMessage>
+      <abu:sendMessage delay="125" operation="handleStateChangeEvent" partnerLink="taskStateChangeListenerPLT">
+         <abu:message type="ns2:TaskStateChangeMessage">
+            <abu:parts>
+            	<abu:part href="../data/statechange_ready.xml" name="taskStateChangeEvent"/>
+            </abu:parts>
+         </abu:message>
+      </abu:sendMessage>
+      <abu:sendMessage delay="125" operation="handleStateChangeEvent" partnerLink="taskStateChangeListenerPLT">
+         <abu:message type="ns2:TaskStateChangeMessage">
+            <abu:parts>
+					<abu:part href="../data/statechange_error.xml" name="taskStateChangeEvent"/>            
+            </abu:parts>
+         </abu:message>
+      </abu:sendMessage>
+      <xi:include href="../includes/finalStateAssertion.xml"/> 
+   </abu:commands>
+</abu:bpelUnit>

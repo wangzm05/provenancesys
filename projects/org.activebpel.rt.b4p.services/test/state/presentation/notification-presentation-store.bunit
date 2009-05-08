@@ -1,0 +1,48 @@
+<abu:bpelUnit
+	xmlns:abu="http://schemas.active-endpoints.com/activebpelunit/2007/11/activebpelunit.xsd"
+	xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+	xmlns:htd="http://www.example.org/WS-HT"
+	xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+	xmlns:ts="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-state.wsdl"
+	xmlns:tsw="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+	xmlns:htapi="http://www.example.org/WS-HT/api"
+	xmlns:htapiw="http://www.example.org/WS-HT/api/wsdl"
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:abx="http://www.activebpel.org/bpel/extension" 
+   >
+	<abu:trace>on</abu:trace>
+	<xi:include href="../includes/engineProperties.xml" />
+	<xi:include href="../includes/bpels.xml" />
+	<xi:include href="../includes/wsdls.xml" />
+	<xi:include href="../includes/resources.xml" />
+
+	<abu:invokes>
+		<abu:invoke name="StoreTask">
+			<abu:defaultInvoke>
+				<abu:asserts>
+					<abu:assertEquals part="storeTaskData" query="//trt:presentation">
+						<trt:presentation>
+							<trt:name>Alert</trt:name>
+							<trt:subject>Task: ABC-123 is overdue</trt:subject>
+							<trt:description>user1 has not completed the task. This task is worth $100.</trt:description>
+						</trt:presentation>
+					</abu:assertEquals>
+				</abu:asserts>
+			</abu:defaultInvoke>
+		</abu:invoke>
+	</abu:invokes>
+
+	<abu:commands>
+		<abu:sendMessage operation="create" partnerLink="internal">
+			<abu:message type="ts:CreateTaskRequest">
+				<abu:parts>
+					<abu:part href="../data/createNotification-fromEscalation.xml"
+						name="createTaskRequest"/>
+				</abu:parts>
+			</abu:message>
+		</abu:sendMessage>
+		<abu:waitUntil timeout="1000"/>
+	</abu:commands>
+</abu:bpelUnit>

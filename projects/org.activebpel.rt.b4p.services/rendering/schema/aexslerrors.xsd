@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<xs:schema
+   targetNamespace="http://schemas.active-endpoints.com/humanworkflow/2007/07/renderxsl/errors"
+   xmlns:tns="http://schemas.active-endpoints.com/humanworkflow/2007/07/renderxsl/errors"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   elementFormDefault="qualified">
+
+   <!-- Simple enumeration type for command error types. -->
+   <xs:simpleType name="tCommandErrorType">
+      <xs:annotation>
+         <xs:documentation>
+            Identifies the type error that occured during the execution of a task
+            command. The type 'taskfault' identifies the error as task service wsdl fault.
+            Type 'error' indicates a generic error.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="taskfault" />
+         <xs:enumeration value="error" />
+      </xs:restriction>
+   </xs:simpleType>
+   
+   <!-- ========================================================== -->
+   <!-- Errors during parsing and processing of input parameters   -->
+   <!-- ========================================================== -->
+   <xs:complexType name="tParameterError">
+      <xs:annotation>
+         <xs:documentation>
+            Indicates errors during processing of the form data input 
+            parameters. For example, errors during parsing of xml content
+            into an internal document.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:simpleContent>
+      	<xs:extension base="xs:string" />
+      </xs:simpleContent>
+	</xs:complexType>
+   
+   <!-- ========================================================== -->
+   <!-- Errors during processing task command operations           -->
+   <!-- ========================================================== -->
+   <xs:complexType name="tCommandError">
+      <xs:annotation>
+         <xs:documentation>
+            Indicates errors during processing of task commands
+            such as claim(), start().
+         </xs:documentation>
+      </xs:annotation>
+      <xs:simpleContent>
+      	<xs:extension base="xs:string">
+	      	<xs:attribute name="type" type="tns:tCommandErrorType" use="required" />
+      	</xs:extension>
+      </xs:simpleContent>
+   </xs:complexType>
+   
+   <!--  Define element impl for parameter and command errors --> 
+   <xs:element name="parameter-error" type="tns:tParameterError" />   
+   <xs:element name="command-error"   type="tns:tCommandError" />   
+   
+   <!-- ======================================================= -->
+   <!-- Complex type for containing list of error elements  -->
+   <!-- ======================================================= -->   
+   <xs:complexType name="tErrors">
+      <xs:annotation>
+         <xs:documentation>
+            Contains list of parameter and command processing errors.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+	      <xs:element ref="tns:parameter-error" minOccurs="0" maxOccurs="unbounded" />
+	      <xs:element ref="tns:command-error"   minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+      <xs:attribute name="principalName" type="xs:string" use="required" />
+      <xs:attribute name="taskRef"       type="xs:string" use="required" />
+   </xs:complexType>
+   
+   <!--  Define element impl based on tns:tErrors --> 
+   <xs:element name="errors" type="tns:tErrors" />
+</xs:schema>
+

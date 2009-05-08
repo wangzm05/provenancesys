@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+   targetNamespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-escalations.wsdl"
+   xmlns:tns="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-escalations.wsdl"
+   xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   xmlns:esc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"
+   xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:ae="urn:active-endpoints:documentation"
+   xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop"
+   xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd">
+
+   <plnk:partnerLinkType name="taskEscalationServicePLT">
+      <plnk:role name="process" portType="tns:IAeTaskEscalationService"/>
+   </plnk:partnerLinkType>
+   
+   <vprop:property name="identifier" type="xs:anyURI" />
+   <vprop:property name="deadlineType" type="esc:tDeadlineType" />
+   
+   <vprop:propertyAlias propertyName="tns:identifier" element="esc:createDeadlinesData" >
+      <vprop:query>trt:identifier/text()</vprop:query>
+   </vprop:propertyAlias>   
+   <vprop:propertyAlias propertyName="tns:deadlineType" element="esc:createDeadlinesData" >
+      <vprop:query>esc:type/text()</vprop:query>
+   </vprop:propertyAlias>      
+   
+   <vprop:propertyAlias propertyName="tns:identifier" element="esc:deadlineOpData" >
+      <vprop:query>trt:identifier/text()</vprop:query>
+   </vprop:propertyAlias>   
+   <vprop:propertyAlias propertyName="tns:deadlineType" element="esc:deadlineOpData" >
+      <vprop:query>esc:type/text()</vprop:query>
+   </vprop:propertyAlias>      
+      	
+   <types>
+      <xs:schema elementFormDefault="qualified"
+         targetNamespace="http://www.activebpel.org/b4p/2007/10/wshumantask/aeb4p-task-escalations.wsdl"
+         xmlns:xs="http://www.w3.org/2001/XMLSchema">               
+			<xs:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+				schemaLocation="../schema/aeb4p-task-rt.xsd" />			
+			<xs:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-escalations-wsdl.xsd"
+				schemaLocation="../schema/aeb4p-task-escalations-wsdl.xsd" />			
+			<xs:import namespace="http://www.example.org/WS-HT/api/xsd"
+				schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask-api-wsdl.xsd" />											
+		</xs:schema>				
+	</types>
+
+   <!-- Messages -->
+   <message name="StartDeadlinesRequest">
+      <part name="createDeadlinesData" element="esc:createDeadlinesData" />
+   </message>
+   <message name="StartDeadlinesResponse">
+      <part name="createDeadlinesReponse" element="esc:createDeadlinesResponse" />
+   </message>   
+   <message name="DeadlineOpRequest">
+      <part name="deadlineOpData" element="esc:deadlineOpData" />
+   </message>
+        
+   <!-- Start and cancel start/completion deadlines and escalations -->
+   <portType name="IAeTaskEscalationService">
+      <operation name="start">
+      	<documentation>
+		      <ae:doc>
+		         <ae:desc>
+						Called by the task lifecycle to create deadlines
+						and associated escalation handlers	            
+		         </ae:desc>
+		      </ae:doc>   
+		   </documentation>         
+         <input message="tns:StartDeadlinesRequest" />
+         <output message="tns:StartDeadlinesResponse" />
+      </operation>
+      <operation name="cancel">
+      	<documentation>
+		      <ae:doc>
+		         <ae:desc>
+						Cancels deadlines.
+		         </ae:desc>
+		      </ae:doc>   
+		   </documentation>               
+         <input message="tns:DeadlineOpRequest" />
+      </operation>
+   </portType>   
+
+</definitions>

@@ -1,0 +1,25 @@
+<tlc:processTaskResponse
+   xmlns:tlc="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-lifecycle-wsdl.xsd"
+   xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+   <trt:identifier>simulation_id</trt:identifier>
+
+   <tlc:metadata>
+      <trt:status />
+      <trt:createdOn />
+      <trt:priority>0</trt:priority>
+      <trt:taskInitiator/>
+      <trt:taskStakeholders/>
+      <trt:potentialOwners/>
+      <trt:excludedOwners/>
+      <trt:businessAdministrators/>
+      <trt:notificationRecipients/>
+      <trt:actualOwner/>
+   </tlc:metadata>
+
+   <trt:output />
+
+   <trt:fault />
+
+</tlc:processTaskResponse>

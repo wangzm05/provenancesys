@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="xsiType">
+   <abs:bUnitRef location="complete-xsiType.bunit"/>
+   <abs:bUnitRef location="complete-no-xsiType.bunit"/>
+   <abs:bUnitRef location="complete-xsiType-invalidMessage.bunit"/>
+   <abs:bUnitRef location="setFault-xsiType.bunit"/>
+   <abs:bUnitRef location="setFault-no-xsiType.bunit"/>
+   <abs:bUnitRef location="setOutput-xsiType.bunit"/>
+   <abs:bUnitRef location="setOutput-no-xsiType.bunit"/>
+</abs:bSuite>

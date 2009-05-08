@@ -1,0 +1,14 @@
+<!DOCTYPE weblogic-web-app PUBLIC "-//BEA Systems, Inc.//DTD Web Application 8.1//EN" "http://www.bea.com/servers/wls810/dtd/weblogic810-web-jar.dtd">
+
+<weblogic-web-app>
+
+  <session-descriptor>
+    <session-param>
+      <param-name>TrackingEnabled</param-name>
+      <param-value>true</param-value>
+    </session-param>
+  </session-descriptor>
+
+  <context-root>/aetask</context-root>
+  
+</weblogic-web-app>

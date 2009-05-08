@@ -1,0 +1,11 @@
+	<aeid:countIdentitiesRequest xmlns:aeid="http://schemas.active-endpoints.com/identity/2007/01/identity.xsd">
+		<aeid:identityQuery>
+			<aeid:include>
+				<aeid:user>owner1</aeid:user>
+				<aeid:user>owner2</aeid:user>
+			</aeid:include>
+			<aeid:exclude>
+				<aeid:user>owner2</aeid:user>
+			</aeid:exclude>
+		</aeid:identityQuery>
+	</aeid:countIdentitiesRequest>

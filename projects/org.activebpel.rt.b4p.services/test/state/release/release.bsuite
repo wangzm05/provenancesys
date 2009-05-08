@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abs:bSuite xmlns:abs="http://schemas.active-endpoints.com/activebpelunit/2007/11/bSuite.xsd" name="release">
+   <abs:bUnitRef location="release.bunit"/>
+   <abs:bUnitRef location="release-admin.bunit"/>
+   <abs:bUnitRef location="release-stakeholder.bunit"/>
+   <abs:bUnitRef location="release-illegalAccess.bunit"/>
+<!--   <abs:bUnitRef location="release-illegalState.bunit"/> -->
+</abs:bSuite>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<htapis:getInputResponse xmlns:htapis="http://www.example.org/WS-HT/api/xsd">
+   <htapis:taskData>anyType</htapis:taskData>
+</htapis:getInputResponse>

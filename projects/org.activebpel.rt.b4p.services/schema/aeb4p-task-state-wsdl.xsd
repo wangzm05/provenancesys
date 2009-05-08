@@ -1,0 +1,211 @@
+<?xml version="1.0"?>
+<xs:schema 
+	targetNamespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+   xmlns:tns="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-state-wsdl.xsd"
+   xmlns:sref="http://docs.oasis-open.org/wsbpel/2.0/serviceref"
+   xmlns:htd="http://www.example.org/WS-HT"
+   xmlns:htdt="http://www.example.org/WS-HT/api/xsd"
+   xmlns:trt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+   xmlns:evt="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   xmlns:api="http://www.example.org/WS-HT/api"
+   elementFormDefault="qualified">
+
+   <xs:import namespace="http://www.w3.org/2001/XMLSchema" />
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+
+   <xs:import namespace="http://docs.oasis-open.org/wsbpel/2.0/serviceref" 
+		schemaLocation="ws-bpel_serviceref.xsd" />   		
+
+   <xs:import namespace="http://www.example.org/WS-HT"
+      schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask.xsd" />
+      
+	<xs:import namespace="http://www.example.org/WS-HT/api" 
+		schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask-api.xsd" />      
+
+	<xs:import namespace="http://www.example.org/WS-HT/api/xsd" 
+		schemaLocation="../../org.activebpel.rt.ht/support/schema/ws-humantask-api-wsdl.xsd" />      
+      
+	<xs:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-rt.xsd"
+		schemaLocation="aeb4p-task-rt.xsd" />      
+		
+	<xs:import namespace="http://schemas.active-endpoints.com/b4p/wshumantask/2007/10/aeb4p-task-events-wsdl.xsd"
+		schemaLocation="aeb4p-task-events-wsdl.xsd" />
+
+	<xs:element name="createTaskRequest">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>
+					Contains ws-ht task creation data.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:choice>
+					<xs:element ref="htd:task" />
+					<xs:element ref="htd:notification" />
+				</xs:choice>
+				<xs:element ref="trt:initialState" />
+				<xs:element ref="trt:interfaceMetadata" />
+				<xs:element ref="trt:taskInstance" minOccurs="0"/>
+				<xs:element ref="sref:service-ref" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="createTaskResponse">
+	   <xs:complexType>
+	      <xs:annotation>
+	         <xs:documentation>
+	            Response after task has been created.
+	         </xs:documentation>
+	      </xs:annotation>    
+	      <xs:sequence>
+	         <xs:element ref="trt:identifier" />
+	         <xs:element ref="evt:listenerId" minOccurs="0" />
+	         <xs:element name="state" type="api:tStatus" />
+            <xs:element ref="trt:taskInstance" />
+	      </xs:sequence>
+	   </xs:complexType>
+	</xs:element>
+
+	<xs:element name="reassign">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="trt:identifier" />
+				<xs:element ref="htd:organizationalEntity" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="updateComment">
+   	<xs:complexType>
+   		<xs:sequence>
+   			<xs:element ref="trt:identifier"/>
+   			<xs:element ref="trt:commentId"/>
+   			<xs:element name="text" type="xs:string"/>
+   		</xs:sequence>
+   	</xs:complexType>
+   </xs:element>
+   <xs:element name="deleteComment">
+   	<xs:complexType>
+   		<xs:sequence>
+   			<xs:element ref="trt:identifier"/>
+   			<xs:element ref="trt:commentId"/>
+   		</xs:sequence>
+   	</xs:complexType>
+   </xs:element>
+
+   <xs:element name="getAttachmentById" type="tns:tAttachmentRequestType"/>
+   <xs:element name="getAttachmentByIdResponse" type="api:tAttachment"/>
+
+   <xs:element name="deleteAttachmentById" type="tns:tAttachmentRequestType"/>
+
+   	<xs:complexType name="tAttachmentRequestType">
+   		<xs:sequence>
+   			<xs:element ref="trt:identifier"/>
+   			<xs:element name="attachmentId" type="xs:long"/>
+   		</xs:sequence>
+   	</xs:complexType>
+
+	<xs:complexType name="tAuthorizationType"/>
+
+   <xs:element name="authorizeRequest" type="tns:tAuthorizationType"/>
+   <xs:element name="authorizeResponse" type="tns:tAuthorizationType"/>
+
+   <xs:element name="getTaskInstance">
+   	<xs:complexType>
+   		<xs:sequence>
+   			<xs:element ref="trt:identifier"/>
+   			<xs:element name="includeAttachments" type="xs:boolean" minOccurs="0"/>
+   		</xs:sequence>
+   	</xs:complexType>
+   </xs:element>
+   <xs:element name="activate" type="trt:tIdentifier" />
+   <xs:element name="cancel" type="trt:tIdentifier" />
+   <xs:element name="expire" type="trt:tIdentifier" />
+   <xs:element name="finalize" type="trt:tIdentifier" />
+   <xs:element name="escalate" type="trt:tIdentifier" />
+   <xs:element name="resume">
+   	<xs:complexType>
+   		<xs:sequence>
+   			<xs:element ref="trt:identifier"/>
+   			<xs:element name="resumerId" type="xs:long"/>
+   		</xs:sequence>
+   	</xs:complexType>
+   </xs:element>
+
+   <xs:element name="scheduleWakeupRequest">
+   	<xs:complexType>
+   		<xs:sequence>
+   			<xs:element ref="trt:identifier"/>
+   			<xs:element name="alarm" type="xs:dateTime"/>
+   		</xs:sequence>
+   	</xs:complexType>
+   </xs:element>
+
+   <xs:element name="scheduleWakeupResponse" type="xs:long"/>
+
+   <xs:element name="cancelWakeupRequest" type="xs:long"/>
+
+
+    <xs:element name="removeOwnerRequest">
+    	<xs:complexType>
+    		<xs:sequence>
+    			<xs:element name="recipients" nillable="true"
+    				type="htd:tOrganizationalEntity"/>
+
+                <xs:element ref="tns:excludedOwners"/>
+                <xs:element name="principalName" type="xs:string"></xs:element>
+    			<xs:element name="excludedOwnersCount" type="xs:int"></xs:element>
+    		</xs:sequence>
+    	</xs:complexType></xs:element>
+
+    <xs:element name="removeOwnerResponse">
+    	<xs:complexType>
+    		<xs:sequence>
+	   			<xs:element name="ownersRemovalComplete" type="xs:boolean"/>
+	   			<xs:element ref="tns:excludedOwners"/>
+    		</xs:sequence>
+    	</xs:complexType>
+    </xs:element>
+    
+	<xs:element name="excludedOwners" type="htd:tOrganizationalEntity" nillable="true"/>
+    
+   <!--  AE Task Inbox Listings  --> 
+	<!--  search start index  -->
+	<xs:element name="taskIndexOffset" type="xs:int" />
+	<!--  number of tasks that matched filter  -->        
+	<xs:element name="taskTotalCount" type="xs:int" />
+	<!-- filter search-by value -->        
+	<xs:element name="searchBy" type="xs:string" />
+	
+	<!--  column sortby fields -->
+	<xs:element name="orderBy">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="fieldId" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--  list tasks request -->
+	<xs:element name="getTasks">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="htdt:getMyTasks" />
+				<xs:element ref="tns:taskIndexOffset" />
+				<xs:element ref="tns:orderBy" minOccurs="0" />			
+				<xs:element ref="tns:searchBy" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>	
+	</xs:element>
+	<!--  list tasks response -->
+	<xs:element name="getTasksResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tns:taskTotalCount" />
+				<xs:element ref="htdt:getMyTasksResponse" />
+			</xs:sequence>
+		</xs:complexType>	
+	</xs:element>
+	
+</xs:schema>
